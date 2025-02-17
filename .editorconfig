@@ -1,0 +1,13 @@
+[*.{js,html,css, ts}]
+
+indent_style = space
+
+indent_size = 4
+
+end of line = lf
+
+charset = utf-8
+
+trimtailingwhitespace = true
+
+insertfinalnewline = true
