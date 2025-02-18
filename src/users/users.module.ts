@@ -1,13 +1,60 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, RequestMethod, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
+import { LoggerMiddleware } from './logger.middleware';
+
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Users } from './entities/user.entity'
 
 @Module({
     controllers: [UsersController],
-    providers: [UsersService],
+    providers: [
+        {provide: UsersService,useClass: UsersService},
+    ],
+    exports: [UsersService],
+    imports: [
+        TypeOrmModule.forFeature([Users]),
+    ]
 })
-export class UsersModule {
-    constructor(private readonly usersService: UsersService) {
-        console.log(`UsersModule started with usersService: ${this.usersService.PROD_TYPE}`);
+export class UsersModule implements NestModule, OnModuleInit, OnModuleDestroy {
+    constructor(
+        private readonly usersService: UsersService,
+        //private transientService: UsersService,
+        //private moduleRef: ModuleRef
+    ) {
+        console.log(`UsersModule constructor with usersService: ${this.usersService.TYPE.PROD}`);
+    }
+
+    async onModuleInit(): Promise<void> {
+
+        //! тут мы получаем доступ к инстансу провайдера-сервиса Юзерс (описано в разделе "Module reference")
+        //this.transientService = await this.moduleRef.resolve(UsersService);
+        //console.log(this.transientService.printTypeObject());
+        //! end
+
+        await new Promise((res) => {
+            console.log('Users service init');
+            res('destroy')
+        })
+    }
+
+    async onModuleDestroy(): Promise<void> {
+        await new Promise((res) => {
+            console.log('Users service destroy');
+            res('destroy')
+        })
+    }
+
+    configure(consumer: MiddlewareConsumer) {
+        console.log('Middleware users get applying (from users module)')
+        consumer
+            .apply(LoggerMiddleware)
+            .exclude(
+                { path: 'cats', method: RequestMethod.GET },
+                { path: 'cats', method: RequestMethod.POST },
+                'cats/{*splat}',
+            )
+            .forRoutes({ path: 'users', method: RequestMethod.GET });
+        //.forRoutes(UsersController);//можно пихнуть сюда целиком контроллер: consumer.apply(LoggerMiddleware).forRoutes(UsersController);
     }
 }

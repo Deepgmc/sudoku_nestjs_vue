@@ -2,9 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-    /*<NestExpressApplication> можно передать*/
-    const app = await NestFactory.create(AppModule, { abortOnError: false });
+    const app = await NestFactory.create(AppModule, { abortOnError: true });
     //app.setGlobalPrefix('api');
-    await app.listen(process.env.PORT ?? 3001);
+    await app.listen(process.env.LISTEN_PORT ?? 0);
 }
 bootstrap();
