@@ -3,6 +3,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 export const UserId = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
-    return Number.parseInt(request.params.id) + 700;
+    //проба декоратора, который просто кастит к инту
+    return Number.parseInt(request.params.id);
   },
 );

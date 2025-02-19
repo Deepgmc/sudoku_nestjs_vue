@@ -4,26 +4,23 @@ import { UsersController } from './users.controller';
 import { LoggerMiddleware } from './logger.middleware';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Users } from './entities/user.entity'
+import { UsersEntity } from './entities/user.entity'
 
 @Module({
     controllers: [UsersController],
     providers: [
-        {provide: UsersService,useClass: UsersService},
+        {provide: UsersService, useClass: UsersService},
     ],
     exports: [UsersService],
     imports: [
-        TypeOrmModule.forFeature([Users]),
+        TypeOrmModule.forFeature([UsersEntity]),
     ]
 })
 export class UsersModule implements NestModule, OnModuleInit, OnModuleDestroy {
     constructor(
-        private readonly usersService: UsersService,
         //private transientService: UsersService,
         //private moduleRef: ModuleRef
-    ) {
-        console.log(`UsersModule constructor with usersService: ${this.usersService.TYPE.PROD}`);
-    }
+    ) {}
 
     async onModuleInit(): Promise<void> {
 
