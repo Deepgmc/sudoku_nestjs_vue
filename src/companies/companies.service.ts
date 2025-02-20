@@ -4,9 +4,11 @@ import { ICompanies } from '../interfaces/companies.interface';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompaniesEntity } from './entities/companies.entity';
+import { ICompaniesDTO } from '../interfaces/companies.interface'
 
 @Injectable()
 export class CompaniesService {
+
     constructor(
         @InjectRepository(CompaniesEntity)
         private companiesRepository: Repository<CompaniesEntity>,
@@ -22,6 +24,10 @@ export class CompaniesService {
 
     async findOne(id: number): Promise<ICompanies | null> {
         return await this.companiesRepository.findOneBy({id})
+    }
+
+    async insertNewCompany(createCompanyDto: ICompaniesDTO): Promise<ICompaniesDTO>{
+        return await this.companiesRepository.save(createCompanyDto)
     }
 
 }

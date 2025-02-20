@@ -4,3 +4,4 @@ export interface ICompanies {
     name: string,
     address: string,
 }
+export type ICompaniesDTO = Omit<ICompanies, 'id'>

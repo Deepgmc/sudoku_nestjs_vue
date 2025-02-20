@@ -6,6 +6,10 @@ import { CompaniesEntity } from './companies.entity';
 export class EmployeeEntity implements TEmployeeForEntity {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @ManyToOne(() => CompaniesEntity, (company) => company.employees)
+    company: CompaniesEntity
+
     @Column()
     fio: string;
     @Column()
@@ -38,7 +42,4 @@ export class EmployeeEntity implements TEmployeeForEntity {
     employeeSalary: number
     @Column()
     passportPlace: string
-
-    @ManyToOne(() => CompaniesEntity, (company) => company.employees)
-    company: CompaniesEntity
 }
