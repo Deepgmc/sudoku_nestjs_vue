@@ -4,4 +4,5 @@ export interface ICompanies {
     name: string,
     address: string,
 }
-export type ICompaniesDTO = Omit<ICompanies, 'id'>
+
+export type TCompaniesCreateDTO = Omit<ICompanies, 'id'>
