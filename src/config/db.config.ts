@@ -20,6 +20,11 @@ export default registerAs('database', () => {
         "synchronize": true
     }
 })
+export const MODE = registerAs('MODE', () => {
+    return {
+        mode: process.env.MODE
+    }
+})
 /**
 // TypeOrmModule.forRoot({ // app.module.ts в импортах
         //     type: 'mysql',

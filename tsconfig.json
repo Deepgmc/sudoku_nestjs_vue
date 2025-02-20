@@ -18,6 +18,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/**/*.ts" // <--- take everything from this location
+    ],
+    "out": "js_docs/" // <--- output directory
+  },
   "include": ["src"],
   "exclude": [
     "client/", "client", "node_modules/"
