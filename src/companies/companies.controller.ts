@@ -1,7 +1,9 @@
-import { Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+
+
 import { CompaniesService } from './companies.service';
 import { EmployeeService } from './employee/employee.service'
-import { CreateCompanyDto } from './dto/create-company.dto';
+import { ICompanies, ICompaniesUpdateDTO, ICompaniesCreateDTO } from '../interfaces/companies.interface';
 
 @Controller('companies')
 export class CompaniesController {
@@ -10,8 +12,27 @@ export class CompaniesController {
         private readonly employeeService: EmployeeService,
     ) { }
 
+    //!static render via handlebars, в main.ts еще
+    // @Get('static_test')
+    // @Render('index')
+    // root() {
+    //     return { message: 'Hello world!' };
+    // }
+
+    // @Get('static_test2')
+    // static_test(@Res() res: Response) {
+    //     return res.render(
+    //         'index',
+    //         { message: 'Hello world!22' },
+    //     );
+    // }
+
+    // принятие-валидация входящего массива
+    // @Body(new ParseArrayPipe({ items: CreateUserDto }))
+    // createUserDtos: CreateUserDto[],
+
     @Get()
-    async findAll(): Promise<CreateCompanyDto[]> {
+    async findAll(): Promise<ICompanies[]> {
         return await this.companiesService.findAll();
     }
 
@@ -29,8 +50,7 @@ export class CompaniesController {
     @Get(':id')
     async findOne(
         @Param('id', ParseIntPipe) id: number
-    ) {
-        //async findOne(@Param('id') id: number) {
+    ): Promise<any> {
         const company = await this.companiesService.findOne(id);
         if (!company) {
             //throw new BadRequestException('Validation failed');
@@ -42,21 +62,36 @@ export class CompaniesController {
     /**
     * Создание компании
     *
-    * @remarks
-    * This method is part of the bla bla.
-    *
-    * @param x - The first input number
+    * @decorator Nestjs Body
+      @postParam Принимает объект createCompanyDto из поста
     * @returns Is created success
     *
-    * @beta
     */
-    @Post()
+    @Post('new')
     async create(
-        @Body() createCompanyDto: CreateCompanyDto
+        @Body() createCompanyDto: ICompaniesCreateDTO
+    ): Promise<any> {
+        console.log('Получен объект для сохранения:', createCompanyDto);
+        return await this.companiesService.create(createCompanyDto)
+    }
+
+    /**
+    * Обновление данных компании
+    *
+    * @postParam Принимает некоторые поля createCompanyDto из поста
+    * @returns Is created success
+    *
+    */
+    @Put(':id')
+    update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateCompanyDto: ICompaniesUpdateDTO,
     ) {
-        console.log('Получен обхект:', createCompanyDto);
-        const result = await this.companiesService.insertNewCompany(createCompanyDto)
-        console.log('Результат сохранения:', result);
-        return 'This action adds a new company';
+        console.log('Got id', id);
+        try {
+            return this.companiesService.update(id, updateCompanyDto);
+        } catch (e) {
+            throw new BadRequestException('Error', e.message as string)
+        }
     }
 }

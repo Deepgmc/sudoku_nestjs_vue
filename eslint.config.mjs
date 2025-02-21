@@ -37,6 +37,7 @@ export default tseslint.config(
             "@typescript-eslint/no-unsafe-return"       : "off",
             "@typescript-eslint/no-unused-vars"         : "warn",
             "@typescript-eslint/no-misused-promises"    : "warn",
+            "@typescript-eslint/no-empty-object-type"   : "warn",
         },
     },
 );

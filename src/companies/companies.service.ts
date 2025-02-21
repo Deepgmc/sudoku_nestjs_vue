@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
-
-import { ICompanies } from '../interfaces/companies.interface';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { ICompanies, ICompaniesUpdateDTO, ICompaniesCreateDTO } from '../interfaces/companies.interface';
 import { CompaniesEntity } from './entities/companies.entity';
-import { TCompaniesCreateDTO } from '../interfaces/companies.interface'
 
 @Injectable()
 export class CompaniesService {
 
+    private readonly logger = new Logger('Log types:')
     /**
      * Constructor
      * @param companiesRepository
@@ -26,12 +26,33 @@ export class CompaniesService {
         })
     }
 
-    async findOne(id: number): Promise<ICompanies | null> {
-        return await this.companiesRepository.findOneBy({id})
+    async findOne(id: number): Promise<ICompanies> {
+        const company = await this.companiesRepository.findOneBy({id})
+
+        this.logger.warn('Warn')
+        this.logger.fatal('Fatal')
+        this.logger.error('Error')
+        this.logger.log('Log')
+        console.log('Debug::');
+        this.logger.debug(company)
+
+        //this.logger.verbose(company);
+
+        if(!company) throw new NotFoundException('Company was not found')
+        return company
     }
 
-    async insertNewCompany(createCompanyDto: TCompaniesCreateDTO): Promise<TCompaniesCreateDTO>{
+    async create(createCompanyDto: ICompaniesCreateDTO): Promise<ICompaniesCreateDTO>{
         return await this.companiesRepository.save(createCompanyDto)
+    }
+
+    async update(
+        id: number,
+        updateCompanyDto: ICompaniesUpdateDTO
+    ): Promise<ICompaniesUpdateDTO>{
+        const company = await this.findOne(id)
+        if(!company) throw new BadRequestException(`Невозможно обновить компанию ${id}`)
+        return await this.companiesRepository.save(Object.assign(company, updateCompanyDto))
     }
 
 }
