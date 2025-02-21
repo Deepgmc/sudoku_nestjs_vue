@@ -6,7 +6,6 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-
     "tdoc": "typedoc",
     "build": "nest build",
     "start": "nest start",
@@ -28,6 +27,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/serve-static": "^5.0.2",
     "@nestjs/typeorm": "^11.0.0",
+    "hbs": "^4.2.0",
     "mysql2": "^3.12.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

@@ -1,5 +1,5 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-//import { ServeStaticModule } from '@nestjs/serve-static';import { resolve } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';import { resolve } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppService } from './app.service';
@@ -26,11 +26,17 @@ import { NotFoundExceptionFilter } from './HttpException.filter';
             isGlobal: true,
             load: [dbConfiguration],
         }),
-        // ServeStaticModule.forRoot({
-        //     rootPath: resolve(__dirname, '../client/dist'),
-        //     serveRoot: '/',
-        //     exclude: ['/users*', '/companies*']
-        // }),
+
+
+
+        ServeStaticModule.forRoot({
+            rootPath: resolve(__dirname, '../client/dist'),
+            serveRoot: '/',
+            // exclude: ['/users*', '/companies*']
+        }),
+
+
+
         CompaniesModule,
         UsersModule,
     ],

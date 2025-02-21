@@ -5,4 +5,5 @@ export interface ICompanies {
     address: string,
 }
 
-export type TCompaniesCreateDTO = Omit<ICompanies, 'id'>
+export interface ICompaniesCreateDTO extends Omit<ICompanies, 'id'> {}
+export interface ICompaniesUpdateDTO extends Partial<ICompanies> {}

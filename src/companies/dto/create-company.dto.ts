@@ -1,7 +1,7 @@
-import { ICompanies, } from '../../interfaces/companies.interface'
+import { ICompaniesCreateDTO } from '../../interfaces/companies.interface'
 import { IsString, IsNotEmpty, Equals } from 'class-validator';
 
-export class CreateCompanyDto implements ICompanies {
+export class CreateCompanyDto implements ICompaniesCreateDTO {
 
 
     //ЭТИ ДЕКОРАТОРЫ ВАЛИДАЦИИ ЮЗАЮТСЯ ГЛОБАЛЬНЫМ app.useGlobalPipes(new ValidationPipe({ ВАЛИДАТОРОМ
@@ -14,12 +14,9 @@ export class CreateCompanyDto implements ICompanies {
     @IsNumberString()
     */
 
-    //@IsDefined()
-    id: number
-
     @IsNotEmpty()
     @IsString()
-    @Equals('New Created Via POST')
+    //@Equals('New Created Via POST')
     name: string
     @IsNotEmpty()
     @IsString()

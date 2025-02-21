@@ -9,6 +9,14 @@ export class CompaniesEntity implements ICompanies {
     @PrimaryGeneratedColumn()
     id: number;
 
+    // всякое полезное тут: https://docs.nestjs.com/recipes/sql-typeorm
+    // интересно про создание дата-провайдера для фото, в середине статьи - не через InjectRepository а через обычный @Inject в конструктор сервиса. Может быть полезно
+    // @Column({ length: 500 })
+    // name: string;
+    // @Column('text')
+    // description: string;
+    // @Column('int')
+
     @Column()
     name: string;
 
