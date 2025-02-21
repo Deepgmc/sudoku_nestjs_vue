@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Logger, NotFoundException, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 
 
 import { CompaniesService } from './companies.service';
@@ -7,9 +7,17 @@ import { ICompanies, ICompaniesUpdateDTO, ICompaniesCreateDTO } from '../interfa
 
 @Controller('companies')
 export class CompaniesController {
+
+    private readonly logger = new Logger('COM CONTROLLER')
+
+    /**
+     * Constructor
+     * @param companiesService
+     * @param employeeService
+     */
     constructor(
         private readonly companiesService: CompaniesService,
-        private readonly employeeService: EmployeeService,
+        private readonly employeeService: EmployeeService
     ) { }
 
     //!static render via handlebars, в main.ts еще
@@ -33,12 +41,16 @@ export class CompaniesController {
 
     @Get()
     async findAll(): Promise<ICompanies[]> {
-        return await this.companiesService.findAll();
+        const company = await this.companiesService.findAll();
+        this.logger.debug(company)
+        return company
     }
 
     @Get('/employee')
     async getAllEmployee() {
-        return await this.employeeService.findAll();
+        const employee = await this.employeeService.findAll();
+        this.logger.debug(employee)
+        return employee
     }
 
     /**
@@ -56,6 +68,7 @@ export class CompaniesController {
             //throw new BadRequestException('Validation failed');
             throw new NotFoundException('Такая компания не была найдена');
         }
+        this.logger.debug(company)
         return company;
     }
 
@@ -71,7 +84,8 @@ export class CompaniesController {
     async create(
         @Body() createCompanyDto: ICompaniesCreateDTO
     ): Promise<any> {
-        console.log('Получен объект для сохранения:', createCompanyDto);
+        this.logger.debug(`Получен объект для сохранения`)
+        this.logger.debug(createCompanyDto)
         return await this.companiesService.create(createCompanyDto)
     }
 
@@ -87,7 +101,8 @@ export class CompaniesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updateCompanyDto: ICompaniesUpdateDTO,
     ) {
-        console.log('Got id', id);
+        this.logger.debug(`Получен объект для обновления`)
+        this.logger.debug(updateCompanyDto)
         try {
             return this.companiesService.update(id, updateCompanyDto);
         } catch (e) {

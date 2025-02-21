@@ -8,7 +8,7 @@ import { CompaniesEntity } from './entities/companies.entity';
 @Injectable()
 export class CompaniesService {
 
-    private readonly logger = new Logger('Log types:')
+    private readonly logger = new Logger('COM SERVICE')
     /**
      * Constructor
      * @param companiesRepository
@@ -28,15 +28,6 @@ export class CompaniesService {
 
     async findOne(id: number): Promise<ICompanies> {
         const company = await this.companiesRepository.findOneBy({id})
-
-        this.logger.warn('Warn')
-        this.logger.fatal('Fatal')
-        this.logger.error('Error')
-        this.logger.log('Log')
-        console.log('Debug::');
-        this.logger.debug(company)
-
-        //this.logger.verbose(company);
 
         if(!company) throw new NotFoundException('Company was not found')
         return company
