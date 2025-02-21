@@ -13,6 +13,7 @@ import dbConfiguration from "./config/db.config";
 import { APP_FILTER } from '@nestjs/core';
 
 import { NotFoundExceptionFilter } from './HttpException.filter';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -39,6 +40,7 @@ import { NotFoundExceptionFilter } from './HttpException.filter';
 
         CompaniesModule,
         UsersModule,
+        AuthModule,
     ],
     controllers: [],
     providers: [
