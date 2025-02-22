@@ -9,14 +9,16 @@ import { UsersEntity } from './entities/user.entity'
 @Module({
     controllers: [UsersController],
     providers: [
-        {provide: UsersService, useClass: UsersService},
+        UsersService
     ],
-    exports: [UsersService],
+    exports: [
+        UsersService
+    ],
     imports: [
         TypeOrmModule.forFeature([UsersEntity]),
     ]
 })
-export class UsersModule implements NestModule, OnModuleInit, OnModuleDestroy {
+export class UsersModule implements OnModuleInit, OnModuleDestroy {
     constructor(
         //private transientService: UsersService,
         //private moduleRef: ModuleRef
@@ -30,28 +32,27 @@ export class UsersModule implements NestModule, OnModuleInit, OnModuleDestroy {
         //! end
 
         await new Promise((res) => {
-            console.log('Users service init');
+            console.log('Users service init Event');
             res('destroy')
         })
     }
 
     async onModuleDestroy(): Promise<void> {
         await new Promise((res) => {
-            console.log('Users service destroy');
+            console.log('Users service destroy Event');
             res('destroy')
         })
     }
 
-    configure(consumer: MiddlewareConsumer) {
-        console.log('Middleware users get applying (from users module)')
-        consumer
-            .apply(LoggerMiddleware)
-            .exclude(
-                { path: 'cats', method: RequestMethod.GET },
-                { path: 'cats', method: RequestMethod.POST },
-                'cats/{*splat}',
-            )
-            .forRoutes({ path: 'users', method: RequestMethod.GET });
-        //.forRoutes(UsersController);//можно пихнуть сюда целиком контроллер: consumer.apply(LoggerMiddleware).forRoutes(UsersController);
-    }
+    // configure(consumer: MiddlewareConsumer) {
+    //     console.log('Middleware users get applying (from users module)')
+    //     consumer
+    //         .apply(LoggerMiddleware)
+    //         .exclude(
+    //             { path: 'cats', method: RequestMethod.GET },
+    //             { path: 'cats', method: RequestMethod.POST },
+    //             'cats/{*splat}',
+    //         )
+    //         .forRoutes({ path: 'users', method: RequestMethod.GET });
+    // }
 }

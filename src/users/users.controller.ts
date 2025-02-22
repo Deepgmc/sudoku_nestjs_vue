@@ -1,9 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
+
 import { UsersService } from './users.service';
 import { UserId } from './userId.decorator';
+import { IUser } from '../interfaces/user.interface';
 
 @Controller('users')
 export class UsersController {
+
+    private readonly logger = new Logger('COM SERVICE')
+
     constructor(
         private readonly usersService: UsersService,
     ){}
@@ -14,13 +19,9 @@ export class UsersController {
     }
 
     @Get(':id')
-    //async findOne(@Param('id') id: string) {
-    async findOne(@UserId() id: number) {
-        try {
-            const user = await this.usersService.findOne(Number(id));
-            return user
-        } catch(e){
-            console.log('FindOne err message: ',e);
-        }
+    async findOne(@UserId() id: number): Promise<IUser> {
+        const user = await this.usersService.findOne(id)
+        this.logger.debug(user)
+        return user
     }
 }

@@ -10,7 +10,7 @@ export class LoggerMiddleware implements NestMiddleware {
         console.warn('LoggerMiddleware <constructor>. Counter:', counter++);
     }
     use(req: Request, res: Response, next: NextFunction) {
-        console.log(req.method, req.url, 'LoggerMiddleware <body>. Counter: ' + counter++ + '. usersService.PROD_TYPE:', this.usersService.TYPE.DEV);
+        console.log(req.method, req.url, 'LoggerMiddleware <body>. Counter: ' + counter++);
         next();
     }
 }
