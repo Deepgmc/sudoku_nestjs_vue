@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { TUserId, TUserWithoutPassword } from '../interfaces/user.interface';
-import { EAppModes } from '../types';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { TUserId, IUser } from '../interfaces/user.interface';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,20 +13,24 @@ export class UsersService {
         private usersRepository: Repository<UsersEntity>,
     ) {}
 
-    public TYPE: typeof EAppModes = EAppModes;
-
-    //printTypeObject(){console.log(this.TYPE);}
-
     async findAll(): Promise<UsersEntity[]> {
         const users = await this.usersRepository.find()
         return users;
     }
 
-    findOne(id: TUserId): Promise<TUserWithoutPassword> {
-        return Promise.resolve<TUserWithoutPassword>({
-            id  : id,
-            name: 'DUMMY',
-            age: 0
-        })
+    async findOne(fieldValue: number | string): Promise<any> {
+        let fieldName: string
+        if(typeof fieldValue === 'string'){
+            fieldName = 'name'
+        } else {
+            fieldName = 'id'
+        }
+        const searchObject = {
+            [fieldName]: fieldValue
+        }
+        const user = await this.usersRepository.findOneBy(searchObject)
+
+
+        return user
     }
 }

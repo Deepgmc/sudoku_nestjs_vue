@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { TUserWithoutPassword } from '../../interfaces/user.interface'
+import { TUserWithoutPassword, IUser } from '../../interfaces/user.interface'
 
 
 @Entity('users')
-export class UsersEntity implements TUserWithoutPassword {
+export class UsersEntity implements IUser {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -12,4 +12,7 @@ export class UsersEntity implements TUserWithoutPassword {
 
     @Column()
     age: number;
+
+    @Column()
+    password: string;
 }

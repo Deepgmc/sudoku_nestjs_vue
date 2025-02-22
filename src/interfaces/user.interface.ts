@@ -7,4 +7,6 @@ export interface IUser {
 
 export type TUserId = IUser['id'];
 
+export type IUsersCreateDTO = Omit<IUser, 'id'>
+export type IUsersUpdateDTO = Partial<IUser>
 export type TUserWithoutPassword = Omit<IUser, 'password'>;
