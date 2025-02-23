@@ -5,10 +5,10 @@ import { TUserWithoutPassword, IUser } from '../../interfaces/user.interface'
 @Entity('users')
 export class UsersEntity implements IUser {
     @PrimaryGeneratedColumn()
-    id: number;
+    userId: number;
 
     @Column()
-    name: string;
+    username: string;
 
     @Column()
     age: number;
