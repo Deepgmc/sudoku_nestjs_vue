@@ -19,15 +19,19 @@ export class LocalStrategy extends PassportStrategy(Strategy){
      * @returns IUser
      */
     async validate(
-        name: string,
+        username: string,
         password: string
     ): Promise<any>  {
-        console.log('Local strategy validate');
-        const user = await this.authService.validateAndGetUser(name, password)
-        user.additional_data = {role: 'admin'}
+        console.log('Local strategy validate', username, password);
+        const user = await this.authService.validateAndGetUser(username, password)
         if(!user){
+            console.log('Local strategy have not found user', username, password);
             throw new UnauthorizedException()
         }
+        user.additional_data = {role: 'admin'}
+
+        console.log('Local strategy user: ', user);
+
         return user
     }
 }

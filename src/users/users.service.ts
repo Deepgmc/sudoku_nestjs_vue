@@ -21,9 +21,9 @@ export class UsersService {
     async findOne(fieldValue: number | string): Promise<any> {
         let fieldName: string
         if(typeof fieldValue === 'string'){
-            fieldName = 'name'
+            fieldName = 'username'
         } else {
-            fieldName = 'id'
+            fieldName = 'userId'
         }
         const searchObject = {
             [fieldName]: fieldValue

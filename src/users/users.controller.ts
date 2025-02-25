@@ -7,7 +7,7 @@ import { IUser } from '../interfaces/user.interface';
 @Controller('users')
 export class UsersController {
 
-    private readonly logger = new Logger('COM SERVICE')
+    private readonly logger = new Logger('USERS SERVICE')
 
     constructor(
         private readonly usersService: UsersService,
@@ -21,6 +21,7 @@ export class UsersController {
     @Get(':id')
     async findOne(@UserId() id: number): Promise<IUser> {
         const user = await this.usersService.findOne(id)
+        this.logger.debug('Find one user:')
         this.logger.debug(user)
         return user
     }
