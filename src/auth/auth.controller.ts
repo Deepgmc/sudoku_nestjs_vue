@@ -1,15 +1,20 @@
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
+
+//! эти наследники гварды можно использовать чтоб дописывать свою логику в дефолтные паспорт гварды
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
+
+import { AuthGuard } from '@nestjs/passport'
+
 
 @Controller('auth')
 export class AuthController {
 
     constructor(private readonly authService: AuthService) { }
 
-    @UseGuards(LocalAuthGuard)
+    @UseGuards(AuthGuard('local'))
     @Post('login')
     login(@Request() req) {
         /**
@@ -19,7 +24,9 @@ export class AuthController {
         А тот уже в конце запихивает этот объект юзера в реквест и делает еще всякую магию, наверное
         */
         console.log('Conctroller got user in request (after guard):', req.user);
-        return this.authService.login(req.user)
+        const jwtAnswer = this.authService.login(req.user)
+        console.log(jwtAnswer);
+        return jwtAnswer
     }
 
     // @UseGuards(LocalAuthGuard)
@@ -29,7 +36,7 @@ export class AuthController {
     //     return req.logout();
     // }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(AuthGuard('jwt'))
     @Get('profile')
     profile(@Request() req) {
         console.log('Profile controller', req);

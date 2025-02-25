@@ -66,8 +66,9 @@ async function bootstrap() {
     // app.setBaseViewsDir(join(__dirname, '..', 'views'));
     // app.setViewEngine('hbs');
 
-    await app.listen(process.env.LISTEN_PORT ?? 0);
-    const logger = new Logger('INIT ENDS')
+    const port = process.env.LISTEN_PORT ?? 0
+    await app.listen(port);
+    const logger = new Logger(`INIT ENDS. Server listening to :${port}`)
     logger.error('############################')
 };
 bootstrap();
