@@ -1,0 +1,54 @@
+body{
+    min-height: 100vh;
+    background: rgb(0, 0, 0);
+    padding: 0;
+    margin: 0;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        'Fira Sans',
+        'Droid Sans',
+        'Helvetica Neue',
+        sans-serif;
+    font-size: 14px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color:lightgrey;
+}
+a, .link {
+    color: $linkColor;
+}
+a:hover, .link:hover {
+    color: $linkColorHover;
+}
+
+input[type=text], input[type=email], input[type=number], button{
+    padding:7px;
+    border-radius: 4px;
+    font-size:16px;
+    background-color: $inputBgrColor;
+}
+button{
+    font-size:14px;
+    min-width: 70px;
+    background-color: $orangeColor;
+    color:black;
+}
+
+.main_container {
+    display:flex;
+    height: 100vh;
+
+    align-content: center;
+    align-items: center;
+    justify-content: space-around;
+
+    flex-flow: row nowrap;
+}
