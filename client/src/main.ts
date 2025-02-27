@@ -1,21 +1,20 @@
-import './assets/main.css'
+import './assets/main.scss'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import App from './App.vue'
-import router from './router'
+import SudokuApp from './SudokuApp.vue'
+import router from './router/router.ts'
 
-const app = createApp(App)
+const app = createApp(SudokuApp)
 
 app.config.errorHandler = (err, instance, info) => {
-    console.log('Global error hanlder starts')
-    //console.log('My error:', err)
-    console.log('instance:', instance)
-    console.log('My info:', info)
+    // console.log('Global error hanlder starts')
+    // console.log('instance:', instance)
+    // console.log('My info:', info)
 }
 
 app.use(createPinia())
 app.use(router)
 
-app.mount('#app')
+app.mount('#sudoku_root_container')

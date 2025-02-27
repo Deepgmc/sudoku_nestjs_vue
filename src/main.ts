@@ -42,8 +42,6 @@ async function bootstrap() {
     }))
 
 
-    //DEL sdffddfsdfsdfdsf
-    //TODO sdffddfsdfsdfdsf
     //? Работа с сессиями
     // $ npm i express-session
     // $ npm i -D @types/express-session
