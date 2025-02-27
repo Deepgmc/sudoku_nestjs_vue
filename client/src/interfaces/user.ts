@@ -5,3 +5,11 @@ export interface IUser {
     password: string,
     email:    string,
 }
+
+export type TUserForm = {
+    username: string,
+    password: string,
+    passwordConfirm: string,
+    age: number,
+    email: string
+}
