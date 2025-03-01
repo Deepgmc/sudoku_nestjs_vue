@@ -4,10 +4,10 @@ import type { IUser } from '@/interfaces/user'
 import { ref } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
-    const user = ref<IUser>({username: '', password: '', age: 0, id: 0})
+    const user = ref<IUser>({username: '', password: '', age: 0, id: 0, email: ''})
 
     function setUser(name: IUser['username'], password: IUser['password']): void{
-        user.value = {username: name, password: password, age: 36, id: 10}
+        user.value = {username: name, password: password, age: 36, id: 10, email: ''}
     }
     return {user, setUser}
 

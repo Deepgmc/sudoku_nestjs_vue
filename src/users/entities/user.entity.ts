@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { TUserWithoutPassword, IUser } from '../../interfaces/user.interface'
+import { IUser } from '../../interfaces/user.interface'
 
 
 @Entity('users')
@@ -15,4 +15,7 @@ export class UsersEntity implements IUser {
 
     @Column()
     password: string;
+
+    @Column()
+    email: string;
 }

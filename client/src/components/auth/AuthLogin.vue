@@ -6,7 +6,7 @@
 
     <form name="login_form" class="form_container">
         <div class="login_item auth_caption">
-            Login to sudoku
+            Login
         </div>
         <div class="login_item">
             <input type="text" placeholder="login">

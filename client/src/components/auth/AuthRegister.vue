@@ -1,47 +1,45 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
-
+import { reactive, ref, computed, inject } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, between, email, helpers as h } from '@vuelidate/validators'
 
 import AuthFormField from './AuthFormField.vue'
-import { errorMessages } from './errorMessages'
+import { registerFormValidationFields, getRules } from './formValidationHelper'
+import type { TRegisterForm } from '@/interfaces/user'
+import type { IAuthManager } from '@/interfaces/auth'
 
-const localUser = reactive({
-    username       : '',
-    password       : 'init password',
-    passwordConfirm: '',
-    age            : 3,
-    email          : 'example@example.com',
+const warnMessage = ref('###')
+const $authManager: IAuthManager = inject('$authManager') as IAuthManager
+
+const localUser = ref<TRegisterForm>({
+    username: 'Serg',
+    password: '1234567',
+    passwordConfirm: '1234567',
+    age: 36,
+    email: 'deep@deep.com',
 })
 
-const localUserT = [
-    {field: 'username', caption: 'Name', placeholder: 'login', type: 'text'},
-    {field: 'password', caption: 'Password', placeholder: 'password', type: 'text'},
-    {field: 'passwordConfirm', caption: 'PasswordConfirmation', placeholder: 'confirm password', type: 'text'},
-    {field: 'age', caption: 'Age', placeholder: 'your age', type: 'number'},
-    {field: 'email', caption: 'Email', placeholder: 'email', type: 'text'},
-]
+const rules = computed(() => {
+    return getRules('registration')
+})
+const $v = useVuelidate(rules, localUser)
 
-const rules: any = {}
-for(const item of localUserT){
-    const thisRules: any = {}
-    const minLen = item.type === 'text' ? 3 : 1;
-    thisRules['required'] = h.withMessage(errorMessages.required, required)
-    thisRules['minLength'] = h.withMessage(`${errorMessages.minlen} ${minLen}`, minLength(minLen))
-    if(item.field === 'email') thisRules['email'] = h.withMessage(errorMessages.email, email)
+async function submitRegister() {
+    const registerAnswer = await $authManager.register(localUser.value)
 
-    rules[item.field] = thisRules
-}
-console.log('rules', rules)
+    console.log('RegisterAnswer:', registerAnswer)
+    if(registerAnswer.error){
+        //axios error comes here
+        console.warn(
+            'Err message:', registerAnswer.error.message,
+            'Err code:', registerAnswer.error.code,
+            'Err status:', registerAnswer.error.status
+        )
+    }
 
 
-const $v = useVuelidate(rules, localUser);
 
-
-function submitRegister() {
-    const result = $v.value.$validate()
-
+    return
+    const result = await $v.value.$validate()
 
     /**
     равны ли пароли
@@ -49,35 +47,40 @@ function submitRegister() {
     проверка на сервере и если неудачно - высветить ошибку тут
     */
 
-
-    result.then((res) => {
-        console.log('V:', $v.value.$errors)
-        if (res) {
+    // console.log($v.value)
+    // console.log('V $errors:', $v.value.$errors)
+    if (result) {
+        try {
+            $authManager.register(localUser.value)
             console.log('Form submitting')
-        } else {
-            console.log('Not submitting', res)
+        } catch (e: any) {
+            warnMessage.value = e.message
         }
-    }).catch((err) => {
-        console.log(err);
-    })
+    } else {
+        console.warn('Not submitting', result)
+    }
+
+
+
+
+
 }
+
+
 </script>
 
 <template>
 
     <form @submit.prevent="submitRegister" name="register_form" class="form_container">
         <div class="register_item auth_caption">
-            Register at sudoku
+            Register <span class="tmp_warn">{{ warnMessage }}</span>
         </div>
 
 
-        <div v-for="item of localUserT" class="register_item">
-            <AuthFormField
-                :inputName="item.caption"
-                :errors="$v[item.field].$errors"
-                :modelField="localUser[item.field]"
-            >
-                <input v-model="localUser[item.field]" :type="item.type" :placeholder="item.placeholder">
+        <div v-for="item of registerFormValidationFields" class="register_item">
+            <AuthFormField :inputName="item.caption" :errors="$v[item.field].$errors"
+                :modelField="localUser[item.field as keyof typeof localUser]">
+                <input v-model="localUser[item.field as keyof typeof localUser]" :type="item.type" :placeholder="item.placeholder">
             </AuthFormField>
         </div>
 
@@ -89,4 +92,8 @@ function submitRegister() {
 
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.tmp_warn {
+    color: rgb(184, 69, 34);
+}
+</style>

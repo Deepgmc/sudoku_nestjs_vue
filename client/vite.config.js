@@ -20,4 +20,18 @@ export default defineConfig({
             '@': nodeUrl.fileURLToPath(new nodeUrl.URL('./src', import.meta.url))
         },
     },
+    server: {
+        proxy: {
+            '/auth': {
+                target: 'http://localhost:3050/',
+                changeOrigin: true,
+                //rewrite: (path) => path.replace(/^\/api/, ''),
+            },
+            '/api': {
+                target: 'http://localhost:3050/',
+                changeOrigin: true,
+                //rewrite: (path) => path.replace(/^\/api/, ''),
+            },
+        }
+    }
 });
