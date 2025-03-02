@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { TUserId, IUser } from '../interfaces/user.interface';
-
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { UsersEntity } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -12,6 +12,11 @@ export class UsersService {
         @InjectRepository(UsersEntity)//тут под капотом делается const userRepository = MyDataSource.getRepository(User)
         private usersRepository: Repository<UsersEntity>,
     ) {}
+
+    async create(CreateUserDto: CreateUserDto): Promise<CreateUserDto>{
+        console.log('CreateUserDto:', CreateUserDto)
+        return await this.usersRepository.save(CreateUserDto)
+    }
 
     async findAll(): Promise<UsersEntity[]> {
         const users = await this.usersRepository.find()

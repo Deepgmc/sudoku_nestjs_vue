@@ -1,128 +1,89 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { reactive, ref, computed, inject } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, between, email, helpers as h } from '@vuelidate/validators'
 
-const messages = {
-    required: 'Required',
-    minlen: 'Minimum length',
-    between: 'Between',
-    email: 'Incorrect email'
-}
+import AuthFormField from './AuthFormField.vue'
+import { registerFormValidationFields, getRules } from './formValidationHelper'
+import type { TRegisterForm } from '@/interfaces/user'
+import type { IAuthManager } from '@/interfaces/auth'
 
-const localUser = reactive({
-    username: '',
-    password: 'init password',
-    passwordConfirm: '',
-    age: 3,
-    email: 'example@example.com'
+const warnMessage = ref<string[]>([])
+const $authManager: IAuthManager = inject('$authManager') as IAuthManager
+
+const localUser = ref<TRegisterForm>({
+    username: 'Serg',
+    password: '1234567',
+    passwordConfirm: '1234567',
+    age: 36,
+    email: 'deep@deep.com',
 })
-const rules = computed(() => ({
-    username: {
-        required: h.withMessage(messages.required, required),
-        minLength: h.withMessage(`${messages.minlen} 2`, minLength(2))
-    },
-    password: {
-        required: h.withMessage(messages.required, required),
-        minLength: h.withMessage(`${messages.minlen} 3`, minLength(3))
-    },
-    passwordConfirm: {
-        required: h.withMessage(messages.required, required),
-        minLength: h.withMessage(`${messages.minlen} 3`, minLength(3))
-    },
-    age: {
-        required: h.withMessage(messages.required, required),
-        minLength: h.withMessage(`${messages.between} 5-150`, between(5, 150))
-    },
-    email: {
-        required: h.withMessage(messages.required, required),
-        email: h.withMessage(messages.email, email),
-        minLength: h.withMessage(`${messages.minlen} 3`, minLength(3))
-    },
-}))
-const $v = useVuelidate(rules, localUser);
 
-function submitRegister() {
+const rules = computed(() => {
+    return getRules('registration', true)
+})
+const $v = useVuelidate(rules, localUser)
 
-    const result = $v.value.$validate();
-    result.then((res) => {
-        if (res) {
-            console.log('Form submitting')
-        } else {
-            console.log('Not submitting', res)
+async function submitRegister() {
+    resetWarnField()
+    /**
+    равны ли пароли
+    отправка на сервер
+    проверка на сервере и если неудачно - высветить ошибку тут
+            // console.log($v.value)
+            // console.log('V $errors:', $v.value.$errors)
+    */
+    const result = await $v.value.$validate()
+    if (result) {
+        try {
+            const registerAnswer = await $authManager.register(localUser.value)
+            console.log('RegisterAnswer:', registerAnswer)
+
+            if(registerAnswer.error){
+                if(registerAnswer.error.response.data.message){
+                    warnMessage.value = registerAnswer.error.response.data.message
+                } else {
+                    console.log('ALARM EROR TYPE INCORRECT')
+                }
+                console.error(
+                    'Err message:', registerAnswer.error.message,
+                    'Err code:', registerAnswer.error.code,
+                    'Err status:', registerAnswer.error.status
+                )
+            }
+        } catch (e: any) {
+            console.log('Catch error:', e)
+            console.log('ALARM EROR TYPE INCORRECT 2')
         }
-    }).catch((err) => {
-        console.log(err);
-    })
+    } else {
+        warnMessage.value = ['Validation went wrong']
+    }
 
 }
+
+function resetWarnField(){
+    warnMessage.value = []
+}
+
+
 </script>
 
 <template>
 
     <form @submit.prevent="submitRegister" name="register_form" class="form_container">
         <div class="register_item auth_caption">
-            Register at sudoku
+            Register
+            <span class="tmp_warn" v-for="message of warnMessage">{{ message }}</span>
         </div>
 
-        <div class="register_item">
-            <div class="register_item_caption">
-                <span v-if="$v.username.$errors.length" class="error_asterisk">*</span>Name
-                <template v-if="$v.username.$errors.length">
-                    <span class="error-msg" v-for="error of $v.username.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
-                </template>
-            </div>
-            <input v-model="localUser.username" type="text" placeholder="login">
+
+        <div v-for="item of registerFormValidationFields" class="register_item">
+            <AuthFormField :inputName="item.caption" :errors="$v[item.field].$errors"
+                :modelField="localUser[item.field as keyof typeof localUser]">
+                <input v-model="localUser[item.field as keyof typeof localUser]" :type="item.type" :placeholder="item.placeholder">
+            </AuthFormField>
         </div>
 
-        <div class="register_item">
-            <div class="register_item_caption">
-                Password
-                <template v-if="$v.password.$errors.length">
-                    <span class="error-msg" v-for="error of $v.password.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
-                </template>
-            </div>
-            <input v-model="localUser.password" type="text" placeholder="password">
-        </div>
-        <div class="register_item">
-            <div class="register_item_caption">
-                Password confirmation
-                <template v-if="$v.passwordConfirm.$errors.length">
-                    <span class="error-msg" v-for="error of $v.passwordConfirm.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
-                </template>
-            </div>
-            <input v-model="localUser.passwordConfirm" type="text" placeholder="confirm password">
-        </div>
 
-        <div class="register_item">
-            <div class="register_item_caption">
-                Age
-                <template v-if="$v.age.$errors.length">
-                    <span class="error-msg" v-for="error of $v.age.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
-                </template>
-            </div>
-            <input v-model="localUser.age" type="number" placeholder="age">
-        </div>
-
-        <div class="register_item">
-            <div class="register_item_caption">
-                Email
-                <template v-if="$v.email.$errors.length">
-                    <span class="error-msg" v-for="error of $v.email.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
-                </template>
-            </div>
-            <input v-model="localUser.email" type="email" placeholder="email">
-        </div>
         <div class="register_item submit_item">
             <button type="submit">Register</button>
         </div>
@@ -130,4 +91,5 @@ function submitRegister() {
 
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+</style>

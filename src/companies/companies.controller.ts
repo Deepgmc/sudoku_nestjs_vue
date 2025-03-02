@@ -4,6 +4,7 @@ import { BadRequestException, Body, Controller, Get, Logger, NotFoundException, 
 import { CompaniesService } from './companies.service';
 import { EmployeeService } from './employee/employee.service'
 import { ICompanies, ICompaniesUpdateDTO, ICompaniesCreateDTO } from '../interfaces/companies.interface';
+import { CreateCompanyDto } from './dto/create-company.dto';
 
 @Controller('companies')
 export class CompaniesController {
@@ -76,13 +77,13 @@ export class CompaniesController {
     * Создание компании
     *
     * @decorator Nestjs Body
-      @postParam Принимает объект createCompanyDto из поста
+      @postParam Принимает объект CreateCompanyDto из поста
     * @returns Is created success
     *
     */
     @Post('new')
     async create(
-        @Body() createCompanyDto: ICompaniesCreateDTO
+        @Body() createCompanyDto: CreateCompanyDto
     ): Promise<any> {
         this.logger.debug(`Получен объект для сохранения`)
         this.logger.debug(createCompanyDto)
@@ -92,8 +93,8 @@ export class CompaniesController {
     /**
     * Обновление данных компании
     *
-    * @postParam Принимает некоторые поля createCompanyDto из поста
-    * @returns Is created success
+    * @postParam Принимает некоторые поля updateCompanyDto из поста
+    * @returns Is updated success
     *
     */
     @Put(':id')

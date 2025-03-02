@@ -4,7 +4,9 @@ import { IsString, IsNotEmpty, Equals } from 'class-validator';
 export class CreateCompanyDto implements ICompaniesCreateDTO {
 
 
-    //ЭТИ ДЕКОРАТОРЫ ВАЛИДАЦИИ ЮЗАЮТСЯ ГЛОБАЛЬНЫМ app.useGlobalPipes(new ValidationPipe({ ВАЛИДАТОРОМ
+    //used by app.useGlobalPipes(new ValidationPipe({
+    // validators:
+    // https://github.com/typestack/class-validator?tab=readme-ov-file#validation-messages
     /**
     @IsOptional()
     @IsPositive()
@@ -12,6 +14,8 @@ export class CreateCompanyDto implements ICompaniesCreateDTO {
     @IsInt()
     @IsEmail()
     @IsNumberString()
+    @IsNotEmpty()
+    @IsString()
     */
 
     @IsNotEmpty()

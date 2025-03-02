@@ -2,8 +2,9 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { ICompanies, ICompaniesUpdateDTO, ICompaniesCreateDTO } from '../interfaces/companies.interface';
+import { ICompanies, ICompaniesUpdateDTO } from '../interfaces/companies.interface';
 import { CompaniesEntity } from './entities/companies.entity';
+import { CreateCompanyDto } from './dto/create-company.dto';
 
 @Injectable()
 export class CompaniesService {
@@ -33,7 +34,7 @@ export class CompaniesService {
         return company
     }
 
-    async create(createCompanyDto: ICompaniesCreateDTO): Promise<ICompaniesCreateDTO>{
+    async create(createCompanyDto: CreateCompanyDto): Promise<CreateCompanyDto>{
         return await this.companiesRepository.save(createCompanyDto)
     }
 
