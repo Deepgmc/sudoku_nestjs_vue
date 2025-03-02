@@ -1,13 +1,14 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Post, Request, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 
-//! эти наследники гварды можно использовать чтоб дописывать свою логику в дефолтные паспорт гварды
-import { LocalAuthGuard } from './local-auth.guard';
-import { JwtAuthGuard } from './jwt-auth.guard';
+//? эти наследники гварды можно использовать чтоб дописывать свою логику в дефолтные паспорт гварды
+// import { LocalAuthGuard } from './local-auth.guard';
+// import { JwtAuthGuard } from './jwt-auth.guard';
 
 import { AuthGuard } from '@nestjs/passport'
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { PasswordValidationPipe } from '../pipes/password.pipe';
 
 
 @Controller('auth')
@@ -15,11 +16,20 @@ export class AuthController {
 
     constructor(private readonly authService: AuthService) { }
 
+    /**
+    * Регистрация нового пользователя
+    *
+    * @decorator Nestjs Body
+      @postParam Принимает объект CreateUserDto из поста
+    * @returns Is created success
+    */
     @Post('register')
-    register(@Body() createUserDto: CreateUserDto){
-        //console.log('createUserDto at controller:', createUserDto)
-        this.authService.registerNewUser(createUserDto)
-        return {answer: 111}
+    //@UsePipes(new PasswordValidationPipe())
+    @UsePipes(PasswordValidationPipe)
+    async register(
+        @Body() createUserDto: CreateUserDto
+    ): Promise<any> {
+        return await this.authService.registerNewUser(createUserDto)
     }
 
     @UseGuards(AuthGuard('local'))

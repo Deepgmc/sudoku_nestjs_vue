@@ -23,7 +23,7 @@ export interface IAuthManager {
     /**
      * Регистрация юзера. Стратегии пока не при чем
      */
-    //FIXME remove any
+    //FIXME remove "any"
     register: (registerData: TRegisterForm) => Promise<any> | Error
 
     /**

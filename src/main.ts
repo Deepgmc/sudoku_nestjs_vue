@@ -36,9 +36,11 @@ async function bootstrap() {
 
 
     app.useGlobalPipes(new ValidationPipe({
+        //https://docs.nestjs.com/techniques/validation#using-the-built-in-validationpipe
         disableErrorMessages: false,//расширенные сообщения валидации входящих параметров для ДТО
-        whitelist: false,
-        transform: true//хрень полная, пытается кастить строку в число в итоге выкидывает ошибку, что всё крашится
+        whitelist: true,
+        transform: true,
+        //exceptionFactory
     }))
 
 

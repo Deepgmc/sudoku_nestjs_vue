@@ -10,4 +10,4 @@ export type TUserId = IUser['userId'];
 
 export type IUsersCreateDTO = Omit<IUser, 'userId'>
 export type IUsersUpdateDTO = Partial<IUser>
-export type TUserWithoutPassword = Omit<IUser, 'password'>;
+export type TUserWithoutPassword = Omit<IUser, 'password'>

@@ -14,9 +14,8 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    registerNewUser(user: CreateUserDto){
-        const newUser = new CreateUserDto(user)
-        console.log('newUser at auth service:', newUser)
+    async registerNewUser(user: CreateUserDto): Promise<any>{
+        return await this.usersService.create(user)
     }
 
     async validateAndGetUser(username: string, password: string): Promise<any> {

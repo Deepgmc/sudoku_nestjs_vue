@@ -17,18 +17,21 @@ const loginFormValidationFields = registerFormValidationFields
  * @param whichForm для какой формы выполняется
  * @returns структура валидации для vuelidate
  */
-export function getRules(whichForm: string) {
+export function getRules(whichForm: string, disable:boolean = false) {
     const rules: any = {}
     const types: TFormValidationFields[] = whichForm === 'registration' ? registerFormValidationFields : loginFormValidationFields
     for (const item of types) {
         const thisRules: any = {}
+        rules[item.field] = thisRules
+        if(disable) continue; //for debugging
+
         const minLen = item.type === 'text' ? 3 : 2;
         thisRules['required'] = h.withMessage(errorMessages.required, required)
         thisRules['minLength'] = h.withMessage(`${errorMessages.minlen} ${minLen}`, minLength(minLen))
         if (item.field === 'email') thisRules['email'] = h.withMessage(errorMessages.email, email)
         if (item.field === 'password') thisRules['passwordConfirmValidator'] = h.withMessage(errorMessages.equalPasswords, passwordConfirmValidator)
 
-        rules[item.field] = thisRules
+
     }
     return rules
 }

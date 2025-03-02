@@ -16,7 +16,7 @@ app.config.errorHandler = function(
     ComponentInstance: ComponentPublicInstance | null,
     info: string
 ){
-    console.log('%c Global erorr handler:', 'background:rgb(85, 0, 0); color: #bada55; padding: 5px;font-size:16px');
+    console.log('%c Global erorr handler:', 'background:rgb(85, 0, 0); color: #bada55; padding: 2px;font-size:14px');
     console.error(`Error: ${err.toString()}`, `Info: ${info}`);
 }
 

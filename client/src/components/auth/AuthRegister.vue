@@ -7,7 +7,7 @@ import { registerFormValidationFields, getRules } from './formValidationHelper'
 import type { TRegisterForm } from '@/interfaces/user'
 import type { IAuthManager } from '@/interfaces/auth'
 
-const warnMessage = ref('###')
+const warnMessage = ref<string[]>([])
 const $authManager: IAuthManager = inject('$authManager') as IAuthManager
 
 const localUser = ref<TRegisterForm>({
@@ -19,51 +19,49 @@ const localUser = ref<TRegisterForm>({
 })
 
 const rules = computed(() => {
-    return getRules('registration')
+    return getRules('registration', true)
 })
 const $v = useVuelidate(rules, localUser)
 
 async function submitRegister() {
-    const registerAnswer = await $authManager.register(localUser.value)
-
-    console.log('RegisterAnswer:', registerAnswer)
-    if(registerAnswer.error){
-        //axios error comes here
-        console.warn(
-            'Err message:', registerAnswer.error.message,
-            'Err code:', registerAnswer.error.code,
-            'Err status:', registerAnswer.error.status
-        )
-    }
-
-
-
-    return
-    const result = await $v.value.$validate()
-
+    resetWarnField()
     /**
     равны ли пароли
     отправка на сервер
     проверка на сервере и если неудачно - высветить ошибку тут
+            // console.log($v.value)
+            // console.log('V $errors:', $v.value.$errors)
     */
-
-    // console.log($v.value)
-    // console.log('V $errors:', $v.value.$errors)
+    const result = await $v.value.$validate()
     if (result) {
         try {
-            $authManager.register(localUser.value)
-            console.log('Form submitting')
+            const registerAnswer = await $authManager.register(localUser.value)
+            console.log('RegisterAnswer:', registerAnswer)
+
+            if(registerAnswer.error){
+                if(registerAnswer.error.response.data.message){
+                    warnMessage.value = registerAnswer.error.response.data.message
+                } else {
+                    console.log('ALARM EROR TYPE INCORRECT')
+                }
+                console.error(
+                    'Err message:', registerAnswer.error.message,
+                    'Err code:', registerAnswer.error.code,
+                    'Err status:', registerAnswer.error.status
+                )
+            }
         } catch (e: any) {
-            warnMessage.value = e.message
+            console.log('Catch error:', e)
+            console.log('ALARM EROR TYPE INCORRECT 2')
         }
     } else {
-        console.warn('Not submitting', result)
+        warnMessage.value = ['Validation went wrong']
     }
 
+}
 
-
-
-
+function resetWarnField(){
+    warnMessage.value = []
 }
 
 
@@ -73,7 +71,8 @@ async function submitRegister() {
 
     <form @submit.prevent="submitRegister" name="register_form" class="form_container">
         <div class="register_item auth_caption">
-            Register <span class="tmp_warn">{{ warnMessage }}</span>
+            Register
+            <span class="tmp_warn" v-for="message of warnMessage">{{ message }}</span>
         </div>
 
 
@@ -93,7 +92,4 @@ async function submitRegister() {
 </template>
 
 <style lang="scss">
-.tmp_warn {
-    color: rgb(184, 69, 34);
-}
 </style>

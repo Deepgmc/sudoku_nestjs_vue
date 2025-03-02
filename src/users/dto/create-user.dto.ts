@@ -1,53 +1,52 @@
-import { IUsersCreateDTO } from "../../interfaces/user.interface";
+import { IsString, IsNotEmpty, IsPositive, Max, Min, Length, IsEmail } from 'class-validator'
 
+import { IUsersCreateDTO } from '../../interfaces/user.interface'
+import { dtoValidationMessageHandler } from '../../validation/dtoMsgHandler'
+
+const dtoMsg = new dtoValidationMessageHandler('User')
+
+/**
+ * Game users DTO. Used during registration
+ */
 export class CreateUserDto implements IUsersCreateDTO {
 
-    username       : string
-    age            : number
-    password       : string
-    passwordConfirm: string
-    email          : string
-
-    constructor(newUser: CreateUserDto){
-        // if(this.validateIncomingUser(newUser)){
-        //     this.username = newUser.username
-        //     this.password = newUser.password
-        //     this.passwordConfirm = newUser.passwordConfirm
-        //     this.age = newUser.age
-        //     this.email = newUser.email
-        // } else {
-        //     throw new TypeError('User DTO is incorrect')
-        // }
-
-    }
-
+    //used by app.useGlobalPipes(new ValidationPipe({
+    // validators:
+    // https://github.com/typestack/class-validator?tab=readme-ov-file#validation-messages
     /**
-     *
-     * @param newUser Check is income user is correct
-     * @returns
+    @IsOptional()
+    @IsPositive()
+    @Max(1000)
+    @IsInt()
+    @IsEmail()
+    @IsNumberString()
+    @IsNotEmpty()
+    @IsString()
+    @Length(10, 20)
+    @IsDate()
      */
-    validateIncomingUser(newUser: IUsersCreateDTO){
-        let isValid = false
-        isValid = this.validateName(newUser.username)
-        isValid = this.validateAge(newUser.age)
-        isValid = this.validateEmail(newUser.email)
-        isValid = this.validatePassword(newUser.password, newUser.password)
-        return isValid
-    }
 
-    validateName(username: string): boolean{
-        return username.length >= 2 && username.length <= 15
-    }
-    validateAge(age: number): boolean{
-        return Number.isInteger(age) && age > 5 && age < 150
-    }
-    validateEmail(email: string): boolean{
-        return /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/g.test(email)
-    }
-    validatePassword(password: string, passwordConfirm: string): boolean{
-        return password.length >= 2 && password.length <= 25 &&
-        passwordConfirm.length >= 2 && passwordConfirm.length <= 25 &&
-        password === passwordConfirm
-    }
+    @IsNotEmpty({message: dtoMsg.getMessage('notempty')})
+    @IsString({message: dtoMsg.getMessage('string')})
+    @Length(2, 20, {message: dtoMsg.getMessage('length')})
+    username: string
+
+    @IsPositive({message: dtoMsg.getMessage('positive')})
+    @Max(150, {message: dtoMsg.getMessage('max')})
+    @Min(5, {message: dtoMsg.getMessage('min')})
+    age: number
+
+    @IsString({message: dtoMsg.getMessage('string')})
+    @Length(3, 25, {message: dtoMsg.getMessage('length')})
+    password: string
+
+    @IsString({message: ''})
+    passwordConfirm: string
+
+    @IsString()
+    @IsEmail({ignore_max_length: true}, {message: dtoMsg.getMessage('email')})
+    email: string
+
+    constructor() {}
 
 }

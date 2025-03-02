@@ -1,6 +1,6 @@
 import type { App as AppType } from 'vue'
 import axios from 'axios'
-import type { AxiosInstance, Axios, AxiosRequestConfig } from 'axios'
+import type { AxiosInstance, Axios, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 export class NetworkManager implements INetworkManager{
 
@@ -29,7 +29,8 @@ export class NetworkManager implements INetworkManager{
     applyNetworkMethod(type: string){
         return (section: string) => {
             return (action: string) => {
-                return async (parameters: any) => {
+                //return async (parameters: any): Promise<AxiosResponse | {error: any}> => {
+                return async (parameters: any): Promise<AxiosResponse | {error: any}> => {
                     // FIXME .post -> [type]
                     return await this.httpClient
                         ?.post(`${section}/${action}`, parameters)
@@ -45,7 +46,7 @@ export class NetworkManager implements INetworkManager{
 }
 
 export interface INetworkManager {
-    applyNetworkMethod: (type: string) => (section: string) => (action: string) => (parameters: any) => any
+    applyNetworkMethod: (type: string) => (section: string) => (action: string) => (parameters: any) => Promise<AxiosResponse | {error: any}>
 }
 export type HttpClientTypes = Axios
 

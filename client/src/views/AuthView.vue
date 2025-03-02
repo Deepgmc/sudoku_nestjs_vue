@@ -102,6 +102,12 @@ function changeForm(): void{
     margin:0 5px 0 0;
 }
 
+.tmp_warn {
+    color: red;
+    margin-top:10px;
+    height:0.6em;
+    font-size: 0.5em;
+}
 
 .submit_item{
     margin-top: 50px;

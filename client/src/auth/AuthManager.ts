@@ -34,6 +34,7 @@ class AuthManager implements IAuthManager{
     }
 
     logIn(username: string, password: string): boolean {
+        //todo make strategy as objects! and make this factory. LJS intensive2 5:56:42
         switch(this.strategy){
             case 'jwt':
                 return this.logInDefault(username, password)
@@ -45,20 +46,9 @@ class AuthManager implements IAuthManager{
     }
 
     async register(registerData: TRegisterForm){
-        console.log('AuthManager register starts')
         if(this.isLogined) throw new Error('You already logined')
 
-        const registerAnswer = await this._postData('register')(registerData)
-        console.log('RegisterAnswer:', registerAnswer)
-
-        if(registerAnswer.error){
-            //axios error comes here
-            console.warn(
-                'Err message:', registerAnswer.error.message,
-                'Err code:', registerAnswer.error.code,
-                'Err status:', registerAnswer.error.status
-            )
-        }
+        return await this._postData('register')(registerData)
 
         /**
         запросить нетворк менеджер метод сохранения данных (post) в конструкторе
