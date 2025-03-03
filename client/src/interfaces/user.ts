@@ -6,12 +6,15 @@ export interface IUser {
     email:    string,
 }
 
+export type TServerError = {field:string, message: string}
+
+
 export type TRegisterForm = {
     username       : string,
     password       : string,
     passwordConfirm: string,
     age            : number,
-    email          : string
+    email          : string,
 }
 
 export type TFormValidationFields = {

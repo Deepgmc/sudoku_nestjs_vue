@@ -4,13 +4,14 @@ import type { TRegisterForm } from '../../interfaces/user'
 import { required, minLength, email, helpers as h } from '@vuelidate/validators'
 
 export const registerFormValidationFields: TFormValidationFields[] = [
-    { field: 'username', caption: 'Name', placeholder: 'login', type: 'text' },
-    { field: 'password', caption: 'Password', placeholder: 'password', type: 'text' },
-    { field: 'passwordConfirm', caption: 'PasswordConfirmation', placeholder: 'confirm password', type: 'text' },
-    { field: 'age', caption: 'Age', placeholder: 'your age', type: 'number' },
-    { field: 'email', caption: 'Email', placeholder: 'example@example.com', type: 'text' },
+    { field: 'username',        caption: 'Name',                 placeholder: 'login',               type: 'text' },
+    { field: 'password',        caption: 'Password',             placeholder: 'password',            type: 'text' },
+    { field: 'passwordConfirm', caption: 'PasswordConfirmation', placeholder: 'confirm password',    type: 'text' },
+    { field: 'age',             caption: 'Age',                  placeholder: 'your age',            type: 'number'},
+    { field: 'email',           caption: 'Email',                placeholder: 'example@example.com', type: 'text' },
 ]
 const loginFormValidationFields = registerFormValidationFields
+const externalServerValidation = () => true
 
 /**
  * Составляет структуру-настройку в нужном формате для vuelidate
@@ -30,9 +31,8 @@ export function getRules(whichForm: string, disable:boolean = false) {
         thisRules['minLength'] = h.withMessage(`${errorMessages.minlen} ${minLen}`, minLength(minLen))
         if (item.field === 'email') thisRules['email'] = h.withMessage(errorMessages.email, email)
         if (item.field === 'password') thisRules['passwordConfirmValidator'] = h.withMessage(errorMessages.equalPasswords, passwordConfirmValidator)
-
-
     }
+    rules.username = Object.assign(rules.username, {externalServerValidation})
     return rules
 }
 

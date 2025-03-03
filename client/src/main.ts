@@ -17,7 +17,8 @@ app.config.errorHandler = function(
     info: string
 ){
     console.log('%c Global erorr handler:', 'background:rgb(85, 0, 0); color: #bada55; padding: 2px;font-size:14px');
-    console.error(`Error: ${err.toString()}`, `Info: ${info}`);
+    console.log(err)
+    //console.error(`Error: ${err.toString()}`, `Info: ${info}`);
 }
 
 app.provide('$networkManager', NetworkManager.getInstance())
