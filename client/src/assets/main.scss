@@ -53,3 +53,9 @@ button{
 
     flex-flow: row nowrap;
 }
+.error_text{
+    color: $errorTextColor
+}
+.success_text{
+    color: $successTextColor
+}

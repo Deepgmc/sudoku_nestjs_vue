@@ -13,28 +13,34 @@ export class UsersService {
         private usersRepository: Repository<UsersEntity>,
     ) {}
 
-    async create(createUserDto: CreateUserDto): Promise<CreateUserDto>{
+    async create(createUserDto: CreateUserDto): Promise<CreateUserDto | boolean> {
+        if(
+            //check if already have such login/email
+            await this.usersRepository.existsBy([{'username': createUserDto.username}, {'email': createUserDto.email}])
+        ){
+            return false
+        }
         return await this.usersRepository.save(createUserDto)
     }
 
-    async findAll(): Promise<UsersEntity[]> {
-        const users = await this.usersRepository.find()
-        return users;
+    /**
+     * Searches the unique user with the unique id or login or email
+     * @param field userId, username, email
+     * @param value id or string
+     * @returns
+     */
+    async findOne(field: string, value: string | number): Promise<UsersEntity | null> {
+        const searchObject = {
+            [field]: value
+        }
+        return await this.usersRepository.findOneBy(searchObject)
     }
 
-    async findOne(fieldValue: number | string): Promise<any> {
-        let fieldName: string
-        if(typeof fieldValue === 'string'){
-            fieldName = 'username'
-        } else {
-            fieldName = 'userId'
-        }
-        const searchObject = {
-            [fieldName]: fieldValue
-        }
-        const user = await this.usersRepository.findOneBy(searchObject)
-
-
-        return user
+    /**
+     * Just all users without conditions
+     * @returns users array
+     */
+    async findAll(): Promise<UsersEntity[]> {
+        return await this.usersRepository.find()
     }
 }

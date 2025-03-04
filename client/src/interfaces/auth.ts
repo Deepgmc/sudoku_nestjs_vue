@@ -1,4 +1,4 @@
-import type { TRegisterForm } from '@/interfaces/user'
+import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
 
 export enum availableStrategies {
     'jwt'
@@ -7,24 +7,34 @@ export enum availableStrategies {
 export interface IAuthManager {
 
     /**
-     * тип авторизации
+     Current strategy
      */
-    strategy: string | null
+    _strategy: string | null
+    setStrategy: (s: IAuthManager['_strategy']) => void
     /**
-     * какие вообще бывают стратегии авторизации
+     * What types of strategies we have
      */
     availableStrategies: typeof availableStrategies
 
     /**
-     * авторизован ли юзер, любыми стратегиями
+     * Depends on strategy: logins current user, saving authorisation data
+       Do not use directly. Use loginRequest() instead
+     * @returns saved login status or no
      */
-    //_isLogined: boolean
+    _login: () => boolean
 
     /**
-     * Регистрация юзера. Стратегии пока не при чем
+     * User registration. Sends query to a server
      */
-    //FIXME remove "any"
-    register: (registerData: TRegisterForm) => Promise<any> | Error
+    registerRequest: (registerData: TRegisterForm) => Promise<any>
+
+    /**
+     * User login. Sends Query to a server
+     * @param username
+     * @param password
+     * @returns
+     */
+    loginRequest: (loginData: ILoginUser) => Promise<any>
 
     /**
      * Авторизация по логину и паролю
@@ -32,13 +42,13 @@ export interface IAuthManager {
      * @param password
      * @returns
      */
-    logInDefault: (username: string, password: string) => boolean
+    loginJwt: (loginData: ILoginUser) => Promise<any>
 
     /**
      * Выйти из системы, удалив авторизационные данные из стора
      * @returns успех разлогирования
      */
-    logOut: () => void;
+    logOut: () => void
 
 }
 

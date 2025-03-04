@@ -20,8 +20,8 @@ export class UsersController {
 
     @Get(':id')
     //? @UserId decorator can be replaced by default ParseIntPipe
-    async findOne(@UserId() id: number): Promise<IUser> {
-        const user = await this.usersService.findOne(id)
+    async findOne(@UserId() id: number): Promise<IUser | null> {
+        const user = await this.usersService.findOne('id', id)
         this.logger.debug('Find one user:')
         this.logger.debug(user)
         return user

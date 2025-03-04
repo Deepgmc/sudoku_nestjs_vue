@@ -24,12 +24,11 @@ export class AuthController {
     * @returns Is created success
     */
     @Post('register')
-    //@UsePipes(new PasswordValidationPipe())
     @UsePipes(PasswordValidationPipe)
     async register(
         @Body() createUserDto: CreateUserDto
     ): Promise<any> {
-        return await this.authService.registerNewUser(createUserDto)
+        await this.authService.registerNewUser(createUserDto)
     }
 
     @UseGuards(AuthGuard('local'))
@@ -41,10 +40,7 @@ export class AuthController {
         Он в свою очередь ищет юзера, проверяет логин пароль и возвращает в паспорт юзера
         А тот уже в конце запихивает этот объект юзера в реквест и делает еще всякую магию, наверное
         */
-        console.log('Conctroller got user in request (after guard):', req.user);
-        const jwtAnswer = this.authService.login(req.user)
-        console.log(jwtAnswer);
-        return jwtAnswer
+        return this.authService.loginJwt(req.user)
     }
 
     // @UseGuards(LocalAuthGuard)

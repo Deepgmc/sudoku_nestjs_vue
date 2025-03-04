@@ -1,9 +1,11 @@
+
 export interface IUser {
     userId  : number,
     username: string,
+    email   : string,
     age     : number,
     password: string,
-    email   : string
+    reg_date: Date
 }
 
 export type TUserId = IUser['userId'];

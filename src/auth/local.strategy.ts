@@ -2,6 +2,7 @@ import { Strategy } from 'passport-local'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { AuthService } from './auth.service'
+import { IUser } from '../interfaces/user.interface'
 
 @Injectable()
 //? вызывается как <name>Strategy ---- AuthGuard('local')
@@ -21,16 +22,13 @@ export class LocalStrategy extends PassportStrategy(Strategy){
     async validate(
         username: string,
         password: string
-    ): Promise<any>  {
-        console.log('Local strategy validate', username, password);
+    ): Promise<IUser>  {
         const user = await this.authService.validateAndGetUser(username, password)
         if(!user){
-            console.log('Local strategy have not found user', username, password);
+            console.log('Local strategy have not found user with:', username, password);
             throw new UnauthorizedException()
         }
         user.additional_data = {role: 'admin'}
-
-        console.log('Local strategy user: ', user);
 
         return user
     }

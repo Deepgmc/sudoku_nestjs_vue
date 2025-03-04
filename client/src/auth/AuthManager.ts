@@ -1,9 +1,11 @@
 
-import { inject, type App as AppType } from 'vue'
+import { type App as AppType } from 'vue'
 import { availableStrategies, type IAuthManager, type jwtTokenType } from '@/interfaces/auth'
 import { NetworkManager, type INetworkManager } from '@/network/NetworkManager.ts'
 
-import type { TRegisterForm } from '@/interfaces/user'
+import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
+import { RESPONSE_STATUS_CODES } from '@/constants'
+
 
 //const $networkManager: INetworkManager = inject('$networkManager') as INetworkManager
 const $networkManager: INetworkManager = NetworkManager.getInstance()
@@ -11,13 +13,13 @@ const $networkManager: INetworkManager = NetworkManager.getInstance()
 class AuthManager implements IAuthManager{
 
     public availableStrategies = availableStrategies
-    strategy: IAuthManager['strategy'] = ''
+    _strategy: IAuthManager['_strategy'] = ''
     private _jwtToken: jwtTokenType = ''
 
     private _isLogined: boolean = false //авторизация, любыми стратегиями
 
     static instance: AuthManager | null = null
-    static getInstance(): IAuthManager{
+    static getInstance(): IAuthManager {
         if(AuthManager.instance) {
             return AuthManager.instance
         }
@@ -33,29 +35,20 @@ class AuthManager implements IAuthManager{
         AuthManager.instance = this
     }
 
-    logIn(username: string, password: string): boolean {
-        //todo make strategy as objects! and make this factory. LJS intensive2 5:56:42
-        switch(this.strategy){
+    async registerRequest(registerData: TRegisterForm): Promise<any>{
+        if(this.isLogined) return {error: {message: 'You already logined'}}
+        return await this._postData('register')(registerData)
+    }
+
+    async loginRequest(loginData: ILoginUser): Promise<any> {
+        if(this.isLogined) return {error: {message: 'You already logined'}}
+        switch(this._strategy){
             case 'jwt':
-                return this.logInDefault(username, password)
+                return await this.loginJwt(loginData)
             break;
             default:
                 throw new TypeError('Invalid login strategy')
         }
-        return false
-    }
-
-    async register(registerData: TRegisterForm){
-        if(this.isLogined) throw new Error('You already logined')
-
-        return await this._postData('register')(registerData)
-
-        /**
-        запросить нетворк менеджер метод сохранения данных (post) в конструкторе
-        вызвать этот метод, указав тип операции и передав данные
-        */
-
-        //return false
     }
 
     /**
@@ -64,18 +57,25 @@ class AuthManager implements IAuthManager{
      * @param password
      * @returns Is user logined success or no
      */
-    logInDefault(username: string, password: string): boolean {
-        if(this.isLogined) {
-            console.warn('Auth manager: Already logined')
-            return true
+    async loginJwt(loginData: ILoginUser): Promise<boolean> {
+        const loginRes = await this._postData('login')(loginData)
+        if(loginRes.status === RESPONSE_STATUS_CODES.CREATED){
+            this.jwtToken = loginRes.access_token
+            this._login()
         }
-        this.strategy = 'jwt'
-        console.log(username, password)
+        return loginRes
+    }
+
+    _login() {
         return false
     }
 
     logOut(): void{
         this.jwtToken = null
+    }
+
+    setStrategy(s: IAuthManager['_strategy']){
+        this._strategy = s
     }
 
     get isLogined(){

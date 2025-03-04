@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
@@ -17,7 +17,8 @@ export class AuthService {
 
     async registerNewUser(user: CreateUserDto): Promise<any>{
         user.password = await this.getPasswordHash(user.password)
-        return await this.usersService.create(user)
+        const creationResult = await this.usersService.create(user)
+        if(!creationResult) throw new BadRequestException(['Can not create with that login-email'])
     }
 
     async getPasswordHash(password: string): Promise<string>{
@@ -28,24 +29,29 @@ export class AuthService {
         })
     }
 
+
+
+
     async validateAndGetUser(username: string, password: string): Promise<any> {
         const user = await this.getAndCheckUser(username)
-        if(user){
-            return new Promise((resolve) => {
-                bcrypt.compare(password, user.password, function(err, compareResult) {
-                    if(compareResult){
-                        const { password, ...result } = user
-                        console.log('ValidateAndGetUser user:', user)
-                        resolve(result)
-                    }
-                    resolve(null)
-                });
-            })
-        }
-        return Promise.resolve(null)
+        return new Promise((resolve) => {
+            bcrypt.compare(password, user.password, function(err, compareResult) {
+                if(compareResult){
+                    const { password, ...result } = user
+                    console.log('ValidateAndGetUser user:', user)
+                    resolve(result)
+                }
+                resolve(null)
+            });
+        })
     }
 
-    login(user: any){
+    /**
+     * Function for jwt passport strategy login system
+     * @param user
+     * @returns jwt access token
+     */
+    loginJwt(user: IUser){
         const payload = {username: user.username, sub: user.userId}
         return {
             access_token: this.jwtService.sign(payload)
@@ -53,8 +59,8 @@ export class AuthService {
     }
 
     async getAndCheckUser(username: string): Promise<IUser> {
-        const user = await this.usersService.findOne(username)
-        if(user === null) throw new UnauthorizedException('Not found such user')
+        const user = await this.usersService.findOne('username', username)
+        if(!user) throw new UnauthorizedException('Not found such user')
         return user
     }
 
