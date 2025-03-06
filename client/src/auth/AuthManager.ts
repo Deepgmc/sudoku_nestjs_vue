@@ -1,37 +1,49 @@
 
 import { type App as AppType } from 'vue'
-import { availableStrategies, type IAuthManager, type jwtTokenType } from '@/interfaces/auth'
+import { availableStrategies, type IAuthManager } from '@/interfaces/Auth'
+import { useAuthStore } from '@/stores/auth'
 import { NetworkManager, type INetworkManager } from '@/network/NetworkManager.ts'
 
 import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
-import { RESPONSE_STATUS_CODES } from '@/constants'
+import type { TStrategies } from '@/interfaces/Auth'
+import { jwtStrategy } from '@/auth/strategies/jwt.strategy'
 
 
-//const $networkManager: INetworkManager = inject('$networkManager') as INetworkManager
 const $networkManager: INetworkManager = NetworkManager.getInstance()
 
-class AuthManager implements IAuthManager{
+export class AuthManager implements IAuthManager{
 
     public availableStrategies = availableStrategies
-    _strategy: IAuthManager['_strategy'] = ''
-    private _jwtToken: jwtTokenType = ''
+
+    _strategy: TStrategies = null
+    _authStore
 
     private _isLogined: boolean = false //авторизация, любыми стратегиями
 
     static instance: AuthManager | null = null
-    static getInstance(): IAuthManager {
+    static getInstance(
+        strategy: IAuthManager['_strategy'],
+        authStore: any
+    ): IAuthManager {
         if(AuthManager.instance) {
+            AuthManager.instance.updateIsLogined()
             return AuthManager.instance
         }
-        return new AuthManager()
+        return new AuthManager(strategy, authStore)
     }
 
     private _apiSection: string = 'auth'
     private _postData: ((type: string) => any)
 
-    constructor(){
+    constructor(
+        strategy: IAuthManager['_strategy'],
+        authStore: any
+    ){
         if(AuthManager.instance) throw new TypeError('Instance creation only with .getInstance()')
+        this._strategy = strategy
+        this._authStore = authStore
         this._postData = $networkManager.applyNetworkMethod('post')(this._apiSection)
+        this.updateIsLogined()
         AuthManager.instance = this
     }
 
@@ -40,45 +52,40 @@ class AuthManager implements IAuthManager{
         return await this._postData('register')(registerData)
     }
 
+    /**
+     * Depends on strategy: logins current user, saving authorisation data
+       Do not use directly. Use loginRequest() instead
+     * @returns saved login status or no
+    */
     async loginRequest(loginData: ILoginUser): Promise<any> {
         if(this.isLogined) return {error: {message: 'You already logined'}}
-        switch(this._strategy){
-            case 'jwt':
-                return await this.loginJwt(loginData)
-            break;
-            default:
-                throw new TypeError('Invalid login strategy')
-        }
+        if(!this._strategy) return {error: {message: 'Invalid login strategy'}}
+
+        this._isLogined = await this._strategy.login(loginData)
+        if(this._isLogined) this._authStore.setIsLogined()
+        else this._authStore.setIsNotLogined()
+
+        const isLoginrequestSuccess = await this._strategy.login(loginData)
+
+        this.updateIsLogined()
+
+        return isLoginrequestSuccess
     }
 
     /**
-     * Login via default JWT strategy
-     * @param username User login
-     * @param password
-     * @returns Is user logined success or no
-     */
-    async loginJwt(loginData: ILoginUser): Promise<boolean> {
-        const loginRes = await this._postData('login')(loginData)
-        if(loginRes.status === RESPONSE_STATUS_CODES.CREATED){
-            this.jwtToken = loginRes.access_token
-            this._login()
-        }
-        return loginRes
-    }
-
-    _login() {
-        return false
-    }
-
-    logOut(): void{
-        this.jwtToken = null
-    }
-
-    setStrategy(s: IAuthManager['_strategy']){
-        this._strategy = s
-    }
-
+    Checks whether the clien-side storage have an auth data
+    */
     get isLogined(){
+        console.log('AuthManager isLogined call:', this._isLogined)
+        return this._isLogined
+    }
+
+    updateIsLogined(): boolean{
+        if(!this._strategy) return false
+        const strategyIslogined = this._strategy.isLogined()
+        this._authStore.setIsLogined(strategyIslogined)
+        this._isLogined = strategyIslogined
+
         return this._isLogined
     }
 
@@ -86,20 +93,11 @@ class AuthManager implements IAuthManager{
         throw new ReferenceError('Cant set isLogined directly')
     }
 
-    set jwtToken(newToken){
-        this._jwtToken = newToken
-    }
-
-    get jwtToken(){
-        return this._jwtToken
-    }
-
-
 }
 
 export default {
     install: (app: AppType) => {
         console.info('Auth manager as plugin instance created')
-        app.provide('$authManager', AuthManager.getInstance())
+        app.provide('$authManager', AuthManager.getInstance(new jwtStrategy(), useAuthStore()) )
     }
 }

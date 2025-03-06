@@ -21,6 +21,14 @@ async function bootstrap() {
     }
     );
 
+    app.useGlobalPipes(new ValidationPipe({
+        //https://docs.nestjs.com/techniques/validation#using-the-built-in-validationpipe
+        disableErrorMessages: false,//расширенные сообщения валидации входящих параметров для ДТО
+        whitelist: true,
+        transform: true,
+        //exceptionFactory
+    }))
+
 
     //!Global app prefix
 
@@ -33,15 +41,6 @@ async function bootstrap() {
     //? выключает только companies без вложенностей
     //? app.setGlobalPrefix('api', { exclude: ['companies'] });
 
-
-
-    app.useGlobalPipes(new ValidationPipe({
-        //https://docs.nestjs.com/techniques/validation#using-the-built-in-validationpipe
-        disableErrorMessages: false,//расширенные сообщения валидации входящих параметров для ДТО
-        whitelist: true,
-        transform: true,
-        //exceptionFactory
-    }))
 
 
     //? Работа с сессиями
@@ -68,7 +67,7 @@ async function bootstrap() {
 
     const port = process.env.LISTEN_PORT ?? 0
     await app.listen(port);
-    const logger = new Logger(`INIT ENDS. Server listening to :${port}`)
-    logger.error('############################')
+    const logger = new Logger(`INIT END: ${port}`)
+    logger.error('####################################')
 };
 bootstrap();

@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { computed, inject, reactive, ref } from 'vue';
+import { computed, inject, reactive, ref, watch, watchEffect } from 'vue';
+import { useAuthStore } from '@/stores/auth'
+import { useVuelidate } from '@vuelidate/core'
 
-import type { IAuthManager } from '@/interfaces/auth';
-import { type ILoginUser } from '@/interfaces/user';
 import AuthFormField from './AuthFormField.vue'
 import AuthResponseMessage from './AuthResponseMessage.vue'
 import { loginFormValidationFields, getRules } from './formValidationHelper'
-import { useVuelidate } from '@vuelidate/core';
+
+import type { IAuthManager } from '@/interfaces/Auth';
+import type { ILoginUser } from '@/interfaces/user';
+
 
 const $externalResults = reactive({})
 const isFormValidated = ref<boolean>(false)
 const infoMessage = ref<string[]>([])
 
+const authStore = useAuthStore()
 const $authManager: IAuthManager = inject('$authManager') as IAuthManager;
 
 const loginUser = ref<ILoginUser>({
@@ -25,15 +29,13 @@ const rules = computed(() => {
 })
 const $v = useVuelidate(rules, loginUser, { $externalResults: $externalResults })
 
-async function submitLogin (): Promise<boolean> {
+async function submitLogin(): Promise<boolean> {
     resetMessageField()
     const result = await $v.value.$validate()
     if(!result){
         return false //client side-validation
     }
-    $authManager.setStrategy('jwt')
     const res = await $authManager.loginRequest(loginUser.value)
-    console.log('LoginAnswer:', res)
 
     if(res.error){
         if(res.error.message) {
@@ -62,8 +64,8 @@ function resetMessageField(){
 <template>
 
     <form @submit.prevent="submitLogin" name="login_form" class="form_container">
-        <div class="login_item auth_caption">Login</div>
-        <div class="login_item">
+        <div class="login_item auth_caption">Login {{authStore.logined ? '(logined)' : ''}}</div>
+        <div class="login_item">{{ authStore.logined }}
             <AuthResponseMessage
                 form="login"
                 :messages="infoMessage"
@@ -73,9 +75,12 @@ function resetMessageField(){
         </div>
 
         <div v-for="item of loginFormValidationFields" class="login_item">
-            <AuthFormField :inputName="item.caption" :errors="$v[item.field].$errors"
-                :modelField="loginUser[item.field as keyof typeof loginUser]">
-                <input v-model="loginUser[item.field as keyof typeof loginUser]" :type="item.type" :placeholder="item.placeholder">
+            <AuthFormField
+                :inputName="item.caption"
+                :errors="$v[item.field].$errors"
+                :modelField="loginUser[item.field as keyof typeof loginUser]"
+                >
+                    <input v-model="loginUser[item.field as keyof typeof loginUser]" :type="item.type" :placeholder="item.placeholder">
             </AuthFormField>
         </div>
 

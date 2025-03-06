@@ -1,4 +1,9 @@
 import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
+import type { jwtStrategy } from '@/auth/strategies/jwt.strategy'
+
+export type jwtTokenType = string | null
+
+export type TStrategies = jwtStrategy | null //     | anotherStrategy | thirdStrategy
 
 export enum availableStrategies {
     'jwt'
@@ -9,19 +14,12 @@ export interface IAuthManager {
     /**
      Current strategy
      */
-    _strategy: string | null
-    setStrategy: (s: IAuthManager['_strategy']) => void
+    _strategy: TStrategies
+    //setStrategy: (s: IAuthManager['_strategy']) => void
     /**
      * What types of strategies we have
      */
     availableStrategies: typeof availableStrategies
-
-    /**
-     * Depends on strategy: logins current user, saving authorisation data
-       Do not use directly. Use loginRequest() instead
-     * @returns saved login status or no
-     */
-    _login: () => boolean
 
     /**
      * User registration. Sends query to a server
@@ -36,20 +34,12 @@ export interface IAuthManager {
      */
     loginRequest: (loginData: ILoginUser) => Promise<any>
 
-    /**
-     * Авторизация по логину и паролю
-     * @param username
-     * @param password
-     * @returns
-     */
-    loginJwt: (loginData: ILoginUser) => Promise<any>
+    isLogined: boolean
 
     /**
      * Выйти из системы, удалив авторизационные данные из стора
      * @returns успех разлогирования
      */
-    logOut: () => void
+    //logOut: () => void
 
 }
-
-export type jwtTokenType = string | null

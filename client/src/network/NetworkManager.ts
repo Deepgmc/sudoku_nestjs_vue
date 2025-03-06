@@ -16,6 +16,7 @@ export class NetworkManager implements INetworkManager{
 
         this.httpClient = axios.create({
             baseURL: 'http://localhost:5173',
+            //baseURL: 'http://localhost:3050',
             timeout: 1000,
 
         });
@@ -29,7 +30,6 @@ export class NetworkManager implements INetworkManager{
     applyNetworkMethod(type: string){
         return (section: string) => {
             return (action: string) => {
-                //return async (parameters: any): Promise<AxiosResponse | {error: any}> => {
                 return async (parameters: any): Promise<AxiosResponse | {error: any}> => {
                     // FIXME .post -> [type]
                     return await this.httpClient

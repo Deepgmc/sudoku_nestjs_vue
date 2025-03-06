@@ -6,7 +6,7 @@ import AuthFormField from './AuthFormField.vue'
 import AuthResponseMessage from './AuthResponseMessage.vue'
 import { registerFormValidationFields, getRules } from './formValidationHelper'
 import type { TRegisterForm } from '@/interfaces/user'
-import type { IAuthManager } from '@/interfaces/auth'
+import type { IAuthManager } from '@/interfaces/Auth'
 
 const $externalResults = reactive({})
 const isFormValidated = ref<boolean>(false)
