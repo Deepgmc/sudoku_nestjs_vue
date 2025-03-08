@@ -1,5 +1,5 @@
 import { ref, computed, reactive } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore  } from 'pinia'
 
 // export const useUserStore = defineStore('user', {
 //     state: () => ({
@@ -22,14 +22,14 @@ export const useAuthStore = defineStore('auth', () => {
      computed() становятся геттерами
      function() становятся действиями
     */
-    const logined = ref<boolean>(false)
+    const isLogined = ref<boolean>(false)
     const timeLogined = ref<number>(0)
 
     function setIsLogined(state: boolean): void {
         timeLogined.value = Date.now()
-        logined.value = state
+        isLogined.value = state
     }
 
-    return {logined, setIsLogined}
+    return {isLogined, setIsLogined}
 })
 

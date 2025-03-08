@@ -34,9 +34,9 @@ async function bootstrap() {
 
     //app.setGlobalPrefix('api');
 
-    // app.setGlobalPrefix('api', {
-    //     exclude: [{ path: 'companies', method: RequestMethod.GET }],
-    // })
+    app.setGlobalPrefix('api', {
+        exclude: [{ path: '/', method: RequestMethod.GET }],
+    })
 
     //? выключает только companies без вложенностей
     //? app.setGlobalPrefix('api', { exclude: ['companies'] });

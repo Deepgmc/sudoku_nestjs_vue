@@ -1,24 +1,24 @@
+import { inject } from 'vue'
 import {type jwtTokenType } from '@/interfaces/Auth'
-import { Strategy } from './Strategy'
-import { NetworkManager, type INetworkManager } from '@/network/NetworkManager.ts'
-import type { ILoginUser } from '@/interfaces/user'
-import { StorageManager } from '@/storage/storageManager'
-import { RESPONSE_STATUS_CODES } from '@/constants'
 
-const $networkManager: INetworkManager = NetworkManager.getInstance()
+import { Strategy } from './Strategy';
+import type { ILoginUser } from '@/interfaces/user';
+import { RESPONSE_STATUS_CODES } from '@/constants';
+import {AuthManager} from '../AuthManager';
+import { NetworkManager } from '@/network/NetworkManager';
+
+const $networkManager = NetworkManager.getInstance()
 
 export class jwtStrategy extends Strategy {
 
-    private _token: jwtTokenType = null
-
     private _apiSection: string = 'auth'
-    private _postData: ((type: string) => any)
-
-    private storageManager = new StorageManager(localStorage)
+    private _postData: (authManager: AuthManager) => any
+    private _getData: (authManager: AuthManager) => any
 
     constructor(){
         super()
-        this._postData = $networkManager.applyNetworkMethod('post')(this._apiSection)
+        this._postData = $networkManager.applyNetworkMethod('post', this._apiSection)
+        this._getData = $networkManager.applyNetworkMethod('get', this._apiSection)
     }
 
     /**
@@ -27,24 +27,52 @@ export class jwtStrategy extends Strategy {
      * @param password
      * @returns Is user logined success or no
     */
-    async login(loginData: ILoginUser): Promise<any>{
-        const loginRes = await this._postData('login')(loginData)
+    async login(loginData: ILoginUser): Promise<any> {
+        const $authManager = AuthManager.getInstance()
+        const loginRes = await this._postData($authManager)('login')(loginData)
+        console.log('Login res: ', loginRes)
         if(loginRes.status === RESPONSE_STATUS_CODES.CREATED){
-            this.token = loginRes.data.access_token
-            return this.storageManager.saveAuthData({access_token: this.token})
+            return this.setAuthStoragedData({access_token: loginRes.data.access_token})
         }
         return false
     }
 
-    isLogined(){
-        const authData = this.storageManager.getAuthData()
-        return !!authData && typeof authData.access_token !== 'undefined'
+    logOut(): boolean{
+        return this.removeAuthStoragedData()
+    }
+
+    /**
+     * Is strategy has an authorisation
+     * @returns boolean
+     */
+    async isLogined(){
+        let isLogined: boolean = false
+        isLogined = await this.checkServerStrategyStatus()
+        return isLogined
+    }
+
+    /**
+     * Checks the server token
+     * @returns whether token valid or not
+     */
+    async checkServerStrategyStatus(){
+        let isLogined = true
+        const checkData = await this._getData(AuthManager.getInstance())('check_token')()
+        if(checkData.error && checkData.error.status === RESPONSE_STATUS_CODES.UNAUTHORIZED){
+            isLogined = false
+        }
+        return isLogined
     }
 
     set token(token: jwtTokenType){
-        this._token = token
+        throw new ReferenceError('Can not set token directly')
     }
-    get token(){
-        return this._token
+    get token(): jwtTokenType{
+        const authData = this.getAuthStoragedData()
+        if(!authData) return null
+        if(typeof authData.access_token !== 'undefined'){
+            return authData.access_token
+        }
+        return null
     }
 }

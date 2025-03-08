@@ -19,4 +19,8 @@ export class StorageManager {
         if(data === null) return null
         return JSON.parse(data)
     }
+    removeAuthData(): boolean{
+        this._storage.removeItem('authData')
+        return true
+    }
 }

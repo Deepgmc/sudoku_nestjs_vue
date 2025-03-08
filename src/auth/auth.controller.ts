@@ -63,4 +63,11 @@ export class AuthController {
         return '<body style="background-color:black;color:white;"><b>Profile page</b></body>'
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @Get('check_token')
+    checkAuth(@Request() req) {
+        console.log('Profile controller', req);
+        return {logined: true}
+    }
+
 }

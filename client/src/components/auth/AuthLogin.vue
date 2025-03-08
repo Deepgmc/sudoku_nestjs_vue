@@ -64,14 +64,13 @@ function resetMessageField(){
 <template>
 
     <form @submit.prevent="submitLogin" name="login_form" class="form_container">
-        <div class="login_item auth_caption">Login {{authStore.logined ? '(logined)' : ''}}</div>
-        <div class="login_item">{{ authStore.logined }}
+        <div class="login_item auth_caption">Login {{authStore.isLogined ? '(logined)' : ''}}</div>
+        <div class="login_item">
             <AuthResponseMessage
                 form="login"
                 :messages="infoMessage"
                 :isFormValidated="isFormValidated"
             ></AuthResponseMessage>
-
         </div>
 
         <div v-for="item of loginFormValidationFields" class="login_item">

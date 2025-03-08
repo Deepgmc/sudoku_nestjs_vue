@@ -3,6 +3,10 @@ import type { jwtStrategy } from '@/auth/strategies/jwt.strategy'
 
 export type jwtTokenType = string | null
 
+export type TAuthData = {
+    access_token: jwtTokenType
+}
+
 export type TStrategies = jwtStrategy | null //     | anotherStrategy | thirdStrategy
 
 export enum availableStrategies {
@@ -34,12 +38,21 @@ export interface IAuthManager {
      */
     loginRequest: (loginData: ILoginUser) => Promise<any>
 
+    /**
+     * SHORT client-side status logined or not. Unsafe - do not checks the server
+     */
     isLogined: boolean
+
+    /**
+     * checks AND UPDATES isLogin status
+     */
+    updateAndGetIsLogined(): Promise<boolean>
 
     /**
      * Выйти из системы, удалив авторизационные данные из стора
      * @returns успех разлогирования
      */
-    //logOut: () => void
+    logOut: () => boolean
+
 
 }

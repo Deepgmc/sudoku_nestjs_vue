@@ -1,55 +1,55 @@
 
-import { type App as AppType } from 'vue'
+import { inject } from 'vue'
 import { availableStrategies, type IAuthManager } from '@/interfaces/Auth'
-import { useAuthStore } from '@/stores/auth'
-import { NetworkManager, type INetworkManager } from '@/network/NetworkManager.ts'
 
 import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
 import type { TStrategies } from '@/interfaces/Auth'
-import { jwtStrategy } from '@/auth/strategies/jwt.strategy'
+import { RESPONSE_STATUS_CODES } from '@/constants'
+import { NetworkManager } from '@/network/NetworkManager.ts'
 
 
-const $networkManager: INetworkManager = NetworkManager.getInstance()
 
-export class AuthManager implements IAuthManager{
+export class AuthManager implements IAuthManager {
 
     public availableStrategies = availableStrategies
 
     _strategy: TStrategies = null
-    _authStore
+    _authStore//pinia store
 
     private _isLogined: boolean = false //авторизация, любыми стратегиями
+    networkManager: NetworkManager
 
     static instance: AuthManager | null = null
     static getInstance(
-        strategy: IAuthManager['_strategy'],
-        authStore: any
-    ): IAuthManager {
+        strategy?: IAuthManager['_strategy'],
+        authStore?: any
+    ): AuthManager {
         if(AuthManager.instance) {
-            AuthManager.instance.updateIsLogined()
             return AuthManager.instance
         }
         return new AuthManager(strategy, authStore)
     }
 
     private _apiSection: string = 'auth'
-    private _postData: ((type: string) => any)
+    private _postData: (authManager: AuthManager) => any
 
     constructor(
-        strategy: IAuthManager['_strategy'],
-        authStore: any
+        strategy?: IAuthManager['_strategy'],
+        authStore?: any
     ){
         if(AuthManager.instance) throw new TypeError('Instance creation only with .getInstance()')
-        this._strategy = strategy
-        this._authStore = authStore
-        this._postData = $networkManager.applyNetworkMethod('post')(this._apiSection)
-        this.updateIsLogined()
         AuthManager.instance = this
+        if(strategy) this._strategy = strategy
+        this._authStore = authStore
+        this.networkManager = NetworkManager.getInstance()
+        this._postData = this.networkManager.applyNetworkMethod('post', this._apiSection)
+
+        this.updateAndGetIsLogined()
     }
 
     async registerRequest(registerData: TRegisterForm): Promise<any>{
         if(this.isLogined) return {error: {message: 'You already logined'}}
-        return await this._postData('register')(registerData)
+        return await this._postData(this)('register')(registerData)
     }
 
     /**
@@ -61,43 +61,51 @@ export class AuthManager implements IAuthManager{
         if(this.isLogined) return {error: {message: 'You already logined'}}
         if(!this._strategy) return {error: {message: 'Invalid login strategy'}}
 
-        this._isLogined = await this._strategy.login(loginData)
-        if(this._isLogined) this._authStore.setIsLogined()
-        else this._authStore.setIsNotLogined()
+        const loginRes = await this._strategy.login(loginData)
 
-        const isLoginrequestSuccess = await this._strategy.login(loginData)
+        this._isLogined = loginRes
+        this._authStore.setIsLogined(this._isLogined)
 
-        this.updateIsLogined()
-
-        return isLoginrequestSuccess
+        return loginRes
     }
 
     /**
-    Checks whether the clien-side storage have an auth data
+    Short method, do NOT update status and do NOT requesting a server
+    Checks whether the clien-side has logined status
     */
     get isLogined(){
-        console.log('AuthManager isLogined call:', this._isLogined)
         return this._isLogined
     }
-
-    updateIsLogined(): boolean{
-        if(!this._strategy) return false
-        const strategyIslogined = this._strategy.isLogined()
-        this._authStore.setIsLogined(strategyIslogined)
-        this._isLogined = strategyIslogined
-
-        return this._isLogined
-    }
-
     set isLogined(someFailParameter){
         throw new ReferenceError('Cant set isLogined directly')
     }
 
-}
+    async updateAndGetIsLogined(): Promise<boolean> {
+        console.log('AuthManager updateAndGetIsLogined() call:')
+        if(!this._strategy) return false
+        let isLogined = false
 
-export default {
-    install: (app: AppType) => {
-        console.info('Auth manager as plugin instance created')
-        app.provide('$authManager', AuthManager.getInstance(new jwtStrategy(), useAuthStore()) )
+        isLogined = await this._strategy.isLogined()
+        this._isLogined = isLogined
+        this._authStore.setIsLogined(this._isLogined)
+        if(!this._isLogined) this.logOut()
+        return this._isLogined
+    }
+
+    logOut(): boolean {
+        if(!this._strategy || !this.isLogined) return true
+        this._strategy.logOut()
+        this._authStore.setIsLogined(false)
+        this._isLogined = false
+        return true
     }
 }
+
+// export default {
+//     install: (app: AppType) => {
+//         console.info('Auth manager as plugin instance created')
+//         const am = AuthManager.getInstance( new jwtStrategy(), useAuthStore())
+//         app.config.globalProperties.$authManager = am
+//         app.provide('$authManager', am )
+//     }
+// }
