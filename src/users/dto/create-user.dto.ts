@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsPositive, Max, Min, Length, IsEmail } from 'class-validator'
+import { IsString, IsNotEmpty, IsPositive, Max, Min, Length, IsEmail, IsOptional } from 'class-validator'
 
 import { IUsersCreateDTO } from '../../interfaces/user.interface'
 import { dtoValidationMessageHandler } from '../../validation/dtoMsgHandler'
@@ -31,6 +31,10 @@ export class CreateUserDto implements IUsersCreateDTO {
     @Length(2, 20, {message: dtoMsg.getMessage('length')})
     username: string
 
+    @IsString()
+    @IsEmail({ignore_max_length: true}, {message: dtoMsg.getMessage('email')})
+    email: string
+
     @IsPositive({message: dtoMsg.getMessage('positive')})
     @Max(150, {message: dtoMsg.getMessage('max')})
     @Min(5, {message: dtoMsg.getMessage('min')})
@@ -43,9 +47,8 @@ export class CreateUserDto implements IUsersCreateDTO {
     @IsString({message: ''})
     passwordConfirm: string
 
-    @IsString()
-    @IsEmail({ignore_max_length: true}, {message: dtoMsg.getMessage('email')})
-    email: string
+    @IsOptional()
+    reg_date: Date
 
     constructor() {}
 

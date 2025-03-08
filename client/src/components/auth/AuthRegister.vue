@@ -3,65 +3,68 @@ import { reactive, ref, computed, inject } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 
 import AuthFormField from './AuthFormField.vue'
+import AuthResponseMessage from './AuthResponseMessage.vue'
 import { registerFormValidationFields, getRules } from './formValidationHelper'
 import type { TRegisterForm } from '@/interfaces/user'
-import type { IAuthManager } from '@/interfaces/auth'
+import type { IAuthManager } from '@/interfaces/Auth'
 
-const warnMessage = ref<string[]>([])
+const $externalResults = reactive({})
+const isFormValidated = ref<boolean>(false)
+const infoMessage = ref<string[]>([])
 const $authManager: IAuthManager = inject('$authManager') as IAuthManager
 
-const localUser = ref<TRegisterForm>({
+const registerUser = ref<TRegisterForm>({
     username: 'Serg',
+    email: 'deep@deep.com',
+    age: 36,
     password: '1234567',
     passwordConfirm: '1234567',
-    age: 36,
-    email: 'deep@deep.com',
 })
 
+/** Vuelidate init */
 const rules = computed(() => {
-    return getRules('registration', true)
+    return getRules('register', false)
 })
-const $v = useVuelidate(rules, localUser)
+const $v = useVuelidate(rules, registerUser, { $externalResults: $externalResults })
 
-async function submitRegister() {
-    resetWarnField()
-    /**
-    равны ли пароли
-    отправка на сервер
-    проверка на сервере и если неудачно - высветить ошибку тут
-            // console.log($v.value)
-            // console.log('V $errors:', $v.value.$errors)
-    */
+async function submitRegister(): Promise<boolean> {
+    resetMessageField()
     const result = await $v.value.$validate()
-    if (result) {
-        try {
-            const registerAnswer = await $authManager.register(localUser.value)
-            console.log('RegisterAnswer:', registerAnswer)
+    if(!result){
+        return false //client side-validation
+    }
+    const res = await $authManager.registerRequest(registerUser.value)
+    console.log('RegisterAnswer:', res)
 
-            if(registerAnswer.error){
-                if(registerAnswer.error.response.data.message){
-                    warnMessage.value = registerAnswer.error.response.data.message
-                } else {
-                    console.log('ALARM EROR TYPE INCORRECT')
-                }
-                console.error(
-                    'Err message:', registerAnswer.error.message,
-                    'Err code:', registerAnswer.error.code,
-                    'Err status:', registerAnswer.error.status
-                )
-            }
-        } catch (e: any) {
-            console.log('Catch error:', e)
-            console.log('ALARM EROR TYPE INCORRECT 2')
+    //TODO SERVER ERRORS ADD TO VUELIDATE
+    // const errors = {
+    //     username: 'password errs',
+    //     age: 'password errs',
+    //     email: 'password errs',
+    // }
+    // Object.assign($externalResults, errors)
+
+    if(res.error){
+        if(res.error.message) {
+            infoMessage.value.push(res.error.message)
+        } else if(res.error.response.data){
+            infoMessage.value = infoMessage.value.concat(res.error.response.data.message)
+        } else {
+            infoMessage.value = infoMessage.value.concat(['Server register error'])
         }
     } else {
-        warnMessage.value = ['Validation went wrong']
+        isFormValidated.value = true
+        infoMessage.value.push('Success registered')
     }
-
+    return true
 }
 
-function resetWarnField(){
-    warnMessage.value = []
+function resetMessageField(){
+    $v.value.$clearExternalResults()
+    $v.value.$reset()
+    $v.value.$touch()
+    isFormValidated.value = false
+    infoMessage.value = []
 }
 
 
@@ -70,19 +73,22 @@ function resetWarnField(){
 <template>
 
     <form @submit.prevent="submitRegister" name="register_form" class="form_container">
-        <div class="register_item auth_caption">
-            Register
-            <span class="tmp_warn" v-for="message of warnMessage">{{ message }}</span>
-        </div>
+        <div class="register_item auth_caption">Register</div>
+        <div class="register_item">
+            <AuthResponseMessage
+                form="register"
+                :messages="infoMessage"
+                :isFormValidated="isFormValidated"
+            ></AuthResponseMessage>
 
+        </div>
 
         <div v-for="item of registerFormValidationFields" class="register_item">
             <AuthFormField :inputName="item.caption" :errors="$v[item.field].$errors"
-                :modelField="localUser[item.field as keyof typeof localUser]">
-                <input v-model="localUser[item.field as keyof typeof localUser]" :type="item.type" :placeholder="item.placeholder">
+                :modelField="registerUser[item.field as keyof typeof registerUser]">
+                <input v-model="registerUser[item.field as keyof typeof registerUser]" :type="item.type" :placeholder="item.placeholder">
             </AuthFormField>
         </div>
-
 
         <div class="register_item submit_item">
             <button type="submit">Register</button>

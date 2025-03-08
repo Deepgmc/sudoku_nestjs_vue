@@ -6,12 +6,15 @@ export interface IUser {
     email:    string,
 }
 
+export interface ILoginUser extends Pick<IUser, 'username' | 'password'> {}
+
+
 export type TRegisterForm = {
     username       : string,
+    email          : string,
+    age            : number,
     password       : string,
     passwordConfirm: string,
-    age            : number,
-    email          : string
 }
 
 export type TFormValidationFields = {

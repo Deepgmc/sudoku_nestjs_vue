@@ -1,5 +1,6 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';import { resolve } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { resolve } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { UsersModule } from './users/users.module';

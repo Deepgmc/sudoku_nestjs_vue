@@ -1,0 +1,5 @@
+export enum RESPONSE_STATUS_CODES {
+    CREATED      = 201,
+    UNAUTHORIZED = 401,
+    NOT_FOUND    = 404
+}

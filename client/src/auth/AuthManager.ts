@@ -1,105 +1,111 @@
 
-import { inject, type App as AppType } from 'vue'
-import { availableStrategies, type IAuthManager, type jwtTokenType } from '@/interfaces/auth'
-import { NetworkManager, type INetworkManager } from '@/network/NetworkManager.ts'
+import { inject } from 'vue'
+import { availableStrategies, type IAuthManager } from '@/interfaces/Auth'
 
-import type { TRegisterForm } from '@/interfaces/user'
+import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
+import type { TStrategies } from '@/interfaces/Auth'
+import { RESPONSE_STATUS_CODES } from '@/constants'
+import { NetworkManager } from '@/network/NetworkManager.ts'
 
-//const $networkManager: INetworkManager = inject('$networkManager') as INetworkManager
-const $networkManager: INetworkManager = NetworkManager.getInstance()
 
-class AuthManager implements IAuthManager{
+
+export class AuthManager implements IAuthManager {
 
     public availableStrategies = availableStrategies
-    strategy: IAuthManager['strategy'] = ''
-    private _jwtToken: jwtTokenType = ''
+
+    _strategy: TStrategies = null
+    _authStore//pinia store
 
     private _isLogined: boolean = false //авторизация, любыми стратегиями
+    networkManager: NetworkManager
 
     static instance: AuthManager | null = null
-    static getInstance(): IAuthManager{
+    static getInstance(
+        strategy?: IAuthManager['_strategy'],
+        authStore?: any
+    ): AuthManager {
         if(AuthManager.instance) {
             return AuthManager.instance
         }
-        return new AuthManager()
+        return new AuthManager(strategy, authStore)
     }
 
     private _apiSection: string = 'auth'
-    private _postData: ((type: string) => any)
+    private _postData: (authManager: AuthManager) => any
 
-    constructor(){
+    constructor(
+        strategy?: IAuthManager['_strategy'],
+        authStore?: any
+    ){
         if(AuthManager.instance) throw new TypeError('Instance creation only with .getInstance()')
-        this._postData = $networkManager.applyNetworkMethod('post')(this._apiSection)
         AuthManager.instance = this
+        if(strategy) this._strategy = strategy
+        this._authStore = authStore
+        this.networkManager = NetworkManager.getInstance()
+        this._postData = this.networkManager.applyNetworkMethod('post', this._apiSection)
+
+        this.updateAndGetIsLogined()
     }
 
-    logIn(username: string, password: string): boolean {
-        //todo make strategy as objects! and make this factory. LJS intensive2 5:56:42
-        switch(this.strategy){
-            case 'jwt':
-                return this.logInDefault(username, password)
-            break;
-            default:
-                throw new TypeError('Invalid login strategy')
-        }
-        return false
-    }
-
-    async register(registerData: TRegisterForm){
-        if(this.isLogined) throw new Error('You already logined')
-
-        return await this._postData('register')(registerData)
-
-        /**
-        запросить нетворк менеджер метод сохранения данных (post) в конструкторе
-        вызвать этот метод, указав тип операции и передав данные
-        */
-
-        //return false
+    async registerRequest(registerData: TRegisterForm): Promise<any>{
+        if(this.isLogined) return {error: {message: 'You already logined'}}
+        return await this._postData(this)('register')(registerData)
     }
 
     /**
-     * Login via default JWT strategy
-     * @param username User login
-     * @param password
-     * @returns Is user logined success or no
-     */
-    logInDefault(username: string, password: string): boolean {
-        if(this.isLogined) {
-            console.warn('Auth manager: Already logined')
-            return true
-        }
-        this.strategy = 'jwt'
-        console.log(username, password)
-        return false
+     * Depends on strategy: logins current user, saving authorisation data
+       Do not use directly. Use loginRequest() instead
+     * @returns saved login status or no
+    */
+    async loginRequest(loginData: ILoginUser): Promise<any> {
+        if(this.isLogined) return {error: {message: 'You already logined'}}
+        if(!this._strategy) return {error: {message: 'Invalid login strategy'}}
+
+        const loginRes = await this._strategy.login(loginData)
+
+        this._isLogined = loginRes
+        this._authStore.setIsLogined(this._isLogined)
+
+        return loginRes
     }
 
-    logOut(): void{
-        this.jwtToken = null
-    }
-
+    /**
+    Short method, do NOT update status and do NOT requesting a server
+    Checks whether the clien-side has logined status
+    */
     get isLogined(){
         return this._isLogined
     }
-
     set isLogined(someFailParameter){
         throw new ReferenceError('Cant set isLogined directly')
     }
 
-    set jwtToken(newToken){
-        this._jwtToken = newToken
+    async updateAndGetIsLogined(): Promise<boolean> {
+        console.log('AuthManager updateAndGetIsLogined() call:')
+        if(!this._strategy) return false
+        let isLogined = false
+
+        isLogined = await this._strategy.isLogined()
+        this._isLogined = isLogined
+        this._authStore.setIsLogined(this._isLogined)
+        if(!this._isLogined) this.logOut()
+        return this._isLogined
     }
 
-    get jwtToken(){
-        return this._jwtToken
+    logOut(): boolean {
+        if(!this._strategy || !this.isLogined) return true
+        this._strategy.logOut()
+        this._authStore.setIsLogined(false)
+        this._isLogined = false
+        return true
     }
-
-
 }
 
-export default {
-    install: (app: AppType) => {
-        console.info('Auth manager as plugin instance created')
-        app.provide('$authManager', AuthManager.getInstance())
-    }
-}
+// export default {
+//     install: (app: AppType) => {
+//         console.info('Auth manager as plugin instance created')
+//         const am = AuthManager.getInstance( new jwtStrategy(), useAuthStore())
+//         app.config.globalProperties.$authManager = am
+//         app.provide('$authManager', am )
+//     }
+// }

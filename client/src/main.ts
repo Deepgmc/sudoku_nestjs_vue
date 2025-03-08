@@ -1,30 +1,22 @@
 import './assets/main.scss'
 
-import { createApp, type ComponentPublicInstance } from 'vue'
+import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import SudokuApp from './SudokuApp.vue'
-import router from './router/router.ts'
+import App from '@/App.vue'
+//import router from './router/router.ts'
 
-import  { NetworkManager } from '@/network/NetworkManager.ts'
-import AuthManager from '@/auth/AuthManager.ts'
+const app = createApp(App)
 
-const app = createApp(SudokuApp)
-
-app.config.errorHandler = function(
-    err: any,
-    ComponentInstance: ComponentPublicInstance | null,
-    info: string
-){
+app.config.errorHandler = function (err: any){
     console.log('%c Global erorr handler:', 'background:rgb(85, 0, 0); color: #bada55; padding: 2px;font-size:14px');
-    console.error(`Error: ${err.toString()}`, `Info: ${info}`);
+    console.log(err)
 }
 
-app.provide('$networkManager', NetworkManager.getInstance())
 
+
+
+//app.use(router)
 app.use(createPinia())
-app.use(router)
-
-app.use(AuthManager)
 
 app.mount('#sudoku_root_container')

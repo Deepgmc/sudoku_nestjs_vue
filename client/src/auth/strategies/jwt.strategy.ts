@@ -1,0 +1,78 @@
+import { inject } from 'vue'
+import {type jwtTokenType } from '@/interfaces/Auth'
+
+import { Strategy } from './Strategy';
+import type { ILoginUser } from '@/interfaces/user';
+import { RESPONSE_STATUS_CODES } from '@/constants';
+import {AuthManager} from '../AuthManager';
+import { NetworkManager } from '@/network/NetworkManager';
+
+const $networkManager = NetworkManager.getInstance()
+
+export class jwtStrategy extends Strategy {
+
+    private _apiSection: string = 'auth'
+    private _postData: (authManager: AuthManager) => any
+    private _getData: (authManager: AuthManager) => any
+
+    constructor(){
+        super()
+        this._postData = $networkManager.applyNetworkMethod('post', this._apiSection)
+        this._getData = $networkManager.applyNetworkMethod('get', this._apiSection)
+    }
+
+    /**
+     * Login via default JWT strategy
+     * @param username User login
+     * @param password
+     * @returns Is user logined success or no
+    */
+    async login(loginData: ILoginUser): Promise<any> {
+        const $authManager = AuthManager.getInstance()
+        const loginRes = await this._postData($authManager)('login')(loginData)
+        console.log('Login res: ', loginRes)
+        if(loginRes.status === RESPONSE_STATUS_CODES.CREATED){
+            return this.setAuthStoragedData({access_token: loginRes.data.access_token})
+        }
+        return false
+    }
+
+    logOut(): boolean{
+        return this.removeAuthStoragedData()
+    }
+
+    /**
+     * Is strategy has an authorisation
+     * @returns boolean
+     */
+    async isLogined(){
+        let isLogined: boolean = false
+        isLogined = await this.checkServerStrategyStatus()
+        return isLogined
+    }
+
+    /**
+     * Checks the server token
+     * @returns whether token valid or not
+     */
+    async checkServerStrategyStatus(){
+        let isLogined = true
+        const checkData = await this._getData(AuthManager.getInstance())('check_token')()
+        if(checkData.error && checkData.error.status === RESPONSE_STATUS_CODES.UNAUTHORIZED){
+            isLogined = false
+        }
+        return isLogined
+    }
+
+    set token(token: jwtTokenType){
+        throw new ReferenceError('Can not set token directly')
+    }
+    get token(): jwtTokenType{
+        const authData = this.getAuthStoragedData()
+        if(!authData) return null
+        if(typeof authData.access_token !== 'undefined'){
+            return authData.access_token
+        }
+        return null
+    }
+}

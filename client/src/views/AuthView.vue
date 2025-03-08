@@ -92,21 +92,20 @@ function changeForm(): void{
     padding: 3px;
 }
 .error-msg{
-    color:$error-text;
+    color: $errorTextColor;
     margin-left:15px;
     font-size:11px;
 }
 .error_asterisk{
-    color:$error-text;
+    color: $errorTextColor;
     font-size:11px;
     margin:0 5px 0 0;
 }
 
-.tmp_warn {
-    color: red;
-    margin-top:10px;
-    height:0.6em;
-    font-size: 0.5em;
+.auth_caption_message {
+    margin-top:3px;
+    height:1em;
+    font-size: 1em;
 }
 
 .submit_item{

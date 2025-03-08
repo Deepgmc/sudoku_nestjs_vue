@@ -13,29 +13,34 @@ export class UsersService {
         private usersRepository: Repository<UsersEntity>,
     ) {}
 
-    async create(CreateUserDto: CreateUserDto): Promise<CreateUserDto>{
-        console.log('CreateUserDto:', CreateUserDto)
-        return await this.usersRepository.save(CreateUserDto)
-    }
-
-    async findAll(): Promise<UsersEntity[]> {
-        const users = await this.usersRepository.find()
-        return users;
-    }
-
-    async findOne(fieldValue: number | string): Promise<any> {
-        let fieldName: string
-        if(typeof fieldValue === 'string'){
-            fieldName = 'username'
-        } else {
-            fieldName = 'userId'
+    async create(createUserDto: CreateUserDto): Promise<CreateUserDto | boolean> {
+        if(
+            //check if already have such login/email
+            await this.usersRepository.existsBy([{'username': createUserDto.username}, {'email': createUserDto.email}])
+        ){
+            return false
         }
+        return await this.usersRepository.save(createUserDto)
+    }
+
+    /**
+     * Searches the unique user with the unique id or login or email
+     * @param field userId, username, email
+     * @param value id or string
+     * @returns
+     */
+    async findOne(field: string, value: string | number): Promise<UsersEntity | null> {
         const searchObject = {
-            [fieldName]: fieldValue
+            [field]: value
         }
-        const user = await this.usersRepository.findOneBy(searchObject)
+        return await this.usersRepository.findOneBy(searchObject)
+    }
 
-
-        return user
+    /**
+     * Just all users without conditions
+     * @returns users array
+     */
+    async findAll(): Promise<UsersEntity[]> {
+        return await this.usersRepository.find()
     }
 }

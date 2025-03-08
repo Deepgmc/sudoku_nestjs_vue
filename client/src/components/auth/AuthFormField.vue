@@ -6,7 +6,6 @@ type PropsType = {
     inputName: string,
     modelField: any
 }
-
 const props = defineProps<PropsType>()
 
 </script>

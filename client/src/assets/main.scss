@@ -1,4 +1,3 @@
-//@use './globalVariables.scss'
 body{
     min-height: 100vh;
     background: rgb(0, 0, 0);
@@ -52,4 +51,10 @@ button{
     justify-content: space-around;
 
     flex-flow: row nowrap;
+}
+.error_text{
+    color: $errorTextColor
+}
+.success_text{
+    color: $successTextColor
 }

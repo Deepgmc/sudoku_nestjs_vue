@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import { IUser } from '../../interfaces/user.interface'
 
 
@@ -11,11 +11,19 @@ export class UsersEntity implements IUser {
     username: string;
 
     @Column()
+    email: string;
+
+    @Column()
     age: number;
 
     @Column()
     password: string;
 
-    @Column()
-    email: string;
+    @CreateDateColumn({
+        type: 'timestamp',
+        precision: 0,
+        default: () => 'CURRENT_TIMESTAMP'/* onUpdate: 'CURRENT_TIMESTAMP' */
+    })
+    reg_date: Date;
+
 }

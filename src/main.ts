@@ -21,20 +21,6 @@ async function bootstrap() {
     }
     );
 
-
-    //!Global app prefix
-
-    //app.setGlobalPrefix('api');
-
-    // app.setGlobalPrefix('api', {
-    //     exclude: [{ path: 'companies', method: RequestMethod.GET }],
-    // })
-
-    //? выключает только companies без вложенностей
-    //? app.setGlobalPrefix('api', { exclude: ['companies'] });
-
-
-
     app.useGlobalPipes(new ValidationPipe({
         //https://docs.nestjs.com/techniques/validation#using-the-built-in-validationpipe
         disableErrorMessages: false,//расширенные сообщения валидации входящих параметров для ДТО
@@ -42,6 +28,19 @@ async function bootstrap() {
         transform: true,
         //exceptionFactory
     }))
+
+
+    //!Global app prefix
+
+    //app.setGlobalPrefix('api');
+
+    app.setGlobalPrefix('api', {
+        exclude: [{ path: '/', method: RequestMethod.GET }],
+    })
+
+    //? выключает только companies без вложенностей
+    //? app.setGlobalPrefix('api', { exclude: ['companies'] });
+
 
 
     //? Работа с сессиями
@@ -68,7 +67,7 @@ async function bootstrap() {
 
     const port = process.env.LISTEN_PORT ?? 0
     await app.listen(port);
-    const logger = new Logger(`INIT ENDS. Server listening to :${port}`)
-    logger.error('############################')
+    const logger = new Logger(`INIT END: ${port}`)
+    logger.error('####################################')
 };
 bootstrap();
