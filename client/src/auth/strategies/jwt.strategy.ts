@@ -56,8 +56,11 @@ export class jwtStrategy extends Strategy {
      * @returns whether token valid or not
      */
     async checkServerStrategyStatus(){
-        let isLogined = true
+        let isLogined = false
         const checkData = await this._getData(AuthManager.getInstance())('check_token')()
+        if(checkData.status === RESPONSE_STATUS_CODES.SUCCESS){
+            isLogined = true
+        }
         if(checkData.error && checkData.error.status === RESPONSE_STATUS_CODES.UNAUTHORIZED){
             isLogined = false
         }

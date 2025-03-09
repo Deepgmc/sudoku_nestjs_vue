@@ -23,13 +23,15 @@ export const useAuthStore = defineStore('auth', () => {
      function() становятся действиями
     */
     const isLogined = ref<boolean>(false)
+    const authLoading = ref<boolean>(true)
     const timeLogined = ref<number>(0)
 
     function setIsLogined(state: boolean): void {
         timeLogined.value = Date.now()
         isLogined.value = state
+        authLoading.value = false
     }
 
-    return {isLogined, setIsLogined}
+    return {isLogined, setIsLogined, authLoading}
 })
 
