@@ -65,8 +65,7 @@ export class AuthController {
 
     @UseGuards(AuthGuard('jwt'))
     @Get('check_token')
-    checkAuth(@Request() req) {
-        console.log('Profile controller', req);
+    checkAuth() {
         return {logined: true}
     }
 

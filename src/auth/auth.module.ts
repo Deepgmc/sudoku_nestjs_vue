@@ -23,7 +23,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         JwtModule.register({
             //global: true,
             secret: jwtConstants.secret,
-            signOptions: { expiresIn: '30s' }
+            signOptions: { expiresIn: '30m' }
         }),
     ],
     exports: [
