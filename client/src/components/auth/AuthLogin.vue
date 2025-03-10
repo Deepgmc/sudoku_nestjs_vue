@@ -9,6 +9,7 @@ import { loginFormValidationFields, getRules } from './formValidationHelper'
 
 import type { IAuthManager } from '@/interfaces/Auth';
 import type { ILoginUser } from '@/interfaces/user';
+import { RESPONSE_STATUS_CODES } from '@/constants';
 
 
 const $externalResults = reactive({})
@@ -19,7 +20,7 @@ const authStore = useAuthStore()
 const $authManager: IAuthManager = inject('$authManager') as IAuthManager;
 
 const loginUser = ref<ILoginUser>({
-    username: 'Serg',
+    username: 'SergUmbrella',
     password: '1234567'
 })
 
@@ -35,13 +36,26 @@ async function submitLogin(): Promise<boolean> {
     if(!result){
         return false //client side-validation
     }
-    const res = await $authManager.loginRequest(loginUser.value)
+    let res: any
+    try {
+        res = await $authManager.loginRequest(loginUser.value)
+        console.log('Login req res:', res)
+        console.log('err1', res.error, res)
+    } catch(e){
+        console.log('err:', e)
+    }
 
+
+    let message = 'Server offline'
     if(res.error){
         if(res.error.message) {
-            infoMessage.value.push(res.error.message)
+            if(res.error.status !== RESPONSE_STATUS_CODES.SERVER_ERR){
+                message = res.error.message
+            }
+            infoMessage.value.push(message)
         } else if(res.error.response.data){
-            infoMessage.value = infoMessage.value.concat(res.error.response.data.message)
+            message = res.error.response.data.message
+            infoMessage.value = infoMessage.value.concat(message)
         } else {
             infoMessage.value = infoMessage.value.concat(['Server login error'])
         }

@@ -2,7 +2,7 @@
 import { provide } from 'vue'
 //import { RouterLink, RouterView } from 'vue-router'
 import AuthView from '@/views/AuthView.vue';
-import GameView from '@/views/GameView.vue';
+import UmbrellaApp from '@/views/UmbrellaApp.vue';
 import AuthLoading from '@/views/AuthLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -13,11 +13,11 @@ import { jwtStrategy } from '@/auth/strategies/jwt.strategy'
 
 
 const $networkManager = NetworkManager.getInstance()
-console.log('$networkManager created at MainApp.vue:', $networkManager)
+console.log('%c $networkManager created at MainApp.vue:', 'color: #bada55;')
 provide('$networkManager', $networkManager)
 
 provide('$authManager', AuthManager.getInstance( new jwtStrategy(), useAuthStore()) )
-console.log('$authManager created at MainApp.vue')
+console.log('%c $authManager created at MainApp.vue', 'color: #bada55;')
 
 
 
@@ -29,7 +29,7 @@ const authStore = useAuthStore()
     <main class="main_container">
         <AuthLoading v-if="authStore.authLoading"></AuthLoading>
         <AuthView v-else-if="!authStore.isLogined && !authStore.authLoading"></AuthView>
-        <GameView v-else-if="!authStore.authLoading"></GameView>
+        <UmbrellaApp v-else-if="!authStore.authLoading"></UmbrellaApp>
         <!-- <RouterLink to="/login">Auth</RouterLink>
         <RouterLink to="/">Game</RouterLink> -->
         <!-- <RouterView /> -->
@@ -37,6 +37,7 @@ const authStore = useAuthStore()
 </template>
 
 <style lang="scss">
+
 
 
 </style>

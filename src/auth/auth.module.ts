@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { jwtConstants } from '../config/auth.config';
 import { JwtStrategy } from './jwt.strategy';
-import { ServeStaticModule } from '@nestjs/serve-static';
+//import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
     controllers: [AuthController],
@@ -23,7 +23,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         JwtModule.register({
             //global: true,
             secret: jwtConstants.secret,
-            signOptions: { expiresIn: '30m' }
+            signOptions: { expiresIn: '6h' }
         }),
     ],
     exports: [

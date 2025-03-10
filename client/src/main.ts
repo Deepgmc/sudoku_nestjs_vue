@@ -19,4 +19,4 @@ app.config.errorHandler = function (err: any){
 //app.use(router)
 app.use(createPinia())
 
-app.mount('#sudoku_root_container')
+app.mount('#umbrella_root_container')

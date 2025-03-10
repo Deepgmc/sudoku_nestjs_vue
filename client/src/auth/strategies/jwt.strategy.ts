@@ -29,12 +29,16 @@ export class jwtStrategy extends Strategy {
     */
     async login(loginData: ILoginUser): Promise<any> {
         const $authManager = AuthManager.getInstance()
-        const loginRes = await this._postData($authManager)('login')(loginData)
-        console.log('Login res: ', loginRes)
-        if(loginRes.status === RESPONSE_STATUS_CODES.CREATED){
-            return this.setAuthStoragedData({access_token: loginRes.data.access_token})
+        try{
+            const loginRes = await this._postData($authManager)('login')(loginData)
+            if(loginRes.status === RESPONSE_STATUS_CODES.CREATED){
+                this.setAuthStoragedData({access_token: loginRes.data.access_token})
+                return true
+            }
+            return loginRes //axios error
+        } catch(loginError){
+            return loginError
         }
-        return false
     }
 
     logOut(): boolean{

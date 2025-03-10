@@ -4,7 +4,6 @@ import { availableStrategies, type IAuthManager } from '@/interfaces/Auth'
 
 import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
 import type { TStrategies } from '@/interfaces/Auth'
-import { RESPONSE_STATUS_CODES } from '@/constants'
 import { NetworkManager } from '@/network/NetworkManager.ts'
 
 
@@ -60,11 +59,15 @@ export class AuthManager implements IAuthManager {
     async loginRequest(loginData: ILoginUser): Promise<any> {
         if(this.isLogined) return {error: {message: 'You already logined'}}
         if(!this._strategy) return {error: {message: 'Invalid login strategy'}}
+        let isLogined: boolean = false
 
         const loginRes = await this._strategy.login(loginData)
 
-        this._isLogined = loginRes
-        this._authStore.setIsLogined(this._isLogined)
+        if(loginRes === true){
+            isLogined = true
+        }
+        this._isLogined = isLogined
+        this._authStore.setIsLogined(isLogined)
 
         return loginRes
     }

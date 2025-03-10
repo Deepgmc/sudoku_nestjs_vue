@@ -24,8 +24,13 @@
     ],
     "out": "js_docs/" // <--- output directory
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "exclude": [
-    "client/", "client", "node_modules/"
+    "client/",
+    "client",
+    "node_modules/",
+    "maps/",
   ]
 }
