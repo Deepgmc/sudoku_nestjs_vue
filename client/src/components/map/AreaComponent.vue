@@ -14,10 +14,7 @@ import DistrictComponent from './DistrictComponent.vue';
 Внутри DistrictComponent тоже вычислить какую Zone загружать и передать её уже в ZoneComponent
 */
 
-
 const props = defineProps<{area: IArea}>()
-console.log('%c AreaComponent got props:', 'color:rgb(182, 86, 158);', props)
-
 
 </script>
 

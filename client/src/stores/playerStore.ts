@@ -6,6 +6,10 @@ export const usePlayerStore = defineStore('player', () => {
 
     const player = ref<IPlayer>({} as IPlayer)
 
+    function fetchPlayerGameSettings(){
+
+    }
+
     return {player}
 })
 

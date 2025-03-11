@@ -18,7 +18,6 @@ import { jwtStrategy } from '@/auth/strategies/jwt.strategy'
 const authStore = useAuthStore()
 
 provide('$networkManager', NetworkManager.getInstance())
-
 provide('$authManager', AuthManager.getInstance( new jwtStrategy(), authStore) )
 
 

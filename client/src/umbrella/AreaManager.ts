@@ -34,9 +34,8 @@ export default class AreaManager extends StoreDecorator {
 
     async init(){
         const getAreaResult = await this.networkManager.applyNetworkMethod('get', 'area')(this.authManager)(this.API_METHODS.INIT_GET_AREA)(null)
-
         this.area = getAreaResult.data as IArea
-        console.log('%c this.area (from server):', 'color:rgb(182, 86, 158);', this.area)
+        console.log('%c AreaManager -> this.area (fetch):', 'color:rgb(182, 101, 86);', this.area)
         // @ts-expect-error -->> TAreaStore | TPlayerStore - type is ok
         this.store.loadAreaToStore(this.area)
     }

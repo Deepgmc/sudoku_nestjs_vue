@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { inject, onBeforeMount, onMounted, reactive } from 'vue';
 
-import AreaManager from '@/umbrella/AreaManager';
-import AreaComponent from '@/components/map/AreaComponent.vue';
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
 import { useAreaStore } from '@/stores/areaStore'
+import AreaManager from '@/umbrella/AreaManager';
+import Player from '@/umbrella/Player';
+import AreaComponent from '@/components/map/AreaComponent.vue';
+
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
@@ -13,9 +15,17 @@ const $authManager = inject('$authManager') as AuthManager
 const areaStore = useAreaStore()
 
 const areaManager = AreaManager.getInstance($networkManager, $authManager)
+const player = Player.getInstance($networkManager, $authManager)
 
 onMounted(() => {
     areaManager.init()
+    // player
+    //     .init()
+    //     .then((playerInitData: any) => {
+    //         areaManager.init()
+    //     })
+
+
     // const gameSettings = $authManager.getUserUmbrellaSettings()
     // console.log('%c gameSettings:', 'color:rgb(182, 86, 158);', gameSettings)
 })

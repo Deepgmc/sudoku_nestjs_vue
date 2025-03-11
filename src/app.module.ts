@@ -6,7 +6,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from './users/logger.middleware';
-//import { CompaniesModule } from './companies/companies.module';
 
 import dbConfiguration from "./config/db.config";
 import { APP_FILTER } from '@nestjs/core';
@@ -14,6 +13,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { NotFoundExceptionFilter } from './HttpException.filter';
 import { AuthModule } from './auth/auth.module';
 import { AreaModule } from './umbrella/area/area.module';
+import { PlayerModule } from './umbrella/player/player.module';
 import { AppController } from './app.controller';
 
 
@@ -35,10 +35,10 @@ import { AppController } from './app.controller';
             // exclude: ['/users*', '/companies*']
         }),
 
-        //CompaniesModule,
         UsersModule,
         AuthModule,
-        AreaModule
+        AreaModule,
+        PlayerModule
     ],
     controllers: [AppController],
     providers: [
@@ -51,12 +51,9 @@ import { AppController } from './app.controller';
 
 export class AppModule implements NestModule {
 
-    //! экспорт сервиса UsersService из UsersModule делает возможным использовать его в AppModule
     constructor(
-        // private readonly usersService: UsersService,
         // private configModule: ConfigService
     ) {
-        //console.log(`Модуль Users используется внутри AppModule (выводим this.usersService.TYPE): ${this.usersService.TYPE.TEST}`);
         //console.log('App module configModule:', configModule);
     }
 
