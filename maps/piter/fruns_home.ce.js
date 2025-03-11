@@ -1,8 +1,4 @@
-import { features } from "process";
-
 export const map = {
-    areaId: 1,
-    areaName: 'Piter',
     cells: [
         [//HOME PORTAL
             {

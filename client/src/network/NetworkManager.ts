@@ -14,14 +14,14 @@ export class NetworkManager implements INetworkManager {
     static instance: NetworkManager | null = null
     static getInstance(): NetworkManager {
         if(NetworkManager.instance) return NetworkManager.instance
-        console.log('New NetworkInstance call')
         return new NetworkManager()
     }
     private httpClient: HttpClientTypes
 
     constructor(){
         if(NetworkManager.instance) {throw new TypeError('Instance creation only with .getInstance()')}
-
+        console.log('%c NetworkManager constructor call', 'color:rgb(182, 86, 158);')
+        NetworkManager.instance = this
         this.httpClient = axios.create({
             baseURL: 'http://localhost:5173/api',
             //baseURL: 'http://localhost:3050/api',
@@ -29,8 +29,7 @@ export class NetworkManager implements INetworkManager {
             //this.httpClient.defaults.headers.common['Authorization'] = AUTH_TOKEN;
             timeout: 1000,
 
-        });
-        NetworkManager.instance = this
+        })
     };
 
     /**
@@ -46,7 +45,7 @@ export class NetworkManager implements INetworkManager {
 
             return (action: string) => {
 
-                return async (parameters: object): Promise<AxiosResponse | {error: any}> => {
+                return async (parameters: object | null): Promise<any> => {
 
                     switch (type) {
                         case 'post':
@@ -63,13 +62,13 @@ export class NetworkManager implements INetworkManager {
         }
     }
 
-    async postMethod(addr: string, parameters: object){
+    async postMethod(addr: string, parameters: any){
         return await this.httpClient.post(addr, parameters)
             .catch(function(e){
                 return {error: e}
             })
     }
-    async getMethod(addr: string, parameters: object){
+    async getMethod(addr: string, parameters: any){
         return await this.httpClient.get(addr, parameters)
             .catch(function(e){
                 return {error: e}

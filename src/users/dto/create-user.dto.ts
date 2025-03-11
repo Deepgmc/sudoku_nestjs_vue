@@ -50,6 +50,9 @@ export class CreateUserDto implements IUsersCreateDTO {
     @IsOptional()
     reg_date: Date
 
+    @IsOptional()
+    game_settings: string = '{"currentDistrict":"fruns","currentZone":"home"}'
+
     constructor() {}
 
 }

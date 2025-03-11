@@ -3,7 +3,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
-import { IUser } from '../interfaces/user.interface';
+import { IUser, IUsersCreateDTO } from '../interfaces/user.interface';
 
 import { CreateUserDto } from '../users/dto/create-user.dto';
 
@@ -58,7 +58,7 @@ export class AuthService {
         }
     }
 
-    async getAndCheckUser(username: string): Promise<IUser> {
+    async getAndCheckUser(username: string): Promise<IUsersCreateDTO> {
         const user = await this.usersService.findOne('username', username)
         if(!user) throw new UnauthorizedException('Not found such user')
         return user

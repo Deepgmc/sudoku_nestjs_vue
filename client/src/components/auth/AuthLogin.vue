@@ -39,12 +39,10 @@ async function submitLogin(): Promise<boolean> {
     let res: any
     try {
         res = await $authManager.loginRequest(loginUser.value)
-        console.log('Login req res:', res)
-        console.log('err1', res.error, res)
+        console.log('Login request result:', res)
     } catch(e){
         console.log('err:', e)
     }
-
 
     let message = 'Server offline'
     if(res.error){

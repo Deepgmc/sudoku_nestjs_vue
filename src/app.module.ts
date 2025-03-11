@@ -6,13 +6,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from './users/logger.middleware';
-import { CompaniesModule } from './companies/companies.module';
+//import { CompaniesModule } from './companies/companies.module';
 
 import dbConfiguration from "./config/db.config";
 import { APP_FILTER } from '@nestjs/core';
 
 import { NotFoundExceptionFilter } from './HttpException.filter';
 import { AuthModule } from './auth/auth.module';
+import { AreaModule } from './umbrella/area/area.module';
 import { AppController } from './app.controller';
 
 
@@ -34,9 +35,10 @@ import { AppController } from './app.controller';
             // exclude: ['/users*', '/companies*']
         }),
 
-        CompaniesModule,
+        //CompaniesModule,
         UsersModule,
         AuthModule,
+        AreaModule
     ],
     controllers: [AppController],
     providers: [

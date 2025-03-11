@@ -16,7 +16,7 @@ async function bootstrap() {
         abortOnError: true,
         logger: new ConsoleLogger({
             colors: true,
-            prefix: 'Nee',
+            prefix: 'Umb',
         }),
     }
     );

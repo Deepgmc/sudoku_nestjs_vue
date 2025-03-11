@@ -1,5 +1,4 @@
 
-import { inject } from 'vue'
 import { availableStrategies, type IAuthManager } from '@/interfaces/Auth'
 
 import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
@@ -20,7 +19,7 @@ export class AuthManager implements IAuthManager {
 
     static instance: AuthManager | null = null
     static getInstance(
-        strategy?: IAuthManager['_strategy'],
+        strategy: IAuthManager['_strategy'],
         authStore?: any
     ): AuthManager {
         if(AuthManager.instance) {
@@ -33,10 +32,11 @@ export class AuthManager implements IAuthManager {
     private _postData: (authManager: AuthManager) => any
 
     constructor(
-        strategy?: IAuthManager['_strategy'],
+        strategy: IAuthManager['_strategy'],
         authStore?: any
     ){
         if(AuthManager.instance) throw new TypeError('Instance creation only with .getInstance()')
+        console.log('%c AuthManager constructor call', 'color:rgb(182, 86, 158);')
         AuthManager.instance = this
         if(strategy) this._strategy = strategy
         this._authStore = authStore

@@ -1,24 +1,40 @@
 <script setup lang="ts">
-import type { IAuthManager } from '@/interfaces/Auth';
-import { inject, ref } from 'vue';
+import { inject, onBeforeMount, onMounted, reactive } from 'vue';
 
-const $authManager: IAuthManager = inject('$authManager') as IAuthManager;
+import AreaManager from '@/umbrella/AreaManager';
+import AreaComponent from '@/components/map/AreaComponent.vue';
+import type { NetworkManager } from '@/network/NetworkManager';
+import type { AuthManager } from '@/auth/AuthManager';
+import { useAreaStore } from '@/stores/areaStore'
+
+const $networkManager = inject('$networkManager') as NetworkManager
+const $authManager = inject('$authManager') as AuthManager
+
+const areaStore = useAreaStore()
+
+const areaManager = AreaManager.getInstance($networkManager, $authManager)
+
+onMounted(() => {
+    areaManager.init()
+    // const gameSettings = $authManager.getUserUmbrellaSettings()
+    // console.log('%c gameSettings:', 'color:rgb(182, 86, 158);', gameSettings)
+})
 
 
-
-function logOut(){$authManager.logOut()}
 </script>
 
 <template>
 
     <div class="umbrella-container">
         <div class="flex-item map_container">
-            <div class="umbrella_map">map</div>
+            <AreaComponent
+                :area="areaStore.area">
+            </AreaComponent>
             <div class="flex-item info_block info_block_bottom">Chat</div>
         </div>
 
         <div class="floating_container">
-            <div class="flex-item info_block info_block_floating"><button @click="logOut">LogOut</button></div>
+            <div class="flex-item info_block info_block_floating">Some options and credentials</div>
             <div class="flex-item info_block info_block_floating">info 2 (inventory)</div>
             <div class="flex-item info_block info_block_floating">info 3 (position)</div>
         </div>
@@ -29,19 +45,20 @@ function logOut(){$authManager.logOut()}
 <style lang="scss">
 .umbrella-container{
     min-height:100vh;
-    border: 1px inset violet;
+    // border-right: 1px inset black;
+    // border-left: 1px inset black;
     display: flex;
     flex-direction: row;
 }
 .flex-item{
-    border: 1px inset blue;
+    border: 1px inset black;
     text-align: center;
     min-height: 200px;
 }
 .map_container{
     display: flex;
     flex-direction: column;
-    border: 1px inset red;
+    //border: 1px inset grey;
     min-width: $map-width;
 }
 .umbrella_map{

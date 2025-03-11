@@ -2,7 +2,7 @@ import { Controller, Get, Logger } from '@nestjs/common';
 
 import { UsersService } from './users.service';
 import { UserId } from './userId.decorator';
-import { IUser } from '../interfaces/user.interface';
+import { IUserEntity } from '../interfaces/user.interface';
 
 @Controller('users')
 export class UsersController {
@@ -20,7 +20,7 @@ export class UsersController {
 
     @Get(':id')
     //? @UserId decorator can be replaced by default ParseIntPipe
-    async findOne(@UserId() id: number): Promise<IUser | null> {
+    async findOne(@UserId() id: number): Promise<IUserEntity | null> {
         const user = await this.usersService.findOne('userId', id)
         this.logger.debug('Find one user:')
         this.logger.debug(user)
