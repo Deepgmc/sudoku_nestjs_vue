@@ -52,7 +52,7 @@ export class NetworkManager implements INetworkManager {
                             return await this.postMethod(`${section}/${action}`, parameters)
                         break;
                         case 'get':
-                        return await this.getMethod(`${section}/${action}`, parameters)
+                            return await this.getMethod(`${section}/${action}`, parameters)
                         break;
                         default:
                             return await this.postMethod(`${section}/${action}`, parameters)
@@ -62,14 +62,14 @@ export class NetworkManager implements INetworkManager {
         }
     }
 
-    async postMethod(addr: string, parameters: any){
+    async postMethod(addr: string, parameters: object | null){
         return await this.httpClient.post(addr, parameters)
             .catch(function(e){
                 return {error: e}
             })
     }
-    async getMethod(addr: string, parameters: any){
-        return await this.httpClient.get(addr, parameters)
+    async getMethod(addr: string, parameters: object | null){
+        return await this.httpClient.get(addr, {params: parameters})
             .catch(function(e){
                 return {error: e}
             })

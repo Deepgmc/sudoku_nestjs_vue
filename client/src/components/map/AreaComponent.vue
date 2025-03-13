@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { inject, onMounted } from 'vue';
-import type { IArea } from '@/interfaces/MapInterfaces';
+import { inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import type { IArea, IDistrict } from '@/interfaces/MapInterfaces';
 import type AreaManager from '@/umbrella/AreaManager';
+
+import DistrictComponent from './DistrictComponent.vue';
 
 /*
 Тут загружена вся карта целиком (area)
@@ -11,11 +13,17 @@ import type AreaManager from '@/umbrella/AreaManager';
 */
 
 const props = defineProps<{area: IArea}>()
+console.log('%c AreaComponent got area:', 'color:darkgreen;', props.area)
 const areaManager = inject ('areaManager') as AreaManager
 
-onMounted(() => {
-    const currentDistrict = areaManager.getPlayerDistrict()
-    console.log('%c currentDistrict (at area component):', 'color:rgb(182, 86, 158);', currentDistrict)
+let currentDistrict: IDistrict = reactive({} as IDistrict)
+const isDistrictFound = ref<boolean>(false)
+
+onBeforeMount(() => {
+    //get DISTRICT for current player
+    currentDistrict = areaManager.getPlayerCurrentDistrict()
+    if(currentDistrict.zones.length > 0) isDistrictFound.value = true
+    console.log('%c areaComponent found currentDistrict:', 'color:red;', currentDistrict)
 })
 
 </script>
@@ -23,7 +31,10 @@ onMounted(() => {
 <template>
     <div class="umbrella_map">
         {{ props.area.areaName }}
-        <!-- <DistrictComponent></DistrictComponent> -->
+        <DistrictComponent
+            v-if="isDistrictFound"
+            :district="currentDistrict"
+        ></DistrictComponent>
     </div>
 </template>
 

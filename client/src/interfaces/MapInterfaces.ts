@@ -9,7 +9,7 @@ export interface IArea {
 export interface IDistrict{
     districtName: string,
     districtPosition: TDistrictPosition,
-    zones: IZone[]
+    zones: IZone[][]
 }
 export interface IZone {
     zoneName: string,
