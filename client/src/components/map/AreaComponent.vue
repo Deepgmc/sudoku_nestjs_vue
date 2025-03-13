@@ -1,11 +1,7 @@
 <script setup lang="ts">
+import { inject, onMounted } from 'vue';
 import type { IArea } from '@/interfaces/MapInterfaces';
-import DistrictComponent from './DistrictComponent.vue';
-
-// type PropsType = {
-//     area: any[]
-// }
-// const props = defineProps<PropsType>()
+import type AreaManager from '@/umbrella/AreaManager';
 
 /*
 Тут загружена вся карта целиком (area)
@@ -15,6 +11,12 @@ import DistrictComponent from './DistrictComponent.vue';
 */
 
 const props = defineProps<{area: IArea}>()
+const areaManager = inject ('areaManager') as AreaManager
+
+onMounted(() => {
+    const currentDistrict = areaManager.getPlayerDistrict()
+    console.log('%c currentDistrict (at area component):', 'color:rgb(182, 86, 158);', currentDistrict)
+})
 
 </script>
 

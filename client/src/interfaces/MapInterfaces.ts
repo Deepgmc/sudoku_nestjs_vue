@@ -3,7 +3,7 @@ MAP GLOBAL
 */
 export interface IArea {
     areaName: string,
-    districts: IDistrict[],
+    districts: IDistrict[][],
     [key: string]: any
 }
 export interface IDistrict{

@@ -1,33 +1,24 @@
 <script setup lang="ts">
-import { inject, onBeforeMount, onMounted, reactive } from 'vue';
+import { inject, onBeforeMount, onMounted, reactive, provide } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
-import { useAreaStore } from '@/stores/areaStore'
 import AreaManager from '@/umbrella/AreaManager';
 import Player from '@/umbrella/Player';
 import AreaComponent from '@/components/map/AreaComponent.vue';
 
-
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
-
-const areaStore = useAreaStore()
 
 const areaManager = AreaManager.getInstance($networkManager, $authManager)
 const player = Player.getInstance($networkManager, $authManager)
 
-onMounted(() => {
-    areaManager.init()
-    // player
-    //     .init()
-    //     .then((playerInitData: any) => {
-    //         areaManager.init()
-    //     })
+provide('areaManager', areaManager)
+provide('player', player)
 
-
-    // const gameSettings = $authManager.getUserUmbrellaSettings()
-    // console.log('%c gameSettings:', 'color:rgb(182, 86, 158);', gameSettings)
+onBeforeMount(() => {
+    areaManager.init() //loading map
+    player.init() //loading player data
 })
 
 
@@ -38,7 +29,8 @@ onMounted(() => {
     <div class="umbrella-container">
         <div class="flex-item map_container">
             <AreaComponent
-                :area="areaStore.area">
+                v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
+                :area="areaManager.store.area">
             </AreaComponent>
             <div class="flex-item info_block info_block_bottom">Chat</div>
         </div>
@@ -53,48 +45,55 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-.umbrella-container{
-    min-height:100vh;
+.umbrella-container {
+    min-height: 100vh;
     // border-right: 1px inset black;
     // border-left: 1px inset black;
     display: flex;
     flex-direction: row;
 }
-.flex-item{
+
+.flex-item {
     border: 1px inset black;
     text-align: center;
     min-height: 200px;
 }
-.map_container{
+
+.map_container {
     display: flex;
     flex-direction: column;
     //border: 1px inset grey;
     min-width: $map-width;
 }
-.umbrella_map{
+
+.umbrella_map {
     width: $map-width;
     height: $map-height;
 }
-.floating_container{
-    display:flex;
-    width:100%;
+
+.floating_container {
+    display: flex;
+    width: 100%;
     flex-direction: column;
 }
-.info_block_bottom{
+
+.info_block_bottom {
     width: $map-width;
 }
-.info_block_floating{
-    width:100%;
+
+.info_block_floating {
+    width: 100%;
     min-width: 300px;
     max-width: 450px;
-    height:20vh;
+    height: 20vh;
 }
 
-@media screen and (max-width:1100px){
-    .umbrella-container{
+@media screen and (max-width:1100px) {
+    .umbrella-container {
         flex-direction: column;
     }
-    .info_block_floating{
+
+    .info_block_floating {
         max-width: $map-width;
     }
 }

@@ -1,4 +1,4 @@
-import type { IPlayerSettings, TEntityPlayerSettings } from '../interfaces/umbrella.interface'
+import type { IPlayerSettings, TEntityPlayerSettings } from './player.interface'
 
 export interface IUser {
     userId         : number,

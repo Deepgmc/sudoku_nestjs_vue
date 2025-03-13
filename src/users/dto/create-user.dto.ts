@@ -2,6 +2,7 @@ import { IsString, IsNotEmpty, IsPositive, Max, Min, Length, IsEmail, IsOptional
 
 import { IUsersCreateDTO } from '../../interfaces/user.interface'
 import { dtoValidationMessageHandler } from '../../validation/dtoMsgHandler'
+import defaultUserSettings from '../../config/defaultUserSettings'
 
 const dtoMsg = new dtoValidationMessageHandler('User')
 
@@ -51,7 +52,7 @@ export class CreateUserDto implements IUsersCreateDTO {
     reg_date: Date
 
     @IsOptional()
-    game_settings: string = '{"currentDistrict":"fruns","currentZone":"home"}'
+    game_settings: string = JSON.stringify(defaultUserSettings)
 
     constructor() {}
 

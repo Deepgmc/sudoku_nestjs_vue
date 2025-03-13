@@ -1,7 +1,7 @@
 export const map = {
   areaName: 'Piter',
   districts: [
-    [//0
+    [//0 column
       {
         districtName: 'Vasileostrovsky',
         districtPosition: {x: 0, y: 0}
@@ -32,7 +32,7 @@ export const map = {
         districtName: 'Moskovsky',
         districtPosition: {x: 2, y: 1}
       },
-      {
+      {//!HOME DISTRICT
         districtName: 'fruns',
         districtPosition: {x: 3, y: 1},
         zones: [
@@ -61,7 +61,7 @@ export const map = {
               zoneName: 'woodCollege4',
               zonePosition: {x: 0, y: 2}
             },
-            {
+            {//!HOME ZONE
               zoneName: 'home',
               zonePosition: {x: 1, y: 2}
             },

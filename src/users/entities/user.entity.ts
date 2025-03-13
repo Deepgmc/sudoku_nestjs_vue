@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
-import { IUser, IUserEntity } from '../../interfaces/user.interface'
+import { IUserEntity } from '../../interfaces/user.interface'
 
 
 @Entity('users')

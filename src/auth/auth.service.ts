@@ -29,16 +29,13 @@ export class AuthService {
         })
     }
 
-
-
-
     async validateAndGetUser(username: string, password: string): Promise<any> {
         const user = await this.getAndCheckUser(username)
         return new Promise((resolve) => {
             bcrypt.compare(password, user.password, function(err, compareResult) {
                 if(compareResult){
                     const { password, ...result } = user
-                    console.log('ValidateAndGetUser user:', user)
+                    //console.log('ValidateAndGetUser user:', user)
                     resolve(result)
                 }
                 resolve(null)
@@ -52,7 +49,11 @@ export class AuthService {
      * @returns jwt access token
      */
     loginJwt(user: IUser){
-        const payload = {username: user.username, sub: user.userId}
+        const payload = {
+            username: user.username,
+            sub: user.userId,
+            loginJwtData: 'auth.service.ts -> loginJwt()'
+        }
         return {
             access_token: this.jwtService.sign(payload)
         }

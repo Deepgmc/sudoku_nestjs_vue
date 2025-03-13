@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { UsersEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { TUserId } from '../interfaces/user.interface';
+import { IPlayerSettings } from '../interfaces/player.interface';
 
 @Injectable()
 export class UsersService {
@@ -30,10 +32,23 @@ export class UsersService {
      * @returns
      */
     async findOne(field: string, value: string | number): Promise<UsersEntity | null> {
-        const searchObject = {
-            [field]: value
+        try{
+            const searchObject = {
+                [field]: value
+            }
+            return await this.usersRepository.findOneBy(searchObject)
+        } catch(_e: any){
+            throw new NotFoundException()
         }
-        return await this.usersRepository.findOneBy(searchObject)
+
+    }
+
+    async getGameSettings(userId: TUserId): Promise<string> {
+        const user = await this.findOne('userId', userId)
+        if(user !== null){
+            return user.game_settings
+        }
+        return ''
     }
 
     /**

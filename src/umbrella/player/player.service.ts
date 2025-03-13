@@ -1,12 +1,20 @@
 //import * as fsPromises from "node:fs/promises";
 import { Injectable } from "@nestjs/common";
+import { UsersService } from "../../users/users.service";
+import { TUserId } from "../../interfaces/user.interface";
+import type { IPlayer, IPlayerSettings } from "../../interfaces/player.interface";
 
 @Injectable()
 export class PlayerService {
-    constructor() { }
+    constructor(
+        private readonly usersService: UsersService
+    ) { }
 
-    // async getInitArea(areaName: string) {
-    //     const {map} = await import(`../../../maps/${areaName}.js`)
-    //     return JSON.stringify(map)
-    // }
+    async getFullPlayerData(userId: TUserId): Promise<IPlayer>{
+        const gameSettings = await this.usersService.getGameSettings(userId)
+        return {
+            userId: userId,
+            game_settings: JSON.parse(gameSettings)
+        }
+    }
 }
