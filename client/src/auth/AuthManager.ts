@@ -19,7 +19,7 @@ export class AuthManager implements IAuthManager {
 
     static instance: AuthManager | null = null
     static getInstance(
-        strategy: IAuthManager['_strategy'],
+        strategy?: IAuthManager['_strategy'],
         authStore?: any
     ): AuthManager {
         if(AuthManager.instance) {
@@ -31,8 +31,8 @@ export class AuthManager implements IAuthManager {
     private _apiSection: string = 'auth'
     private _postData: (authManager: AuthManager) => any
 
-    constructor(
-        strategy: IAuthManager['_strategy'],
+    private constructor(
+        strategy?: IAuthManager['_strategy'],
         authStore?: any
     ){
         if(AuthManager.instance) throw new TypeError('Instance creation only with .getInstance()')
@@ -84,8 +84,11 @@ export class AuthManager implements IAuthManager {
     }
 
     async updateAndGetIsLogined(): Promise<boolean> {
-        console.log('AuthManager updateAndGetIsLogined() call:')
-        if(!this._strategy) return false
+        console.log('AuthManager updateAndGetIsLogined() call')
+        if(!this._strategy) {
+            this.logOut()
+            return false
+        }
         let isLogined = false
 
         isLogined = await this._strategy.isLogined()

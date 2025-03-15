@@ -1,9 +1,9 @@
 export const map = {
-    cells: [
+    zoneCells: [
         [//HOME PORTAL
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence top1'
                 },
                 features: []
             },
@@ -49,7 +49,7 @@ export const map = {
         [//HOME DUMP
             {
                 obj: {
-                    name: 'houseDump'
+                    name: 'houseDump1'
                 },
                 features: []
             },
@@ -164,7 +164,7 @@ export const map = {
         [//HOME LOCATION
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence top'
                 },
                 features: []
             },

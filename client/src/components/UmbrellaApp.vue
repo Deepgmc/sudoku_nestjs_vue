@@ -32,19 +32,21 @@ onBeforeMount(() => {
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
                 :area="areaManager.store.area">
             </AreaComponent>
-            <div class="flex-item info_block info_block_bottom">Chat</div>
+            <!-- <div class="flex-item info_block info_block_bottom">Chat</div> -->
         </div>
 
-        <div class="floating_container">
+        <!-- <div class="floating_container">
             <div class="flex-item info_block info_block_floating">Some options and credentials</div>
             <div class="flex-item info_block info_block_floating">info 2 (inventory)</div>
             <div class="flex-item info_block info_block_floating">info 3 (position)</div>
-        </div>
+        </div> -->
     </div>
 
 </template>
 
 <style lang="scss">
+//@import '@/assets/globalVariables.scss';
+@use '@/assets/globalVariables.scss' as g;
 .umbrella-container {
     min-height: 100vh;
     // border-right: 1px inset black;
@@ -54,7 +56,7 @@ onBeforeMount(() => {
 }
 
 .flex-item {
-    border: 1px inset black;
+    // border: 1px inset black;
     text-align: center;
     min-height: 200px;
 }
@@ -63,12 +65,14 @@ onBeforeMount(() => {
     display: flex;
     flex-direction: column;
     //border: 1px inset grey;
-    min-width: $map-width;
+    min-width: g.$map-width;
+    border: 1px solid rgb(77, 44, 44);
 }
 
 .umbrella_map {
-    width: $map-width;
-    height: $map-height;
+    // width: g.$map-width;
+    min-height: g.$map-height;
+    border: 1px solid rgb(77, 44, 44);
 }
 
 .floating_container {
@@ -78,7 +82,7 @@ onBeforeMount(() => {
 }
 
 .info_block_bottom {
-    width: $map-width;
+    width: g.$map-width;
 }
 
 .info_block_floating {
@@ -89,12 +93,12 @@ onBeforeMount(() => {
 }
 
 @media screen and (max-width:1100px) {
-    .umbrella-container {
-        flex-direction: column;
-    }
+    // .umbrella-container {
+    //     flex-direction: column;
+    // }
 
-    .info_block_floating {
-        max-width: $map-width;
-    }
+    // .info_block_floating {
+    //     max-width: g.$map-width;
+    // }
 }
 </style>

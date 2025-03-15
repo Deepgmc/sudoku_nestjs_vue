@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
 import type { IArea, IDistrict } from '@/interfaces/MapInterfaces';
 import type AreaManager from '@/umbrella/AreaManager';
 
@@ -17,20 +17,21 @@ console.log('%c AreaComponent got area:', 'color:darkgreen;', props.area)
 const areaManager = inject ('areaManager') as AreaManager
 
 let currentDistrict: IDistrict = reactive({} as IDistrict)
-const isDistrictFound = ref<boolean>(false)
+//const isDistrictFound = ref<boolean>(false)
+const isDistrictFound = computed(() => {
+    return currentDistrict.zones.length > 0
+})
 
 onBeforeMount(() => {
     //get DISTRICT for current player
     currentDistrict = areaManager.getPlayerCurrentDistrict()
-    if(currentDistrict.zones.length > 0) isDistrictFound.value = true
-    console.log('%c areaComponent found currentDistrict:', 'color:red;', currentDistrict)
+    console.log('%c areaComponent found currentDistrict:', 'color:darkgreen;', currentDistrict)
 })
 
 </script>
 
 <template>
     <div class="umbrella_map">
-        {{ props.area.areaName }}
         <DistrictComponent
             v-if="isDistrictFound"
             :district="currentDistrict"

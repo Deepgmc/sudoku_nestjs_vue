@@ -1,3 +1,4 @@
+//import './assets/globalVariables.scss'
 import './assets/main.scss'
 
 import { createApp } from 'vue'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
 import type AreaManager from '@/umbrella/AreaManager';
 
 import ZoneComponent from './ZoneComponent.vue';
@@ -12,16 +12,21 @@ console.log('%c DistrictComponent got district:', 'color:darkgreen;', props.dist
 
 const areaManager = inject ('areaManager') as AreaManager
 
-let currentZone: IZone = reactive({} as IZone)
+let currentZone = ref<IZone>({} as IZone)
 
 let isZoneFound = computed(() => {
-    return currentZone.zoneName && currentZone.zoneName.length > 0
+    return currentZone.value.zoneCells && currentZone.value.zoneCells.length > 0
 })
 
-onMounted(async () => {
+onBeforeMount(async () => {
     //get ZONE for current player
-    currentZone = await areaManager.getPlayerCurrentZone(props.district)
-    //if(currentZone.zoneName.length > 0) isZoneFound.value = true
+    try{
+        currentZone.value = await areaManager.getPlayerCurrentZone(props.district)
+    } catch(_e: any){
+        throw new TypeError('Error while loading zone')
+    }
+
+    console.log('%c currentZone.value:', 'color:rgb(182, 86, 158);', currentZone.value)
 })
 </script>
 

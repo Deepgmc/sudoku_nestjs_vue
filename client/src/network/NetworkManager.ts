@@ -18,7 +18,7 @@ export class NetworkManager implements INetworkManager {
     }
     private httpClient: HttpClientTypes
 
-    constructor(){
+    private constructor(){
         if(NetworkManager.instance) {throw new TypeError('Instance creation only with .getInstance()')}
         console.log('%c NetworkManager constructor call', 'color:rgb(182, 86, 158);')
         NetworkManager.instance = this

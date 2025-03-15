@@ -2,7 +2,9 @@ import { NetworkManager } from "@/network/NetworkManager"
 import type { AuthManager } from "@/auth/AuthManager"
 import {type IArea, type IDistrict, type IZone} from '@/interfaces/MapInterfaces'
 
-import { StoreDecorator } from "./StoreDecorator"
+import { RESPONSE_STATUS_CODES } from '@/constants';
+
+import { StoreDecorator } from './StoreDecorator'
 import Player from './Player'
 import type { IPlayerGameSettings, TPlayerGameSettingsString } from "@/interfaces/playerInterfaces"
 
@@ -48,16 +50,17 @@ export default class AreaManager extends StoreDecorator {
         return this
     }
 
+    getDistrictByCoordinates(y: number, x: number): IDistrict{
+        return this.store.area.districts[y][x]// 1-3
+    }
+
     /**
      * Searches the area districts for player
        Got the coordinates from the player game_settings currentDistrict
      * @returns district IDistrict
      */
     getPlayerCurrentDistrict(): IDistrict {
-        const playerSettings = this.player.getSettings()
-        const playerDistrict = this.getDistrictFromSettings(playerSettings)
-        // console.log('%c playerSettings:', 'color:rgb(182, 86, 158);', playerSettings)
-        // console.log('%c playerDistrict:', 'color:rgb(182, 86, 158);', playerDistrict)
+        const playerDistrict = this.getDistrictFromSettings(this.player.getSettings())
         return playerDistrict
     }
 
@@ -70,41 +73,69 @@ export default class AreaManager extends StoreDecorator {
         const ps = this.getXYFromFileName(playerSettings.currentDistrict)
         const districtX: number = parseInt(ps.x) // 3
         const districtY: number = parseInt(ps.y) // 1
-        console.log('%c districtX, districtY', 'color:rgb(182, 86, 158);', districtX, districtY)
-        const district: IDistrict = this.store.area.districts[districtY][districtX]
+        const district: IDistrict = this.getDistrictByCoordinates(districtY, districtX)
         return district
+    }
+
+    /**
+     * Gets the zone from loaded area by the district and zone coordinates
+     * @param districtX
+     * @param districtY
+     * @param zoneX
+     * @param zoneY
+     * @returns Zone object
+     */
+    getZoneByCoordinates(
+        districtX: number,
+        districtY: number,
+        zoneX: number,
+        zoneY: number
+    ){
+        const district = this.getDistrictByCoordinates(districtY, districtX)
+        return district.zones[zoneX][zoneY]
     }
 
     /**
      * Searches the district zones for player
        Got the coordinates from the player game_settings CurrentZone
-     * @returns district IZone
+       Loads the zone settings file from server
+     * @returns Zone settings with Cells: ICells
      */
     async getPlayerCurrentZone(playerDistrict: IDistrict): Promise<IZone>{
         const playerSettings = this.player.getSettings()
         const playerZone = this.getZoneFromSettings(playerDistrict, playerSettings)
-        console.log('%c playerSettings:', 'color:rgb(182, 86, 158);', playerSettings)
-        //console.log('%c playerZone:', 'color:rgb(182, 86, 158);', playerZone)
-        const zoneFileData = await this._getData(this.API_METHODS.INIT_GET_ZONE)( {
+        const zoneFileData = await this._getData(this.API_METHODS.INIT_GET_ZONE)({
             zone: playerZone.zonePosition,
             district: playerDistrict.districtPosition
-        } )
-        console.log('%c zoneFileData:', 'color:rgb(182, 86, 158);', zoneFileData)
-        return playerZone
+        })
+        if(zoneFileData.status === RESPONSE_STATUS_CODES.SUCCESS){
+            console.log('%c zoneFileData:', 'color:rgb(182, 86, 158);', zoneFileData.data)
+            return zoneFileData.data
+        } else {
+            throw new Error('Invalid zone loading')
+        }
     }
 
-    getZoneFromSettings(district: IDistrict, playerSettings: IPlayerGameSettings): IZone{
+    /**
+     * Returns zone object from the loaded area
+     * @param district district object
+     * @param playerSettings
+     * @returns zone object
+     */
+    getZoneFromSettings(district: IDistrict, playerSettings: IPlayerGameSettings): IZone {
         //currentDistrict: '3_1', currentZone: '2_1'
         const ps = this.getXYFromFileName(playerSettings.currentZone)
         const zoneX: number = parseInt(ps.x) // 2
         const zoneY: number = parseInt(ps.y) // 1
-        console.log('%c zoneX, zoneY', 'color:rgb(182, 86, 158);', zoneX, zoneY)
-        // console.log('%c district.zones:', 'color:rgb(182, 86, 158);', district.zones)
-
-        const zone: IZone = district.zones[zoneX][zoneY]
+        const zone: IZone = this.getZoneByCoordinates(district.districtPosition.x, district.districtPosition.y, zoneX, zoneY)
         return zone
     }
 
+    /**
+     *
+     * @param currentDistrict Splits the x and y from file-arguments
+     * @returns object with coordinates
+     */
     getXYFromFileName(currentDistrict: string){
         const sp = currentDistrict.split('_')
         return {

@@ -11,13 +11,13 @@ export default defineConfig(({ mode }) => {
             vue(),
             vueDevTools(),
         ],
-        css: {
-            preprocessorOptions: {
-                scss: {
-                    additionalData: `@use "@/assets/globalVariables.scss" as *;`
-                }
-            }
-        },
+        // css: {
+        //     preprocessorOptions: {
+        //         scss: {
+        //             additionalData: `@use "@/assets/globalVariables.scss" as *;`
+        //         }
+        //     }
+        // },
         resolve: {
             alias: {
                 '@': nodeUrl.fileURLToPath(new nodeUrl.URL('./src', import.meta.url))
