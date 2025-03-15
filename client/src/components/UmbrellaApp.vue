@@ -4,17 +4,24 @@ import { inject, onBeforeMount, onMounted, reactive, provide } from 'vue';
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
 import AreaManager from '@/umbrella/AreaManager';
-import Player from '@/umbrella/Player';
+import PlayerManager from '@/umbrella/PlayerManager';
 import AreaComponent from '@/components/map/AreaComponent.vue';
+import UmbrellaManager from '@/umbrella/UmbrellaManager';
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
 
-const areaManager = AreaManager.getInstance($networkManager, $authManager)
-const player = Player.getInstance($networkManager, $authManager)
+//saving globaly auth and network to base umbrella class
+UmbrellaManager.$authManager = $authManager;
+UmbrellaManager.$networkManager = $networkManager;
+
+//instantiating this objects, just they create a new instance
+const areaManager = AreaManager.getInstance()
+const player = PlayerManager.getInstance()
 
 provide('areaManager', areaManager)
 provide('player', player)
+
 
 onBeforeMount(() => {
     areaManager.init() //loading map

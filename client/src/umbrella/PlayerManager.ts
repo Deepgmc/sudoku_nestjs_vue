@@ -1,22 +1,23 @@
 import type { NetworkManager } from "@/network/NetworkManager";
-import { StoreDecorator } from "./StoreDecorator";
+import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type { AuthManager } from "@/auth/AuthManager";
-import { type IPlayer } from "@/interfaces/playerInterfaces";
+import { type IPlayer } from '@/interfaces/playerInterfaces';
 
-export default class Player extends StoreDecorator {
-    static instance: Player
+export default class PlayerManager extends UmbrellaManager {
+    static instance: PlayerManager
     static getInstance(
-        networkManager: NetworkManager,
-        authManager: AuthManager
+        // networkManager: NetworkManager,
+        // authManager: AuthManager
     ){
-        if(Player.instance) return Player.instance
-        Player.instance = new Player(networkManager, authManager)
-        return Player.instance
+        if(PlayerManager.instance) return PlayerManager.instance
+        //PlayerManager.instance = new PlayerManager(networkManager, authManager)
+        PlayerManager.instance = new PlayerManager()
+        return PlayerManager.instance
     }
 
-    constructor(
-        private networkManager: NetworkManager,
-        private authManager: AuthManager
+    private constructor(
+        // private networkManager: NetworkManager,
+        // private authManager: AuthManager
     ) {
         super()
         this._getData = this.networkManager.applyNetworkMethod('get', this._apiSection)(this.authManager)
@@ -33,7 +34,6 @@ export default class Player extends StoreDecorator {
     async init(){
         const getPlayerResult = await this._getData(this.API_METHODS.INIT_PLAYER)(null)
         this.player = getPlayerResult.data as IPlayer
-        //console.log('%c Player -> this.player (fetch):', 'color:rgb(182, 101, 86);', this.player)
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
         this.store.loadPlayerToStore(this.player)
         return this

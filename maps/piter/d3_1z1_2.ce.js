@@ -3,7 +3,10 @@ export const map = {
         [//HOME PORTAL
             {
                 obj: {
-                    name: 'fence top1'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -11,14 +14,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: ['portal']
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 16,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -26,7 +34,10 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -34,14 +45,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -49,7 +65,10 @@ export const map = {
         [//HOME DUMP
             {
                 obj: {
-                    name: 'houseDump1'
+                    name: 'houseDump',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -57,14 +76,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -72,7 +96,10 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -80,14 +107,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -95,7 +127,10 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -103,14 +138,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -118,7 +158,10 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -126,14 +169,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -141,7 +189,10 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -149,14 +200,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -164,7 +220,10 @@ export const map = {
         [//HOME LOCATION
             {
                 obj: {
-                    name: 'fence top'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -172,15 +231,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12',
-                    features: ['entrance']
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: true
+                    },
                 },
                 features: []
             },
@@ -188,7 +251,10 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -196,14 +262,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },
@@ -211,7 +282,10 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence'
+                    name: 'fence',
+                    options: {
+                        orientation: 's-n',
+                    }
                 },
                 features: []
             },
@@ -219,14 +293,19 @@ export const map = {
                 obj: {
                     name: 'sideStreet',
                     options: {
-                        direction: 's-n'
+                        orientation: 's-n',
                     }
                 },
                 features: []
             },
             {
                 obj: {
-                    name: 'house12'
+                    name: 'house',
+                    options: {
+                        orientation: 'e-w',
+                        floor: 12,
+                        isEntrance: false
+                    },
                 },
                 features: []
             },

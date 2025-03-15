@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import ZoneManager from '@/umbrella/ZoneManager'
 import Cell from './Cell.vue';
 
 const props = defineProps(['zone'])
 console.log('%c ZoneComponent got zone:', 'color:darkgreen;', props.zone)
+
+const zoneManager = ZoneManager.getInstance(props.zone)
+const zone = zoneManager.hydrateZoneObjects()
 
 </script>
 

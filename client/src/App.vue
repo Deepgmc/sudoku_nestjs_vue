@@ -10,9 +10,8 @@ import UmbrellaApp from '@/components/UmbrellaApp.vue';
 import AuthLoading from '@/views/AuthLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 
-
-import { NetworkManager } from './network/NetworkManager'
-import { AuthManager } from './auth/AuthManager'
+import { NetworkManager } from '@/network/NetworkManager'
+import { AuthManager } from '@/auth/AuthManager'
 import { jwtStrategy } from '@/auth/strategies/jwt.strategy'
 
 const authStore = useAuthStore()

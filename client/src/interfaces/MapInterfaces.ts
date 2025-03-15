@@ -14,7 +14,7 @@ export interface IDistrict{
 export interface IZone {
     zoneName: string,
     zonePosition: IZonePosition,
-    zoneCells: ICell[]
+    zoneCells: ICell[][]
 }
 export type TDistrictPosition = {
     x: number,
@@ -32,7 +32,7 @@ export interface ICell {
     features: string[]
 }
 export interface ICellObj {
-    className: string,
+    name: string,
     options: TCellObjOptions
 }
 export type TCellObjOptions = {

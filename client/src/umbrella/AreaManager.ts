@@ -4,36 +4,29 @@ import {type IArea, type IDistrict, type IZone} from '@/interfaces/MapInterfaces
 
 import { RESPONSE_STATUS_CODES } from '@/constants';
 
-import { StoreDecorator } from './StoreDecorator'
-import Player from './Player'
-import type { IPlayerGameSettings, TPlayerGameSettingsString } from "@/interfaces/playerInterfaces"
+import UmbrellaManager from '@/umbrella/UmbrellaManager'
+import PlayerManager from './PlayerManager'
+import type { IPlayerGameSettings } from "@/interfaces/playerInterfaces"
 
 /**
  * Main map class. Stores the whole map + actions and helpers
  */
-export default class AreaManager extends StoreDecorator {
+export default class AreaManager extends UmbrellaManager {
     static instance: AreaManager
-    static getInstance(
-        networkManager: NetworkManager,
-        authManager: AuthManager
-    ){
+    static getInstance(){
         if(AreaManager.instance) return AreaManager.instance
-        AreaManager.instance = new AreaManager(networkManager, authManager)
+        AreaManager.instance = new AreaManager()
         return AreaManager.instance
     }
 
-    constructor(
-        private networkManager: NetworkManager,
-        private authManager: AuthManager
-    ) {
+    private constructor() {
         super()
         this._getData = this.networkManager.applyNetworkMethod('get', 'area')(this.authManager)
         this._postData = this.networkManager.applyNetworkMethod('post', 'area')(this.authManager)
-        this.player = Player.getInstance(this.networkManager, this.authManager)
-        //console.log('%c AreaManager constructor starts', 'color:rgb(182, 86, 158);')
+        this.player = PlayerManager.getInstance()
     }
 
-    private player: Player
+    private player: PlayerManager
     API_METHODS = {
         INIT_GET_AREA: 'get_area',
         INIT_GET_ZONE: 'get_zone_file',
@@ -109,7 +102,6 @@ export default class AreaManager extends StoreDecorator {
             district: playerDistrict.districtPosition
         })
         if(zoneFileData.status === RESPONSE_STATUS_CODES.SUCCESS){
-            console.log('%c zoneFileData:', 'color:rgb(182, 86, 158);', zoneFileData.data)
             return zoneFileData.data
         } else {
             throw new Error('Invalid zone loading')

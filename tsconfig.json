@@ -25,12 +25,13 @@
     "out": "js_docs/" // <--- output directory
   },
   "include": [
-    "src"
+    "src",
   ],
   "exclude": [
     "client/",
     "client",
     "node_modules/",
     "maps/",
+    "zoneEntities/"
   ]
 }

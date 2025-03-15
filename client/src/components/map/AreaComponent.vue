@@ -13,7 +13,6 @@ import DistrictComponent from './DistrictComponent.vue';
 */
 
 const props = defineProps<{area: IArea}>()
-console.log('%c AreaComponent got area:', 'color:darkgreen;', props.area)
 const areaManager = inject ('areaManager') as AreaManager
 
 let currentDistrict: IDistrict = reactive({} as IDistrict)
@@ -25,7 +24,7 @@ const isDistrictFound = computed(() => {
 onBeforeMount(() => {
     //get DISTRICT for current player
     currentDistrict = areaManager.getPlayerCurrentDistrict()
-    console.log('%c areaComponent found currentDistrict:', 'color:darkgreen;', currentDistrict)
+    //console.log('%c areaComponent found currentDistrict:', 'color:darkgreen;', currentDistrict)
 })
 
 </script>

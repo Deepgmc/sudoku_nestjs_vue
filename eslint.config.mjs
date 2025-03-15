@@ -9,6 +9,7 @@ export default tseslint.config(
             'eslint.config.mjs',
             'babel.config.js',
             'maps/',
+            'client/src/umbrella/zoneEntities/**',
         ],
     },
     eslint.configs.recommended,

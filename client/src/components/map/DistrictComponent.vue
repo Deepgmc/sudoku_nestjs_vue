@@ -25,8 +25,6 @@ onBeforeMount(async () => {
     } catch(_e: any){
         throw new TypeError('Error while loading zone')
     }
-
-    console.log('%c currentZone.value:', 'color:rgb(182, 86, 158);', currentZone.value)
 })
 </script>
 
