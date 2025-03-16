@@ -3,8 +3,7 @@ const props = defineProps(['cell'])
 </script>
 
 <template>
-    <div>
-        <slot></slot>
+    <div :class="props.cell.backgroundClass">
     </div>
 </template>
 

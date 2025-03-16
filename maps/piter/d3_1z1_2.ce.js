@@ -65,7 +65,7 @@ export const map = {
         [//HOME DUMP
             {
                 obj: {
-                    name: 'houseDump',
+                    name: 'fence',
                     options: {
                         orientation: 's-n',
                     }
@@ -96,7 +96,7 @@ export const map = {
         [
             {
                 obj: {
-                    name: 'fence',
+                    name: 'houseDump',
                     options: {
                         orientation: 's-n',
                     }

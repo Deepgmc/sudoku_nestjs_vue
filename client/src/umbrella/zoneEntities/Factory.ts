@@ -26,7 +26,7 @@ export function CellEntityFactory (
 }
 
 
-abstract class CellEntity {
+export abstract class CellEntity {
     constructor(
         public objectName: TObjectNames,
         orientation?: string
@@ -35,12 +35,14 @@ abstract class CellEntity {
         this.objectName = objectName
         this.passability = entitiesOptions[objKey].passability
         this.backgroundImage = entitiesOptions[objKey].backgroundImage
+        this.backgroundClass = entitiesOptions[objKey].backgroundClass
         this.actions = entitiesOptions[objKey].actions
         if(orientation) this.orientation = orientation; else this.orientation = '' //some cells do not need orientation
     }
     public orientation: string
     public passability: boolean
     public backgroundImage: string
+    public backgroundClass: string
     public actions: string[]
 }
 

@@ -1,12 +1,13 @@
 /**
 MAP GLOBAL
 */
+import { CellEntity } from "@/umbrella/zoneEntities/Factory"
 export interface IArea {
     areaName: string,
     districts: IDistrict[][],
     [key: string]: any
 }
-export interface IDistrict{
+export interface IDistrict {
     districtName: string,
     districtPosition: TDistrictPosition,
     zones: IZone[][]
@@ -16,6 +17,11 @@ export interface IZone {
     zonePosition: IZonePosition,
     zoneCells: ICell[][]
 }
+export interface IZoneHydrated extends Omit<IZone, 'zoneCells'> {
+    zoneCells: THydratedZoneCells
+}
+export type THydratedZoneCells = CellEntity[][]
+
 export type TDistrictPosition = {
     x: number,
     y: number
@@ -36,5 +42,7 @@ export interface ICellObj {
     options: TCellObjOptions
 }
 export type TCellObjOptions = {
-    direction?: string
+    orientation?: string,
+    floor?: number,
+    isEntrance?: boolean
 }

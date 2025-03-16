@@ -1,0 +1,32 @@
+.fenceIron, .sideStreet, .houseDump, .houseResidental{
+    position: relative;
+}
+
+.fenceIron:after, .sideStreet:after, .houseDump:after, .houseResidental:after {
+    position: absolute;
+    top: 0;
+    /* left: 0;
+    transform: rotate(90deg);
+    */
+    z-index: -1;
+    color: red;
+    font-size: 65px;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+.fenceIron:after {
+    content: "\25A5";
+    color: rgb(116, 116, 116);
+}
+.sideStreet:after {
+    content: "\1D11B";//2589
+    color:rgb(73, 62, 57);
+}
+.houseDump:after {
+    content: "\1F5D1";
+}
+.houseResidental:after {
+    content: "\1F3E2";
+}

@@ -3,7 +3,7 @@ import ZoneManager from '@/umbrella/ZoneManager'
 import Cell from './Cell.vue';
 
 const props = defineProps(['zone'])
-console.log('%c ZoneComponent got zone:', 'color:darkgreen;', props.zone)
+console.log('%c ZoneComponent got zone (raw):', 'color:darkgreen;', props.zone)
 
 const zoneManager = ZoneManager.getInstance(props.zone)
 const zone = zoneManager.hydrateZoneObjects()
@@ -14,10 +14,9 @@ const zone = zoneManager.hydrateZoneObjects()
 
 <template>
     <div class="zone-cells-container">
-        <div v-for="cells in props.zone.zoneCells">
+        <div v-for="cells in zone.zoneCells">
             <div class="zone-cell-line">
                 <Cell class="cell-item" v-for="(cell, index) in cells" :cell="cell">
-                    {{ index }}
                 </Cell>
             </div>
         </div>
@@ -27,6 +26,7 @@ const zone = zoneManager.hydrateZoneObjects()
 
 
 <style lang="scss">
+@use '@/assets/zoneCellsIcons.scss';
 .zone-cell-line{
     display:flex;
     flex: row nowrap;
@@ -38,9 +38,10 @@ const zone = zoneManager.hydrateZoneObjects()
     border: 1px solid rgb(59, 54, 54);
     border-radius: 3px;
     margin: 2px;
+    font-size: 10px;
 
     display:flex;
-    flex: row nowrap;
+    flex: row wrap;
     justify-content: center;
     align-items: center;
     align-content: center;
