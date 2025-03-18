@@ -31,11 +31,11 @@ export type IZonePosition = {
     y: number
 }
 /**
-ZONE CELLS
+ZONE CELLS (FROM MAP)
 */
 export interface ICell {
     obj: ICellObj,
-    features: string[]
+    features: string[],
 }
 export interface ICellObj {
     name: string,
@@ -44,5 +44,8 @@ export interface ICellObj {
 export type TCellObjOptions = {
     orientation?: string,
     floor?: number,
-    isEntrance?: boolean
+    isEntrance?: boolean,
+    actions: TCellActions
 }
+
+export type TCellActions = (() => any) | string[]

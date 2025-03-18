@@ -43,31 +43,21 @@ export default class AreaManager extends UmbrellaManager {
         return this
     }
 
-    getDistrictByCoordinates(y: number, x: number): IDistrict{
+    getDistrictByCoordinates(x: number, y: number): IDistrict{
         return this.store.area.districts[y][x]// 1-3
     }
 
     /**
      * Searches the area districts for player
-       Got the coordinates from the player game_settings currentDistrict
+       Got the coordinates from the player
      * @returns district IDistrict
      */
     getPlayerCurrentDistrict(): IDistrict {
-        const playerDistrict = this.getDistrictFromSettings(this.player.getSettings())
+        const playerDistrict: IDistrict = this.getDistrictByCoordinates(
+            this.player.store.districtX as number,
+            this.player.store.districtY as number
+        )
         return playerDistrict
-    }
-
-    /**
-     * Searches the district where player currentl locates
-     * @param playerSettings currentDistrict currentZone options in player DB game_settings
-     * @returns district where player current locates (IDistrict)
-     */
-    getDistrictFromSettings(playerSettings: IPlayerGameSettings): IDistrict{
-        const ps = this.getXYFromFileName(playerSettings.currentDistrict)
-        const districtX: number = parseInt(ps.x) // 3
-        const districtY: number = parseInt(ps.y) // 1
-        const district: IDistrict = this.getDistrictByCoordinates(districtY, districtX)
-        return district
     }
 
     /**
@@ -84,8 +74,8 @@ export default class AreaManager extends UmbrellaManager {
         zoneX: number,
         zoneY: number
     ){
-        const district = this.getDistrictByCoordinates(districtY, districtX)
-        return district.zones[zoneX][zoneY]
+        const district = this.getDistrictByCoordinates(districtX, districtY)
+        return district.zones[zoneY][zoneX]
     }
 
     /**
@@ -95,8 +85,12 @@ export default class AreaManager extends UmbrellaManager {
      * @returns Zone settings with Cells: ICells
      */
     async getPlayerCurrentZone(playerDistrict: IDistrict): Promise<IZone>{
-        const playerSettings = this.player.getSettings()
-        const playerZone = this.getZoneFromSettings(playerDistrict, playerSettings)
+        const playerZone: IZone = this.getZoneByCoordinates(
+            playerDistrict.districtPosition.x,
+            playerDistrict.districtPosition.y,
+            this.player.store.zoneX as number,
+            this.player.store.zoneY as number
+        )
         const zoneFileData = await this._getData(this.API_METHODS.INIT_GET_ZONE)({
             zone: playerZone.zonePosition,
             district: playerDistrict.districtPosition
@@ -105,34 +99,6 @@ export default class AreaManager extends UmbrellaManager {
             return zoneFileData.data
         } else {
             throw new Error('Invalid zone loading')
-        }
-    }
-
-    /**
-     * Returns zone object from the loaded area
-     * @param district district object
-     * @param playerSettings
-     * @returns zone object
-     */
-    getZoneFromSettings(district: IDistrict, playerSettings: IPlayerGameSettings): IZone {
-        //currentDistrict: '3_1', currentZone: '2_1'
-        const ps = this.getXYFromFileName(playerSettings.currentZone)
-        const zoneX: number = parseInt(ps.x) // 2
-        const zoneY: number = parseInt(ps.y) // 1
-        const zone: IZone = this.getZoneByCoordinates(district.districtPosition.x, district.districtPosition.y, zoneX, zoneY)
-        return zone
-    }
-
-    /**
-     *
-     * @param currentDistrict Splits the x and y from file-arguments
-     * @returns object with coordinates
-     */
-    getXYFromFileName(currentDistrict: string){
-        const sp = currentDistrict.split('_')
-        return {
-            x: sp[0],
-            y: sp[1]
         }
     }
 }

@@ -1,35 +1,44 @@
+import { type TCellActions } from "@/interfaces/MapInterfaces"
+import type PlayerManager from "../PlayerManager"
+
 export type TObjectNames = keyof typeof entitiesOptions
 
 export type entity = {
     passability: boolean,
     backgroundImage: string,
     backgroundClass: string,
-    actions: Function[] | string[]
+    actions: TCellActions,
+    player: PlayerManager | null
 }
 
+/**
+ * настройки объектов карты стандартные
+   используются для гидрации структуры, пришедшей с сервера для заполнения её объектами
+ */
 export const entitiesOptions = {
+    'house': {
+        passability: false,
+        backgroundClass: 'houseResidental',
+        actions: ['lookWindow'],
+    },
     'fence': {
         passability: false,
-        backgroundImage: 'fenceImg',
         backgroundClass: 'fenceIron',
         actions: [],
     },
     'sideStreet': {
         passability: true,
-        backgroundImage: 'sideStreetImg',
         backgroundClass: 'sideStreet',
         actions: [],
     },
     'houseDump': {
         passability: false,
-        backgroundImage: 'sideStreetDumpImg', //1F5D1
         backgroundClass: 'houseDump',
-        actions: ['digIn'],
+        actions: ['dig'],
     },
-    'house': {
-        passability: false,
-        backgroundImage: 'houseImg',//1F3E2
-        backgroundClass: 'houseResidental',
-        actions: ['lookIn'],
+    'trees': {
+        passability: true,
+        backgroundClass: 'trees',
+        actions: ['look', 'dig'],
     },
 }

@@ -1,19 +1,30 @@
-.fenceIron, .sideStreet, .houseDump, .houseResidental{
+.fenceIron,
+.sideStreet,
+.houseDump,
+.houseResidental,
+.trees{
     position: relative;
 }
 
-.fenceIron:after, .sideStreet:after, .houseDump:after, .houseResidental:after {
+.fenceIron:after,
+.sideStreet:after,
+.houseDump:after,
+.houseResidental:after,
+.trees:after {
     position: absolute;
     top: 0;
-    /* left: 0;
+    /*
     transform: rotate(90deg);
     */
     z-index: -1;
     color: red;
-    font-size: 65px;
+    font-size: 45px;
+    left:0px;
+    //top:0px;
 
     text-align: center;
     vertical-align: middle;
+    opacity: 1;
 }
 
 .fenceIron:after {
@@ -21,7 +32,7 @@
     color: rgb(116, 116, 116);
 }
 .sideStreet:after {
-    content: "\1D11B";//2589
+    content: "\1D11B";
     color:rgb(73, 62, 57);
 }
 .houseDump:after {
@@ -29,4 +40,7 @@
 }
 .houseResidental:after {
     content: "\1F3E2";
+}
+.trees:after {
+    content: "\1F333";
 }

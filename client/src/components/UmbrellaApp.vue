@@ -28,16 +28,16 @@ onBeforeMount(() => {
     player.init() //loading player data
 })
 
-
 </script>
 
 <template>
 
     <div class="umbrella-container">
         <div class="flex-item map_container">
+            <!-- player.userId: {{ player.userId }} player.store.userId: {{ player.store.userId }} isLoaded: {{ player.store.isPlayerLoaded }} -->
             <AreaComponent
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
-                :area="areaManager.store.area">
+            >
             </AreaComponent>
             <!-- <div class="flex-item info_block info_block_bottom">Chat</div> -->
         </div>

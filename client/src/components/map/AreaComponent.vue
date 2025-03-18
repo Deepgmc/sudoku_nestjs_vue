@@ -11,12 +11,9 @@ import DistrictComponent from './DistrictComponent.vue';
 Вычислить их и передать дальше в DistrictComponent
 Внутри DistrictComponent тоже вычислить какую Zone загружать и передать её уже в ZoneComponent
 */
-
-const props = defineProps<{area: IArea}>()
 const areaManager = inject ('areaManager') as AreaManager
 
 let currentDistrict: IDistrict = reactive({} as IDistrict)
-//const isDistrictFound = ref<boolean>(false)
 const isDistrictFound = computed(() => {
     return currentDistrict.zones.length > 0
 })

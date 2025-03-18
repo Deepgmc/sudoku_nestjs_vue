@@ -1,31 +1,25 @@
-import type { NetworkManager } from "@/network/NetworkManager";
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import type { AuthManager } from "@/auth/AuthManager";
 import { type IPlayer } from '@/interfaces/playerInterfaces';
 
 export default class PlayerManager extends UmbrellaManager {
     static instance: PlayerManager
-    static getInstance(
-        // networkManager: NetworkManager,
-        // authManager: AuthManager
-    ){
+    static getInstance(){
         if(PlayerManager.instance) return PlayerManager.instance
-        //PlayerManager.instance = new PlayerManager(networkManager, authManager)
         PlayerManager.instance = new PlayerManager()
         return PlayerManager.instance
     }
 
-    private constructor(
-        // private networkManager: NetworkManager,
-        // private authManager: AuthManager
-    ) {
+    private constructor() {
         super()
         this._getData = this.networkManager.applyNetworkMethod('get', this._apiSection)(this.authManager)
-        //console.log('%c Player constructor starts', 'color:rgb(182, 86, 158);')
     }
     private _getData: (action: string) => any
     private _apiSection: string = 'player'
-    private player: IPlayer = {} as IPlayer
+    private playerRaw: IPlayer = {} as IPlayer
+
+    get userId(){
+        return this.store.getUserId()
+    }
 
     API_METHODS = {
         INIT_PLAYER: 'get_full'
@@ -33,13 +27,34 @@ export default class PlayerManager extends UmbrellaManager {
 
     async init(){
         const getPlayerResult = await this._getData(this.API_METHODS.INIT_PLAYER)(null)
-        this.player = getPlayerResult.data as IPlayer
+        this.playerRaw = getPlayerResult.data as IPlayer
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
-        this.store.loadPlayerToStore(this.player)
+        this.loadPlayerToStore(this.playerRaw)
         return this
     }
 
-    getSettings(){
-        return this.player.game_settings
+    loadPlayerToStore(player: IPlayer){
+        this.store.userId = player.userId
+        const districtCoordinates = this.getXYFromRawSettings(player.game_settings.currentDistrict)
+        const zoneCoordinates = this.getXYFromRawSettings(player.game_settings.currentZone)
+
+        this.store.districtX = parseInt(districtCoordinates.x)
+        this.store.districtY = parseInt(districtCoordinates.y)
+        this.store.zoneX = parseInt(zoneCoordinates.x)
+        this.store.zoneY = parseInt(zoneCoordinates.y)
+        this.store.x = parseInt(player.game_settings.x)
+        this.store.y = parseInt(player.game_settings.y)
+    }
+
+    getXYFromRawSettings(rawSettingsXY: string){
+        const xy = rawSettingsXY.split('_')
+        return {
+            x: xy[0],
+            y: xy[1]
+        }
+    }
+
+    isHere(x: number, y:number): boolean{
+        return this.store.x === x && this.store.y === y
     }
 }

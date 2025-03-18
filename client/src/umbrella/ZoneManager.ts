@@ -3,6 +3,7 @@ import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import {CellEntityFactory} from '@/umbrella/zoneEntities/Factory'
 import type { TObjectNames } from './zoneEntities/zoneEntities'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
+import type PlayerManager from '@/umbrella/PlayerManager';
 
 export default class ZoneManager extends UmbrellaManager {
     static instance: ZoneManager
@@ -18,23 +19,35 @@ export default class ZoneManager extends UmbrellaManager {
 
     private zoneRaw: IZone
 
+    get zoneCells(): THydratedZoneCells{
+        return this.store.zone.zoneCells
+    }
+
     /**
-     *
+     * @returns Fills the raw server-side map with real game objects
      */
-    hydrateZoneObjects(){
+    hydrateZoneObjects(): void {
+        //replacing zoneCells with new one
         const {zoneCells, ...tmpZone} = this.zoneRaw
         const hydratedZone: IZoneHydrated = {...tmpZone, zoneCells: {} as THydratedZoneCells}
         hydratedZone.zoneCells = this.zoneRaw.zoneCells.map(row => {
             return row.map(cell => {
-                const hydratedObject = CellEntityFactory(cell.obj.name as TObjectNames, cell.obj.options)
-                //console.log('%c hydratedObject:', 'color:rgb(182, 86, 158);', hydratedObject)
-                return hydratedObject
+                return CellEntityFactory(cell.obj.name as TObjectNames, cell.obj.options)
             })
         })
 
-
         console.log('%c hydratedZone:', 'color:rgb(158, 2, 119);', hydratedZone)
-        return hydratedZone
-        //this.store.loadZoneToStore(zoneReorganized)
+        this.store.loadZoneToStore(hydratedZone)
+    }
+
+    setPlayerToMap(player: PlayerManager): void {
+        this.zoneCells.forEach((row, indexY) => {
+            return row.forEach((cell, indexX) => {
+                cell.player = null //remove player everywhere
+                if(player.isHere(indexX, indexY)){
+                    cell.player = player
+                }
+            })
+        })
     }
 }
