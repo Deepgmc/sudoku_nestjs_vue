@@ -51,13 +51,20 @@ button{
     color:black;
 }
 
-.main_container {
+.auth_login_container {
     display:flex;
     height: 100vh;
 
     align-content: center;
     align-items: center;
     justify-content: space-around;
+
+    flex-flow: row nowrap;
+}
+.main_container {
+    display:flex;
+    height: 100vh;
+    justify-content: flex-start;
 
     flex-flow: row nowrap;
 }
