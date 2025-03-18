@@ -1,27 +1,28 @@
-import type { TCellObjOptions, TCellActions } from '@/interfaces/MapInterfaces.ts';
+import type { TCellObjOptions, TCellActions, TCellFeatures } from '@/interfaces/MapInterfaces.ts';
 import {entitiesOptions, type TObjectNames } from './zoneEntities.ts'
 import PlayerManager from '../PlayerManager.ts';
 
 export function CellEntityFactory (
     name: TObjectNames,
-    mapOptions: TCellObjOptions,
+    mapCellOptions: TCellObjOptions,
+    mapCellFeatures: TCellFeatures,
 ): CellEntity {
     let cellEntity: CellEntity | null = null
     switch (name) {
         case 'house':
-            cellEntity = new House(name, mapOptions)
+            cellEntity = new House(name, mapCellOptions, mapCellFeatures)
             break;
         case 'fence':
-            cellEntity = new Fence(name, mapOptions)
+            cellEntity = new Fence(name, mapCellOptions, mapCellFeatures)
             break;
         case 'houseDump':
-            cellEntity = new HouseDump(name, mapOptions)
+            cellEntity = new HouseDump(name, mapCellOptions, mapCellFeatures)
             break;
         case 'sideStreet':
-            cellEntity = new SideStreet(name, mapOptions)
+            cellEntity = new SideStreet(name, mapCellOptions, mapCellFeatures)
             break;
         case 'trees':
-            cellEntity = new Trees(name, mapOptions)
+            cellEntity = new Trees(name, mapCellOptions, mapCellFeatures)
             break;
         default:
             throw new Error('Invalid name at EntityFactory')
@@ -34,7 +35,8 @@ export function CellEntityFactory (
 export abstract class CellEntity {
     constructor(
         objectName: TObjectNames,
-        mapOptions?: any
+        mapOptions: any,
+        mapCellFeatures: TCellFeatures
     ){
         this.objectName = objectName
         this.player = null
@@ -43,6 +45,7 @@ export abstract class CellEntity {
         this.backgroundClass = entitiesOptions[objKey].backgroundClass
         this.actions = entitiesOptions[objKey].actions//.concat(mapOptions.actions)
         if(mapOptions.orientation) this.orientation = mapOptions.orientation; else this.orientation = '' //some cells do not need orientation
+        this.features = mapCellFeatures
     }
     public objectName: TObjectNames
     public player: PlayerManager | null
@@ -50,46 +53,52 @@ export abstract class CellEntity {
     public passability: boolean
     public backgroundClass: string
     public actions: TCellActions
+    public infoIcons: string[] = []
+    public features: TCellFeatures
+
+    abstract generateInfoIcons(): void
 }
-/**
- * {
-        obj: {
-            name: 'house',
-            options: {
-                orientation: 'e-w',
-                floor: 12,
-                isEntrance: false
-            },
-        },
-        features: []
-    },
- */
+
 class House extends CellEntity {
-    public floors: number
-    public isEntrance: boolean
-    constructor(objectName: TObjectNames, options: any){
-        super(objectName, options)
+    private floors: number
+    private isEntrance: boolean
+    constructor(objectName: TObjectNames, options: any, mapCellFeatures: TCellFeatures){
+        super(objectName, options, mapCellFeatures)
         this.floors = options.floor
         this.isEntrance = options.isEntrance
+        this.generateInfoIcons()
+    }
+
+    generateInfoIcons(){
+        if(this.isEntrance){
+            this.infoIcons.push('&#128726;')
+        }
     }
 }
 class HouseDump extends CellEntity {
-    constructor(objectName: TObjectNames, options: any){
-        super(objectName, options)
+    constructor(objectName: TObjectNames, options: any, mapCellFeatures: TCellFeatures){
+        super(objectName, options, mapCellFeatures)
     }
+    generateInfoIcons(){return []}
 }
 class Fence extends CellEntity {
-    constructor(objectName: TObjectNames, options: any){
-        super(objectName, options)
+    constructor(objectName: TObjectNames, options: any, mapCellFeatures: TCellFeatures){
+        super(objectName, options, mapCellFeatures)
     }
+    generateInfoIcons(){return []}
 }
 class SideStreet extends CellEntity {
-    constructor(objectName: TObjectNames, options: any){
-        super(objectName, options)
+    constructor(objectName: TObjectNames, options: any, mapCellFeatures: TCellFeatures){
+        super(objectName, options, mapCellFeatures)
+        this.features.forEach(f => {
+            if(f === 'portal') this.infoIcons.push('&#x25CE;')
+        })
     }
+    generateInfoIcons(){return []}
 }
 class Trees extends CellEntity {
-    constructor(objectName: TObjectNames, options: any){
-        super(objectName, options)
+    constructor(objectName: TObjectNames, options: any, mapCellFeatures: TCellFeatures){
+        super(objectName, options, mapCellFeatures)
     }
+    generateInfoIcons(){return []}
 }

@@ -47,5 +47,6 @@ export type TCellObjOptions = {
     isEntrance?: boolean,
     actions: TCellActions
 }
+export type TCellFeatures = string[]
 
 export type TCellActions = (() => any) | string[]
