@@ -14,8 +14,8 @@ const infoMessage = ref<string[]>([])
 const $authManager: IAuthManager = inject('$authManager') as IAuthManager
 
 const registerUser = ref<TRegisterForm>({
-    username: 'Serg',
-    email: 'deep@deep.com',
+    username: 'SergUmbrella',
+    email: 'deepUmbrella@deep.com',
     age: 36,
     password: '1234567',
     passwordConfirm: '1234567',
@@ -34,15 +34,6 @@ async function submitRegister(): Promise<boolean> {
         return false //client side-validation
     }
     const res = await $authManager.registerRequest(registerUser.value)
-    console.log('RegisterAnswer:', res)
-
-    //TODO SERVER ERRORS ADD TO VUELIDATE
-    // const errors = {
-    //     username: 'password errs',
-    //     age: 'password errs',
-    //     email: 'password errs',
-    // }
-    // Object.assign($externalResults, errors)
 
     if(res.error){
         if(res.error.message) {

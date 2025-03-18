@@ -1,10 +1,8 @@
 
-import { inject } from 'vue'
 import { availableStrategies, type IAuthManager } from '@/interfaces/Auth'
 
 import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
 import type { TStrategies } from '@/interfaces/Auth'
-import { RESPONSE_STATUS_CODES } from '@/constants'
 import { NetworkManager } from '@/network/NetworkManager.ts'
 
 
@@ -33,11 +31,12 @@ export class AuthManager implements IAuthManager {
     private _apiSection: string = 'auth'
     private _postData: (authManager: AuthManager) => any
 
-    constructor(
+    private constructor(
         strategy?: IAuthManager['_strategy'],
         authStore?: any
     ){
         if(AuthManager.instance) throw new TypeError('Instance creation only with .getInstance()')
+        console.log('%c AuthManager constructor call', 'color:rgb(182, 86, 158);')
         AuthManager.instance = this
         if(strategy) this._strategy = strategy
         this._authStore = authStore
@@ -60,11 +59,15 @@ export class AuthManager implements IAuthManager {
     async loginRequest(loginData: ILoginUser): Promise<any> {
         if(this.isLogined) return {error: {message: 'You already logined'}}
         if(!this._strategy) return {error: {message: 'Invalid login strategy'}}
+        let isLogined: boolean = false
 
         const loginRes = await this._strategy.login(loginData)
 
-        this._isLogined = loginRes
-        this._authStore.setIsLogined(this._isLogined)
+        if(loginRes === true){
+            isLogined = true
+        }
+        this._isLogined = isLogined
+        this._authStore.setIsLogined(isLogined)
 
         return loginRes
     }
@@ -81,8 +84,11 @@ export class AuthManager implements IAuthManager {
     }
 
     async updateAndGetIsLogined(): Promise<boolean> {
-        console.log('AuthManager updateAndGetIsLogined() call:')
-        if(!this._strategy) return false
+        console.log('AuthManager updateAndGetIsLogined() call')
+        if(!this._strategy) {
+            this.logOut()
+            return false
+        }
         let isLogined = false
 
         isLogined = await this._strategy.isLogined()

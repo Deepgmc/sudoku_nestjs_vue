@@ -3,7 +3,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '../users/users.service';
-import { IUser } from '../interfaces/user.interface';
+import { IUser, IUsersCreateDTO } from '../interfaces/user.interface';
 
 import { CreateUserDto } from '../users/dto/create-user.dto';
 
@@ -29,16 +29,13 @@ export class AuthService {
         })
     }
 
-
-
-
     async validateAndGetUser(username: string, password: string): Promise<any> {
         const user = await this.getAndCheckUser(username)
         return new Promise((resolve) => {
             bcrypt.compare(password, user.password, function(err, compareResult) {
                 if(compareResult){
                     const { password, ...result } = user
-                    console.log('ValidateAndGetUser user:', user)
+                    //console.log('ValidateAndGetUser user:', user)
                     resolve(result)
                 }
                 resolve(null)
@@ -52,13 +49,17 @@ export class AuthService {
      * @returns jwt access token
      */
     loginJwt(user: IUser){
-        const payload = {username: user.username, sub: user.userId}
+        const payload = {
+            username: user.username,
+            sub: user.userId,
+            loginJwtData: 'auth.service.ts -> loginJwt()'
+        }
         return {
             access_token: this.jwtService.sign(payload)
         }
     }
 
-    async getAndCheckUser(username: string): Promise<IUser> {
+    async getAndCheckUser(username: string): Promise<IUsersCreateDTO> {
         const user = await this.usersService.findOne('username', username)
         if(!user) throw new UnauthorizedException('Not found such user')
         return user

@@ -35,10 +35,12 @@ function changeForm(): void{
 </template>
 
 <style lang="scss">
+//@import '@/assets/globalVariables.scss';
+@use '@/assets/globalVariables.scss' as g;
 .auth_container{
     display: flex;
     flex-flow: column nowrap;
-    flex: 1 0 $authFormWidth;
+    flex: 1 0 g.$authFormWidth;
 
     align-items: center;
 
@@ -51,7 +53,7 @@ function changeForm(): void{
     align-items: flex-start;
     flex: 1 0 auto;
     margin: 0 0 40px 0;
-    min-width: $authFormWidth;
+    min-width: g.$authFormWidth;
 
     //border: 1px solid blue;
 }
@@ -59,7 +61,7 @@ function changeForm(): void{
 
 .auth_caption{
     font-size: 2em;
-    color: $orangeColor;
+    color: g.$orangeColor;
     padding:0 0 20px 0;
 }
 .form_container {
@@ -92,12 +94,12 @@ function changeForm(): void{
     padding: 3px;
 }
 .error-msg{
-    color: $errorTextColor;
+    color: g.$errorTextColor;
     margin-left:15px;
     font-size:11px;
 }
 .error_asterisk{
-    color: $errorTextColor;
+    color: g.$errorTextColor;
     font-size:11px;
     margin:0 5px 0 0;
 }
@@ -115,6 +117,6 @@ function changeForm(): void{
     cursor:pointer;
 }
 .auth_switch_btn:hover {
-    color: $linkColorHover;
+    color: g.$linkColorHover;
 }
 </style>

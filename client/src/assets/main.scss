@@ -1,3 +1,10 @@
+//@import '@/assets/globalVariables.scss';
+@use './globalVariables.scss' as g;
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
 body{
     min-height: 100vh;
     background: rgb(0, 0, 0);
@@ -21,24 +28,26 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color:lightgrey;
+    background-image: url("bgr.jpg");
+    background-repeat: repeat;
 }
 a, .link {
-    color: $linkColor;
+    color: g.$linkColor;
 }
 a:hover, .link:hover {
-    color: $linkColorHover;
+    color: g.$linkColorHover;
 }
 
 input[type=text], input[type=email], input[type=number], button{
     padding:7px;
     border-radius: 4px;
     font-size:16px;
-    background-color: $inputBgrColor;
+    background-color: g.$inputBgrColor;
 }
 button{
     font-size:14px;
     min-width: 70px;
-    background-color: $orangeColor;
+    background-color: g.$orangeColor;
     color:black;
 }
 
@@ -53,8 +62,8 @@ button{
     flex-flow: row nowrap;
 }
 .error_text{
-    color: $errorTextColor
+    color: g.$errorTextColor
 }
 .success_text{
-    color: $successTextColor
+    color: g.$successTextColor
 }

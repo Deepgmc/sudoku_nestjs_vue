@@ -12,14 +12,15 @@ import { AppModule } from './app.module';
  */
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(
-        AppModule, {
-        abortOnError: true,
-        logger: new ConsoleLogger({
-            colors: true,
-            prefix: 'Nee',
-        }),
-    }
+            AppModule, {
+            abortOnError: true,
+            logger: new ConsoleLogger({
+                colors: true,
+                prefix: 'Umb',
+            }),
+        }
     );
+    app.set('query parser', 'extended');
 
     app.useGlobalPipes(new ValidationPipe({
         //https://docs.nestjs.com/techniques/validation#using-the-built-in-validationpipe

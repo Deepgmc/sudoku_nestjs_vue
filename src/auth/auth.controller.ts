@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
+//import {NotFoundException, BadRequestException} from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 
@@ -31,6 +32,12 @@ export class AuthController {
         await this.authService.registerNewUser(createUserDto)
     }
 
+    @UseGuards(AuthGuard('jwt'))
+    @Get('check_token')
+    checkAuth() {
+        return {logined: true}
+    }
+
     @UseGuards(AuthGuard('local'))
     @Post('login')
     login(@Request() req) {
@@ -50,23 +57,17 @@ export class AuthController {
     //     return req.logout();
     // }
 
-    @UseGuards(AuthGuard('jwt'))
-    @Get('profile')
-    profile(@Request() req) {
-        console.log('Profile controller', req);
+    // @UseGuards(AuthGuard('jwt'))
+    // @Get('profile')
+    // profile(@Request() req) {
+    //     console.log('Profile controller', req);
 
-        /**
-        доступ по гет-запросу с хедером:
-        Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDAyOTgwNzYsImV4cCI6MTc0MDMwMTY3Nn0.ROg6Ez4JmeiythFhNQk0fVrsWnzjMWQmBwOE6l-Kiz4
-        */
+    //     /**
+    //     доступ по гет-запросу с хедером:
+    //     Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDAyOTgwNzYsImV4cCI6MTc0MDMwMTY3Nn0.ROg6Ez4JmeiythFhNQk0fVrsWnzjMWQmBwOE6l-Kiz4
+    //     */
 
-        return '<body style="background-color:black;color:white;"><b>Profile page</b></body>'
-    }
-
-    @UseGuards(AuthGuard('jwt'))
-    @Get('check_token')
-    checkAuth() {
-        return {logined: true}
-    }
+    //     return '<body style="background-color:black;color:white;"><b>Profile page</b></body>'
+    // }
 
 }

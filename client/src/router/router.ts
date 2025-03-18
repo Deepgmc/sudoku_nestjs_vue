@@ -1,22 +1,22 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import AuthView from '../views/AuthView.vue'
+// import { createRouter, createWebHistory } from 'vue-router'
+// import AuthView from '../views/AuthView.vue'
 
-const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [
-        {
-            path: '/login',
-            name: 'login',
-            component: AuthView,
-        },
-        {
-            path: '/',
-            name: 'game',
-            component: () => import('../views/GameView.vue'),
-            //?meta: { requiresAuth: true } // Mark route as requiring authentication
-        },
-    ],
-})
+// const router = createRouter({
+//     history: createWebHistory(import.meta.env.BASE_URL),
+//     routes: [
+//         {
+//             path: '/login',
+//             name: 'login',
+//             component: AuthView,
+//         },
+//         {
+//             path: '/',
+//             name: 'game',
+//             component: () => import('../views/GameView.vue'),
+//             //?meta: { requiresAuth: true } // Mark route as requiring authentication
+//         },
+//     ],
+// })
 
 /**
 https://clouddevs.com/vue/authentication-with-jwt/
@@ -44,4 +44,4 @@ if (decodedToken.exp < currentTime) {
 }
 */
 
-export default router
+//export default router
