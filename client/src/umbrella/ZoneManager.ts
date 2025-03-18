@@ -32,7 +32,7 @@ export default class ZoneManager extends UmbrellaManager {
         const hydratedZone: IZoneHydrated = {...tmpZone, zoneCells: {} as THydratedZoneCells}
         hydratedZone.zoneCells = this.zoneRaw.zoneCells.map(row => {
             return row.map(cell => {
-                return CellEntityFactory(cell.obj.name as TObjectNames, cell.obj.options)
+                return CellEntityFactory(cell.obj.name as TObjectNames, cell.obj.options, cell.features)
             })
         })
 
@@ -46,6 +46,7 @@ export default class ZoneManager extends UmbrellaManager {
                 cell.player = null //remove player everywhere
                 if(player.isHere(indexX, indexY)){
                     cell.player = player
+                    console.log(`%c Player set to: x${indexX} y${indexY}`, 'color:rgb(182, 86, 158);', player)
                 }
             })
         })

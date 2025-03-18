@@ -45,9 +45,9 @@ zoneManager.setPlayerToMap(player)
 
 <template>
     <div class="zone-cells-container">
-        <div v-for="(cells, lineIndex) in zoneManager.store.zone.zoneCells">
+        <div v-for="(cells, lineIndex) in zoneManager.store.zone.zoneCells" :key="lineIndex">
             <div class="zone-cell-line">
-                <Cell v-for="(cell, index) in cells"
+                <Cell v-for="(cell, index) in cells" :key="index"
                     :cell="cell"
                     :index="index"
                     :lineIndex="lineIndex">
@@ -111,41 +111,13 @@ zoneManager.setPlayerToMap(player)
     border: 1px solid red;
 }
 
+.palyer_cell_container{
+    margin-top:10px;
+    font-size:30px;
+}
 
-// .cell-item{
-//     height:80px;
-//     width:80px;
-//     border: 1px solid grey;
-//     border-radius: 5px;
-//     margin: 1px;
-//     font-size: 10px;
-
-//     display: flex;
-//     flex-flow: column nowrap;
-//     justify-content: flex-end;
-//     align-items: flex-end;
-// }
-// .cell_action_line{
-//     display: flex;
-//     flex-flow: row wrap;
-//     justify-content: flex-end;
-//     width: 50%;
-//     background: rgb(66, 64, 64);
-//     opacity: 0.5;
-//     color:white;
-// }
-// .cell_action_line > div {
-//     display:flex;
-// }
-// .cell_button{
-//     padding-left: 2px;
-//     padding-right: 2px;
-// }
-// .palyer{
-//     font-size: 30px;
-// }
-
-// .cell-item:hover {
-//     border: 1px solid red;
-// }
+.icons_list_item{
+    font-size: 14px;
+    cursor: pointer;
+}
 </style>

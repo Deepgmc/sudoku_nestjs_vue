@@ -19,7 +19,7 @@
     z-index: -1;
     color: red;
     font-size: 45px;
-    left:0px;
+    left:5px;
     //top:0px;
 
     text-align: center;
@@ -28,12 +28,12 @@
 }
 
 .fenceIron:after {
-    content: "\25A5";
+    content: "\25A9";//&#x25A6; //x25A6
     color: rgb(116, 116, 116);
 }
 .sideStreet:after {
-    content: "\1D11B";
-    color:rgb(73, 62, 57);
+    content: "\2225";//1D11B   //2551
+    color:rgb(54, 48, 45);
 }
 .houseDump:after {
     content: "\1F5D1";

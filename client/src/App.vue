@@ -23,13 +23,14 @@ provide('$authManager', AuthManager.getInstance( new jwtStrategy(), authStore) )
 </script>
 
 <template>
-    <main class="main_container">
+    <main class="auth_login_container" v-if="!authStore.isLogined || authStore.authLoading">
         <AuthLoading v-if="authStore.authLoading"></AuthLoading>
-        <AuthView v-else-if="!authStore.isLogined && !authStore.authLoading"></AuthView>
-        <UmbrellaApp
-            v-else-if="!authStore.authLoading"
-        ></UmbrellaApp>
+        <AuthView v-if="!authStore.isLogined && !authStore.authLoading"></AuthView>
     </main>
+    <UmbrellaApp
+        class="main_container"
+        v-if="!authStore.authLoading"
+    ></UmbrellaApp>
 </template>
 
 <style lang="scss">
