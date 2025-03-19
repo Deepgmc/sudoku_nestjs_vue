@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onBeforeMount } from 'vue';
+
 
 
 const props = defineProps(['clickedCell'])
@@ -8,7 +10,7 @@ console.log('%c clickedCell component:', 'color:rgb(182, 86, 158);', props.click
 </script>
 
 
-<template>
+<template><!-- {{ clickedCell.cell.objectName }} ({{ clickedCell.x }} - {{ clickedCell.y }}) -->
     <div>
         <h3>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.objectName }})</h3>
         <hr>
