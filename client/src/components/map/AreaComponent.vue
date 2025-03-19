@@ -14,13 +14,13 @@ import DistrictComponent from './DistrictComponent.vue';
 */
 const areaManager = inject ('areaManager') as AreaManager
 
+const props = defineProps(['handleCellClick'])
 let currentDistrict: IDistrict = reactive({} as IDistrict)
 const isDistrictFound = computed(() => {
     return currentDistrict.zones.length > 0
 })
 
 onBeforeMount(() => {
-    //get DISTRICT for current player
     currentDistrict = areaManager.getPlayerCurrentDistrict()
     //console.log('%c areaComponent found currentDistrict:', 'color:darkgreen;', currentDistrict)
 })
@@ -28,12 +28,12 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="umbrella_map">
-        <DistrictComponent
-            v-if="isDistrictFound"
-            :district="currentDistrict"
-        ></DistrictComponent>
-    </div>
+    <DistrictComponent
+        @cell-click="handleCellClick"
+        v-if="isDistrictFound"
+        :district="currentDistrict"
+        :handleCellClick="props.handleCellClick"
+    ></DistrictComponent>
 </template>
 
 <style lang="scss">
