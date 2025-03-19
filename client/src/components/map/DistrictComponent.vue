@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { computed, inject, onBeforeMount, ref, type PropType } from 'vue';
 import type AreaManager from '@/umbrella/AreaManager';
 
 import ZoneComponent from './ZoneComponent.vue';
-import type { IZone } from '@/interfaces/MapInterfaces';
+import type { IDistrict, IZone } from '@/interfaces/MapInterfaces';
 
 
-
-const props = defineProps(['district', 'handleCellClick'])
+const props = defineProps({
+    handleCellClick: {
+        type: Function,
+        required: true
+    },
+    district: {
+        type: Object as PropType<IDistrict>,
+        required: true
+    }
+})
 console.log('%c DistrictComponent got district:', 'color:darkgreen;', props.district)
 
 const areaManager = inject ('areaManager') as AreaManager

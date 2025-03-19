@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { inject, ref, type PropType } from 'vue';
 import ZoneManager from '@/umbrella/ZoneManager'
 import Cell from './Cell.vue';
-// import {CellEntityFactory} from '@/umbrella/zoneEntities/Factory'
-// import type { TObjectNames } from '@/umbrella/zoneEntities/zoneEntities';
 
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
+import type { IZone } from '@/interfaces/MapInterfaces';
 
-const props = defineProps(['zone', 'handleCellClick'])
+const props = defineProps({
+    handleCellClick: {
+        type: Function,
+        required: true
+    },
+    zone: {
+        type: Object as PropType<IZone>,
+        required: true
+    }
+})
+
+
 console.log('%c ZoneComponent got zone (raw):', 'color:darkgreen;', props.zone)
 
 const player = inject ('player') as PlayerManager

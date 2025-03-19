@@ -14,7 +14,12 @@ import DistrictComponent from './DistrictComponent.vue';
 */
 const areaManager = inject ('areaManager') as AreaManager
 
-const props = defineProps(['handleCellClick'])
+const props = defineProps({
+    handleCellClick: {
+        type: Function,
+        required: true
+    }
+})
 let currentDistrict: IDistrict = reactive({} as IDistrict)
 const isDistrictFound = computed(() => {
     return currentDistrict.zones.length > 0
@@ -29,7 +34,6 @@ onBeforeMount(() => {
 
 <template>
     <DistrictComponent
-        @cell-click="handleCellClick"
         v-if="isDistrictFound"
         :district="currentDistrict"
         :handleCellClick="props.handleCellClick"
