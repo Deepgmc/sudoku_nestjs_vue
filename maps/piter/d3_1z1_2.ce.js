@@ -123,7 +123,7 @@ export const map = {
                 features: []
             },
         ],
-        [//HOME DUMP
+        [
             {
                 obj: {
                     name: 'fence',

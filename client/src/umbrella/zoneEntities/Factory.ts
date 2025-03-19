@@ -56,6 +56,10 @@ export abstract class CellEntity {
         this.actions = entitiesOptions[objKey].actions//.concat(mapOptions.actions)
         if(mapOptions.orientation) this.orientation = mapOptions.orientation; else this.orientation = '' //some cells do not need orientation
         this.features = mapCellFeatures
+
+        this.features.forEach(f => {
+            this.infoIcons.push(this.getFeatureInfoIcon(f))
+        })
     }
     public objectName: TObjectNames
     public player: PlayerManager | null
@@ -67,6 +71,22 @@ export abstract class CellEntity {
     public features: TCellFeatures
 
     abstract generateInfoIcons(): void
+
+    getFeatureInfoIcon(type: string){
+        let icon = ''
+        switch (type) {
+            case 'portal':
+                icon = '&#x25CE;'
+                break;
+            case 'homeless':
+                icon = '&#x1F6B6;'
+                break;
+
+            default:
+                break;
+        }
+        return icon
+    }
 }
 
 class House extends CellEntity {
@@ -100,9 +120,6 @@ class Fence extends CellEntity {
 class SideStreet extends CellEntity {
     constructor(objectName: TObjectNames, options: any, mapCellFeatures: TCellFeatures){
         super(objectName, options, mapCellFeatures)
-        this.features.forEach(f => {
-            if(f === 'portal') this.infoIcons.push('&#x25CE;')
-        })
     }
     generateInfoIcons(){return []}
 }
