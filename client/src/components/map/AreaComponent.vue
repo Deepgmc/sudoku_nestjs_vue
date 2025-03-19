@@ -10,6 +10,7 @@ import DistrictComponent from './DistrictComponent.vue';
 Тут же нужны данные от профиля юзера - какой district загружать.
 Вычислить их и передать дальше в DistrictComponent
 Внутри DistrictComponent тоже вычислить какую Zone загружать и передать её уже в ZoneComponent
+Всё через пропсы
 */
 const areaManager = inject ('areaManager') as AreaManager
 
