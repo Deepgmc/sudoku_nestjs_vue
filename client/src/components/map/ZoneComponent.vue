@@ -4,7 +4,7 @@ import ZoneManager from '@/umbrella/ZoneManager'
 import Cell from './Cell.vue';
 
 import type PlayerManager from '@/umbrella/PlayerManager';
-import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
+import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
 import type { IZone } from '@/interfaces/MapInterfaces';
 
 const props = defineProps({

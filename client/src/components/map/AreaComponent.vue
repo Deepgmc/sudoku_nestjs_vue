@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
-import type { IArea, IDistrict } from '@/interfaces/MapInterfaces';
+import type { IDistrict } from '@/interfaces/MapInterfaces';
 import type AreaManager from '@/umbrella/AreaManager';
 
 import DistrictComponent from './DistrictComponent.vue';

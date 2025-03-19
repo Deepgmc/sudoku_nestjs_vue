@@ -1,7 +1,7 @@
 /**
 MAP GLOBAL
 */
-import { CellEntity } from "@/umbrella/zoneEntities/Factory"
+import CellEntity from "@/umbrella/zoneEntities/CellEntity"
 export interface IArea {
     areaName: string,
     districts: IDistrict[][],

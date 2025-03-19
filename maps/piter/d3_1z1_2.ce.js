@@ -17,7 +17,7 @@ export const map = {
                         orientation: 's-n',
                     }
                 },
-                features: ['portal'],
+                features: ['portal', 'portalGuard'],
             },
             {
                 obj: {

@@ -20,25 +20,30 @@ export const entitiesOptions = {
         passability: false,
         backgroundClass: 'houseResidental',
         actions: ['lookWindow'],
+        textName: `Жилое здание`,
     },
     'fence': {
         passability: false,
         backgroundClass: 'fenceIron',
         actions: [],
+        textName: `Забор`,
     },
     'sideStreet': {
         passability: true,
         backgroundClass: 'sideStreet',
         actions: [],
+        textName: `Дорога`,
     },
     'houseDump': {
         passability: false,
         backgroundClass: 'houseDump',
         actions: ['dig'],
+        textName: `Мусорка`,
     },
     'trees': {
         passability: true,
         backgroundClass: 'trees',
         actions: ['look', 'dig'],
+        textName: `Парковая зона`,
     },
 }

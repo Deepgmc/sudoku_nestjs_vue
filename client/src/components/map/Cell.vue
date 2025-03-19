@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
 import PlayerComponent from '../PlayerComponent.vue';
-import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
+import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
 
 
 const props = defineProps({
@@ -27,7 +27,6 @@ const isMeClicked = computed(() => {
         :class="{'cell_item-clicked': isMeClicked}"
         @click="$emit('cellClick', lineIndex, cellIndex, props.cell)"
     >
-    {{ isMeClicked }}
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
                 <PlayerComponent v-if="props.cell.player"></PlayerComponent>

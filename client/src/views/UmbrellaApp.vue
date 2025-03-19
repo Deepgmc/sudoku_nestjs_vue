@@ -8,7 +8,7 @@ import PlayerManager from '@/umbrella/PlayerManager';
 import AreaComponent from '@/components/map/AreaComponent.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
+import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
@@ -45,7 +45,6 @@ const isCellClicked = computed(() => {
     return clickedCell.cell !== null
 })
 const handleCellClick = function(x: number, y: number, cell: CellEntity){
-    console.log('%c Clicked cell:', 'color:rgb(182, 86, 158);', cell, x, y)
     clickedCell.cell = cell
     clickedCell.x = x
     clickedCell.y = y
