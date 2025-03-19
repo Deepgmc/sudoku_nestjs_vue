@@ -8,7 +8,6 @@ import PlayerManager from '@/umbrella/PlayerManager';
 import AreaComponent from '@/components/map/AreaComponent.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import type { ICell } from '@/interfaces/MapInterfaces';
 import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
 
 const $networkManager = inject('$networkManager') as NetworkManager

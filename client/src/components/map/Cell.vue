@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type PropType } from 'vue';
 import PlayerComponent from '../PlayerComponent.vue';
+import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
 
-const props = defineProps([
-    'cell',
-    'cellIndex',
-    'lineIndex',
-    'clickedCellX',
-    'clickedCellY'
-])
+
+const props = defineProps({
+    cellIndex: {type: Number, required: true},
+    lineIndex: {type: Number, required: true},
+    clickedCellX: {type: Number, required: true},
+    clickedCellY: {type: Number, required: true},
+    cell: {
+        type: Object as PropType<CellEntity>,
+        required: true
+    }
+})
 
 const isMeClicked = computed(() => {
     return props.clickedCellY === props.cellIndex && props.clickedCellX === props.lineIndex
