@@ -17,7 +17,7 @@ export const map = {
                         orientation: 's-n',
                     }
                 },
-                features: ['portal']
+                features: ['portal'],
             },
             {
                 obj: {
@@ -142,7 +142,7 @@ export const map = {
                 features: []
             },
         ],
-        [//HOME DUMP
+        [
             {
                 obj: {
                     name: 'fence',
@@ -209,7 +209,7 @@ export const map = {
                 features: []
             },
         ],
-        [
+        [//HOME DUMP
             {
                 obj: {
                     name: 'houseDump',
@@ -217,7 +217,7 @@ export const map = {
                         orientation: 's-n',
                     }
                 },
-                features: []
+                features: ['homeless']
             },
             {
                 obj: {

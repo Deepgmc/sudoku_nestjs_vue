@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 import ZoneManager from '@/umbrella/ZoneManager'
 import Cell from './Cell.vue';
-import {CellEntityFactory} from '@/umbrella/zoneEntities/Factory'
-import type { TObjectNames } from '@/umbrella/zoneEntities/zoneEntities';
+// import {CellEntityFactory} from '@/umbrella/zoneEntities/Factory'
+// import type { TObjectNames } from '@/umbrella/zoneEntities/zoneEntities';
 
 import type PlayerManager from '@/umbrella/PlayerManager';
+import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
 
-const props = defineProps(['zone'])
+const props = defineProps(['zone', 'handleCellClick'])
 console.log('%c ZoneComponent got zone (raw):', 'color:darkgreen;', props.zone)
 
 const player = inject ('player') as PlayerManager
@@ -16,28 +17,13 @@ const zoneManager = ZoneManager.getInstance(props.zone)
 zoneManager.hydrateZoneObjects()
 zoneManager.setPlayerToMap(player)
 
-
-
-//смена позиции игрока
-// setTimeout(() => {
-//     player.store.x = 2
-//     player.store.y = 2
-//     zoneManager.setPlayerToMap(player)
-// }, 3000)
-
-
-//замена ячейки на новую
-// setTimeout(() => {
-//     const newItem = CellEntityFactory('house' as TObjectNames, {
-//         orientation: 's-w',
-//         floor: 12,
-//         isEntrance: false,
-//         actions: ['A1', 'A2']
-//     })
-//     zoneManager.store.setNewItem(newItem)
-
-// }, 2000)
-
+const clickedCellX = ref<number>(NaN)
+const clickedCellY = ref<number>(NaN)
+function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
+    clickedCellX.value = x
+    clickedCellY.value = y
+    props.handleCellClick(x, y, cell)
+}
 
 </script>
 
@@ -49,8 +35,12 @@ zoneManager.setPlayerToMap(player)
             <div class="zone-cell-line">
                 <Cell v-for="(cell, index) in cells" :key="index"
                     :cell="cell"
-                    :index="index"
-                    :lineIndex="lineIndex">
+                    :lineIndex="lineIndex"
+                    :cellIndex="index"
+                    :clickedCellX="clickedCellX"
+                    :clickedCellY="clickedCellY"
+                    @cell-click="zoneHandleCellClick"
+                >
                 </Cell>
             </div>
         </div>
@@ -93,7 +83,7 @@ zoneManager.setPlayerToMap(player)
             }
         }
     }
-    .cell_item-bottom{
+    .cell_item-bottom {
         display:flex;
         flex-flow: row nowrap;
         justify-content: space-around;
@@ -107,8 +97,8 @@ zoneManager.setPlayerToMap(player)
         font-size:30px;
     }
 }
-.cell_item:hover {
-    border: 1px solid red;
+.cell_item-clicked {
+    border: 1px dotted rgb(170, 0, 0);
 }
 
 .palyer_cell_container{

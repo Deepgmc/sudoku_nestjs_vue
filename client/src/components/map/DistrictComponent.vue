@@ -7,7 +7,7 @@ import type { IZone } from '@/interfaces/MapInterfaces';
 
 
 
-const props = defineProps(['district'])
+const props = defineProps(['district', 'handleCellClick'])
 console.log('%c DistrictComponent got district:', 'color:darkgreen;', props.district)
 
 const areaManager = inject ('areaManager') as AreaManager
@@ -19,7 +19,6 @@ let isZoneFound = computed(() => {
 })
 
 onBeforeMount(async () => {
-    //get ZONE for current player
     try{
         currentZone.value = await areaManager.getPlayerCurrentZone(props.district)
     } catch(_e: any){
@@ -32,6 +31,7 @@ onBeforeMount(async () => {
     <ZoneComponent
         v-if="isZoneFound"
         :zone="currentZone"
+        :handleCellClick="props.handleCellClick"
     ></ZoneComponent>
 </template>
 
