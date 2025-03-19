@@ -27,13 +27,17 @@ export default class PlayerManager extends UmbrellaManager {
 
     async init(){
         const getPlayerResult = await this._getData(this.API_METHODS.INIT_PLAYER)(null)
+        if(getPlayerResult.error){
+            return false
+        }
         this.playerRaw = getPlayerResult.data as IPlayer
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
         this.loadPlayerToStore(this.playerRaw)
         return this
     }
 
-    loadPlayerToStore(player: IPlayer){
+    loadPlayerToStore(player: IPlayer): boolean{
+        if(!player) return false
         this.store.userId = player.userId
         const districtCoordinates = this.getXYFromRawSettings(player.game_settings.currentDistrict)
         const zoneCoordinates = this.getXYFromRawSettings(player.game_settings.currentZone)
@@ -44,6 +48,7 @@ export default class PlayerManager extends UmbrellaManager {
         this.store.zoneY = parseInt(zoneCoordinates.y)
         this.store.x = parseInt(player.game_settings.x)
         this.store.y = parseInt(player.game_settings.y)
+        return true
     }
 
     getXYFromRawSettings(rawSettingsXY: string){

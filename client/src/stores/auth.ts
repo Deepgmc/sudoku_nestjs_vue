@@ -1,20 +1,6 @@
 import { ref, computed, reactive } from 'vue'
 import { defineStore  } from 'pinia'
 
-// export const useUserStore = defineStore('user', {
-//     state: () => ({
-//         auth: {
-//             isLogined: false,
-//             timeLogined: 0
-//         }
-//     }),
-//     actions: {
-//         setIsLogined(){
-//             this.auth.isLogined = true
-//         }
-//     }
-// })
-
 
 export const useAuthStore = defineStore('auth', () => {
     /**

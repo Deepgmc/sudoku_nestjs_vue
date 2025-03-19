@@ -14,7 +14,7 @@ export default tseslint.config(
         ],
     },
     eslint.configs.recommended,
-    eslintPluginVue.configs['flat/recommended'],
+    //eslintPluginVue.configs['flat/recommended'],
     ...tseslint.configs.recommendedTypeChecked,
     {
         languageOptions: {
