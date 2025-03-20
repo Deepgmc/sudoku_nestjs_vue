@@ -15,8 +15,11 @@ console.log('%c clickedCell:', 'color:rgb(182, 86, 158);', props.clickedCell)
 <template><!-- {{ clickedCell.cell.objectName }} ({{ clickedCell.x }} - {{ clickedCell.y }}) -->
     <div>
         <h3>{{ clickedCell.cell.textName }}</h3>
+        <hr>
+        Description:
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
         <hr>
+        Features:
         <div>{{ clickedCell.cell.getFeaturesInfo() }}</div>
     </div>
 </template>

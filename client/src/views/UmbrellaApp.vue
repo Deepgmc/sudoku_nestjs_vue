@@ -84,11 +84,8 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
     display: flex;
     width: g.$map-width;
     min-height: g.$map-height;
-    border-right: 1px dotted rgb(163, 43, 43);
-    border-bottom: 1px dotted rgb(163, 43, 43);
 }
 .umbrella_info_container{
-    border: 1px solid rgb(54, 48, 134);
     width: g.$info-width;
     min-height: g.$info-height;
 }

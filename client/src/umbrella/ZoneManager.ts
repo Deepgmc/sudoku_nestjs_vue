@@ -1,7 +1,6 @@
 import type { IZone } from '@/interfaces/MapInterfaces'
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import {CellEntityFactory} from '@/umbrella/zoneEntities/Factory'
-import type { TObjectNames } from './zoneEntities/zoneEntities'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
 import type PlayerManager from '@/umbrella/PlayerManager';
 
@@ -32,7 +31,7 @@ export default class ZoneManager extends UmbrellaManager {
         const hydratedZone: IZoneHydrated = {...tmpZone, zoneCells: {} as THydratedZoneCells}
         hydratedZone.zoneCells = this.zoneRaw.zoneCells.map(row => {
             return row.map(cell => {
-                return CellEntityFactory(cell.obj.name as TObjectNames, cell.obj.options, cell.features)
+                return CellEntityFactory(cell.obj, cell.features)
             })
         })
 

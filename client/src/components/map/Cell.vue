@@ -29,6 +29,7 @@ const isMeClicked = computed(() => {
     >
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
+                <!-- need slot here!!! -->
                 <PlayerComponent v-if="props.cell.player"></PlayerComponent>
             </div>
             <div class="cell_item-top_right">
