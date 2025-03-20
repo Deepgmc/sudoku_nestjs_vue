@@ -41,7 +41,6 @@ export interface ICell {
     obj: ICellObject,
     features: TCellRawFeatures,
 }
-export type TCellFeatures = string[]
 
 export interface ICellObject {
     name: string,

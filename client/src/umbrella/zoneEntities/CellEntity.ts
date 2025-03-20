@@ -1,37 +1,34 @@
-import type { TCellObjOptions, TCellActions, TCellFeatures } from '@/interfaces/MapInterfaces.ts';
-import {entitiesOptions, type TObjectNames } from './zoneEntities.ts'
+import type { TCellActions, TCellFeatures, IFeature, ICellObject } from '@/interfaces/MapInterfaces.ts';
 import PlayerManager from '../PlayerManager.ts';
 
 export default abstract class CellEntity {
     constructor(
-        objectName: TObjectNames,
-        mapOptions: any,
+        mapCellObject: ICellObject,
         mapCellFeatures: TCellFeatures
     ){
-        this.objectName = objectName
+        this.mapCellObjectName = mapCellObject.name
+
         this.player = null
-        const objKey: TObjectNames = this.objectName
-        if(mapOptions.orientation) this.orientation = mapOptions.orientation; else this.orientation = '' //some cells do not need orientation
-        this.features = mapCellFeatures
 
-        this.passability = entitiesOptions[objKey].passability
-        this.backgroundClass = entitiesOptions[objKey].backgroundClass
-        this.actions = entitiesOptions[objKey].actions//.concat(mapOptions.actions)
-        this.textName = entitiesOptions[objKey].textName
+        if(mapCellObject.orientation) this.orientation = mapCellObject.orientation; else this.orientation = '' //some cells do not need orientation
+        this.mapRawFeatures = mapCellFeatures
 
-        this.features.forEach(f => {
-            this.infoIcons.push(this.getFeatureInfoIcon(f))
+        this.mapRawFeatures.forEach(feature => {
+            this.infoIcons.push(this.getFeatureInfoIcon(feature))
         })
     }
-    public objectName: TObjectNames
-    public player: PlayerManager | null
+    abstract passability: boolean
+    abstract backgroundClass: string
+    abstract actions: TCellActions
+    abstract textName: string
+
+    public mapCellObjectName: string
     public orientation: string
-    public passability: boolean
-    public backgroundClass: string
-    public actions: TCellActions
-    public textName: string
     public infoIcons: string[] = []
-    public features: TCellFeatures
+
+    //?FEATURES
+    public player: PlayerManager | null
+    public mapRawFeatures: TCellFeatures
 
     abstract generateInfoIcons(): void
 
@@ -39,9 +36,9 @@ export default abstract class CellEntity {
 
     abstract getFeaturesInfo(): string
 
-    getFeatureInfoIcon(type: string){
+    getFeatureInfoIcon(feature: IFeature){
         let icon = ''
-        switch (type) {
+        switch (feature.name) {
             case 'portal':
                 icon = '&#x25CE;'
                 break;
@@ -57,9 +54,9 @@ export default abstract class CellEntity {
         return icon
     }
 
-    getFeatureText(feature: string){
+    getFeatureText(feature: IFeature){
         let fText = ''
-        switch (feature) {
+        switch (feature.name) {
             case 'portal':
                 fText = 'Портал в другую зону'
                 break;
@@ -78,4 +75,8 @@ export default abstract class CellEntity {
         }
         return fText
     }
+}
+
+export function capitalizeFirstLetter(val: string) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }

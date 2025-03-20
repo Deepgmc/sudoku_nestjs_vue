@@ -1,21 +1,20 @@
 import type CellEntity from './CellEntity.ts';
+import { capitalizeFirstLetter } from './CellEntity.ts';
 import House from './Objects/House.ts';
 import HouseDump from './Objects/HouseDump.ts';
 import SideStreet from './Objects/SideStreet.ts';
 import Fence from './Objects/Fence.ts';
 import Trees from './Objects/Trees.ts';
-import type { TCellFeatures, TCellObjOptions } from '@/interfaces/MapInterfaces.ts';
-import type { TObjectNames } from './zoneEntities.ts';
+import type { TCellFeatures, ICellObject } from '@/interfaces/MapInterfaces.ts';
 
 
 export function CellEntityFactory (
-    name: TObjectNames,
-    mapCellOptions: TCellObjOptions,
+    cellObject: ICellObject,
     mapCellFeatures: TCellFeatures,
 ): CellEntity {
     let cellEntity: CellEntity | null = null
     try {
-        cellEntity = eval(`new ${capitalizeFirstLetter(name)}(name, mapCellOptions, mapCellFeatures)`)
+        cellEntity = eval(`new ${capitalizeFirstLetter(cellObject.name)}(cellObject, mapCellFeatures)`)
     } catch(_e: any) {
         cellEntity = null
     }
@@ -23,6 +22,3 @@ export function CellEntityFactory (
     return cellEntity
 }
 
-function capitalizeFirstLetter(val: string) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-}

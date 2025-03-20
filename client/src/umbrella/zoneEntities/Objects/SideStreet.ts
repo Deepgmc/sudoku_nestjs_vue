@@ -1,10 +1,15 @@
-import type { TCellFeatures } from "@/interfaces/MapInterfaces"
+import type { ICellObject, TCellFeatures } from "@/interfaces/MapInterfaces"
 import CellEntity from "../CellEntity.ts"
-import type { TObjectNames } from "../zoneEntities.ts"
 
 export default class SideStreet extends CellEntity {
-    constructor(objectName: TObjectNames, options: any, mapCellFeatures: TCellFeatures){
-        super(objectName, options, mapCellFeatures)
+
+    public passability: boolean = true
+    public backgroundClass: string = 'sideStreet'
+    public actions: string[] = []
+    public textName: string = 'Дорога'
+
+    constructor(objectName: ICellObject, mapCellFeatures: TCellFeatures){
+        super(objectName, mapCellFeatures)
     }
     generateInfoIcons(){return []}
 
@@ -15,7 +20,7 @@ export default class SideStreet extends CellEntity {
     }
 
     getFeaturesInfo(){
-        const text: string[] = this.features.map(feature => {
+        const text: string[] = this.mapRawFeatures.map(feature => {
             return this.getFeatureText(feature)
         })
         return text.join(' ')

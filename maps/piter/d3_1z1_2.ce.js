@@ -15,12 +15,19 @@ export const map = {
                 },
                 features: [
                     {
+<<<<<<< HEAD
                         name: 'portal',
                         actions: []
                     },
                     {
                         name: 'portalGuard',
                         actions: []
+=======
+                        name: 'portal'
+                    },
+                    {
+                        name: 'portalGuard'
+>>>>>>> 8addf03 (Reorganized CellEntity and Features in map files)
                     },
                 ],
             },
@@ -183,9 +190,14 @@ export const map = {
                     orientation: 's-n',
                 },
                 features: [
+<<<<<<< HEAD
                     {//!homeless
                         name: 'homeless',
                         actions: ['askAboutHome']
+=======
+                    {
+                        name: 'homeless'
+>>>>>>> 8addf03 (Reorganized CellEntity and Features in map files)
                     }
                 ]
             },
