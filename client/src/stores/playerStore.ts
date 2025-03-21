@@ -1,33 +1,34 @@
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { defineStore  } from 'pinia'
-import type { TUserId } from '@/interfaces/playerInterfaces'
+import type { IEquiped, IInventory, IPlayer, TUserId } from '@/interfaces/playerInterfaces'
 
 export const usePlayerStore = defineStore('player', () => {
 
     const userId = ref<TUserId>(0)
-    const districtX = ref<number>(0)
-    const districtY = ref<number>(0)
-    const zoneX = ref<number>(0)
-    const zoneY = ref<number>(0)
-    const x = ref<number>(0)
-    const y = ref<number>(0)
+    const userName = ref<string>('')
+    const player = reactive<IPlayer>({} as IPlayer)
+    const equiped = reactive<IEquiped>({} as IEquiped)
+    const inventory = reactive<IInventory>({} as IInventory)
 
     function getUserId(){
         return userId.value
+    }
+    function setUserId(newId: number){
+        userId.value = newId
     }
 
     const isPlayerLoaded = computed(() => userId.value > 0)
 
     return {
         userId,
-        districtX,
-        districtY,
-        zoneX,
-        zoneY,
-        x,
-        y,
+        userName,
+
+        player,
+        equiped,
+        inventory,
 
         isPlayerLoaded,
-        getUserId
+        getUserId,
+        setUserId
     }
 })

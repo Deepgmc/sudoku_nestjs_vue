@@ -6,7 +6,6 @@ import { RESPONSE_STATUS_CODES } from '@/constants';
 
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import PlayerManager from './PlayerManager'
-import type { IPlayerGameSettings } from "@/interfaces/playerInterfaces"
 
 /**
  * Main map class. Stores the whole map + actions and helpers
@@ -54,8 +53,8 @@ export default class AreaManager extends UmbrellaManager {
      */
     getPlayerCurrentDistrict(): IDistrict {
         const playerDistrict: IDistrict = this.getDistrictByCoordinates(
-            this.player.store.districtX as number,
-            this.player.store.districtY as number
+            this.player.store.player.districtX as number,
+            this.player.store.player.districtY as number
         )
         return playerDistrict
     }
@@ -88,8 +87,8 @@ export default class AreaManager extends UmbrellaManager {
         const playerZone: IZone = this.getZoneByCoordinates(
             playerDistrict.districtPosition.x,
             playerDistrict.districtPosition.y,
-            this.player.store.zoneX as number,
-            this.player.store.zoneY as number
+            this.player.store.player.zoneX as number,
+            this.player.store.player.zoneY as number
         )
         const zoneFileData = await this._getData(this.API_METHODS.INIT_GET_ZONE)({
             zone: playerZone.zonePosition,
