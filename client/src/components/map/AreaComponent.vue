@@ -22,7 +22,7 @@ const props = defineProps({
 })
 let currentDistrict: IDistrict = reactive({} as IDistrict)
 const isDistrictFound = computed(() => {
-    return currentDistrict.zones.length > 0
+    return currentDistrict.zones && currentDistrict.zones.length > 0
 })
 
 onBeforeMount(() => {

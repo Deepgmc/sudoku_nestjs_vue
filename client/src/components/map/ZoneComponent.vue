@@ -25,7 +25,8 @@ const player = inject ('player') as PlayerManager
 
 const zoneManager = ZoneManager.getInstance(props.zone)
 zoneManager.hydrateZoneObjects()
-zoneManager.setPlayerToMap(player)
+
+zoneManager.setAndMovePlayer(player, player.x, player.y)
 
 const clickedCellX = ref<number>(NaN)
 const clickedCellY = ref<number>(NaN)

@@ -16,7 +16,7 @@ const props = defineProps({
 })
 
 const isMeClicked = computed(() => {
-    return props.clickedCellY === props.cellIndex && props.clickedCellX === props.lineIndex
+    return props.clickedCellY === props.lineIndex && props.clickedCellX === props.cellIndex
 })
 
 </script>
@@ -25,12 +25,12 @@ const isMeClicked = computed(() => {
     <div
         class="cell_item"
         :class="{'cell_item-clicked': isMeClicked}"
-        @click="$emit('cellClick', lineIndex, cellIndex, props.cell)"
+        @click="$emit('cellClick', cellIndex, lineIndex, props.cell)"
     >
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
                 <!-- need slot here!!! -->
-                <PlayerComponent v-if="props.cell.player"></PlayerComponent>
+                <PlayerComponent v-if="props.cell.player" :player="props.cell.player"></PlayerComponent>
             </div>
             <div class="cell_item-top_right">
                 <div v-for="icon in props.cell.infoIcons">

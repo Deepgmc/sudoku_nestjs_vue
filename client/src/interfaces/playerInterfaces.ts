@@ -6,6 +6,7 @@ export type IPlayerRaw = {
     inventory: IInventory
 }
 export interface IPlayer {
+    playerIcon: string,
     level: number,
     experience: number,
 
@@ -14,12 +15,12 @@ export interface IPlayer {
     agility: number,
     intellect: number,
 
-    districtX: string,
-    districtY: string,
-    zoneX: string,
-    zoneY: string,
-    x: string,
-    y: string
+    districtX: number,
+    districtY: number,
+    zoneX: number,
+    zoneY: number,
+    x: number,
+    y: number
 }
 
 export interface IEquiped {

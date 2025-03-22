@@ -6,14 +6,15 @@ import type PlayerManager from '@/umbrella/PlayerManager';
 
 export default class ZoneManager extends UmbrellaManager {
     static instance: ZoneManager
-    static getInstance(zoneRaw: IZone){
+    static getInstance(zoneRaw?: IZone){
         if(ZoneManager.instance) return ZoneManager.instance
         ZoneManager.instance = new ZoneManager(zoneRaw)
         return ZoneManager.instance
     }
-    private constructor(zoneRaw: IZone) {
+    private constructor(zoneRaw?: IZone) {
         super()
-        this.zoneRaw = zoneRaw //receiving the zone setting object from the server map
+        if(zoneRaw) this.zoneRaw = zoneRaw //receiving the zone setting object from the server map
+        else this.zoneRaw = {} as IZone
     }
 
     private zoneRaw: IZone
@@ -39,15 +40,35 @@ export default class ZoneManager extends UmbrellaManager {
         this.store.loadZoneToStore(hydratedZone)
     }
 
-    setPlayerToMap(player: PlayerManager): void {
-        this.zoneCells.forEach((row, indexY) => {
-            return row.forEach((cell, indexX) => {
-                cell.player = null //remove player everywhere
-                if(player.isHere(indexX, indexY)){
-                    cell.player = player
-                    console.log(`%c Player set to: x${indexX} y${indexY}`, 'color:rgb(182, 86, 158);', player)
-                }
+    setAndMovePlayer(player: PlayerManager, newX: number, newY: number): void {
+        if(typeof this.zoneCells[newY][newX] === 'undefined'){
+            throw new Error(`Incorrent zoneCells indexes: ${newX}, ${newY}`)
+        }
+        const targetCell = this.zoneCells[newY][newX]
+        if(!targetCell.isMovable()){
+            throw new Error('Passability FALSE. MAKE ERROR HANDLING')
+        }
+        this.removePlayerFromMap()
+            .then(res => {
+                targetCell.player = player
+                player.setXY(newX, newY)
+                console.log(`%c Player moving to: x${newX} y${newY}`, 'color:rgb(182, 86, 158);', player)
             })
+    }
+
+    /**
+     * Removes player object from all the cellEntities
+     * @returns
+     */
+    removePlayerFromMap(): Promise<boolean>{
+        return new Promise(resolve => {
+            this.zoneCells.forEach((row, indexY) => {
+                return row.forEach((cell, indexX) => {
+                    cell.player = null //remove player everywhere
+                })
+            })
+            resolve(true)
         })
+
     }
 }

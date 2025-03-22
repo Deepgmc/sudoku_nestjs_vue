@@ -53,8 +53,8 @@ export default class AreaManager extends UmbrellaManager {
      */
     getPlayerCurrentDistrict(): IDistrict {
         const playerDistrict: IDistrict = this.getDistrictByCoordinates(
-            this.player.store.player.districtX as number,
-            this.player.store.player.districtY as number
+            this.player.districtX as number,
+            this.player.districtY as number
         )
         return playerDistrict
     }
@@ -87,8 +87,8 @@ export default class AreaManager extends UmbrellaManager {
         const playerZone: IZone = this.getZoneByCoordinates(
             playerDistrict.districtPosition.x,
             playerDistrict.districtPosition.y,
-            this.player.store.player.zoneX as number,
-            this.player.store.player.zoneY as number
+            this.player.zoneX as number,
+            this.player.zoneY as number
         )
         const zoneFileData = await this._getData(this.API_METHODS.INIT_GET_ZONE)({
             zone: playerZone.zonePosition,

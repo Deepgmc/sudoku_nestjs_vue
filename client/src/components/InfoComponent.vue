@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
 
 
 const props = defineProps(['clickedCell'])
 
-onBeforeMount(() => {
-
-})
-console.log('%c clickedCell:', 'color:rgb(182, 86, 158);', props.clickedCell)
+console.log('%c clickedCell component:', 'color:rgb(182, 86, 158);', props.clickedCell)
 
 </script>
 
@@ -21,6 +17,9 @@ console.log('%c clickedCell:', 'color:rgb(182, 86, 158);', props.clickedCell)
         <hr>
         Features:
         <div>{{ clickedCell.cell.getFeaturesInfo() }}</div>
+        <hr>
+        Actions:
+        <button @click="$emit('actionsClick', {payload: props.clickedCell, action: 'movePlayer'})">Move here</button>
     </div>
 </template>
 

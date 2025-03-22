@@ -9,6 +9,7 @@ import AreaComponent from '@/components/map/AreaComponent.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
+import ZoneManager from '@/umbrella/ZoneManager';
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
@@ -50,6 +51,18 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
     clickedCell.y = y
 }
 
+function handleInfoActions(payload: any){
+    const zoneManager = ZoneManager.getInstance()
+    switch (payload.action) {
+        case 'movePlayer':
+            zoneManager.setAndMovePlayer(player, payload.payload.x, payload.payload.y)
+            break;
+        default:
+            break;
+    }
+
+}
+
 </script>
 
 <template>
@@ -66,6 +79,7 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
             <InfoComponent
                 v-if="isCellClicked"
                 :clickedCell="clickedCell"
+                @actions-click="handleInfoActions"
             >
             </InfoComponent>
         </div>
