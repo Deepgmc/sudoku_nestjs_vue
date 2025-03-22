@@ -1,5 +1,6 @@
 import type { TCellActions, TCellFeatures, IFeature, ICellObject } from '@/interfaces/MapInterfaces.ts';
 import PlayerManager from '../PlayerManager.ts';
+import type { IPlayer } from '@/interfaces/playerInterfaces.ts';
 
 export default abstract class CellEntity {
     constructor(
@@ -26,8 +27,7 @@ export default abstract class CellEntity {
     public orientation: string
     public infoIcons: string[] = []
 
-    //?FEATURES
-    public player: PlayerManager | null
+    public player: IPlayer | null
     public mapRawFeatures: TCellFeatures
 
     abstract generateInfoIcons(): void
@@ -35,6 +35,10 @@ export default abstract class CellEntity {
     abstract getInfoDescription(): string
 
     abstract getFeaturesInfo(): string
+
+    isMovable(): boolean {
+        return this.passability
+    }
 
     getFeatureInfoIcon(feature: IFeature){
         let icon = ''

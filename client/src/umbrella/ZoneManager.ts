@@ -83,6 +83,21 @@ export default class ZoneManager extends UmbrellaManager {
                 const yRange = Math.abs(player.y - indexY)
                 cell.isVisibleToplayer = !(xRange > player.visibilityRange || yRange > player.visibilityRange)
             })
+    }
+
+    /**
+     * Removes player object from all the cellEntities
+     * @returns
+     */
+    removePlayerFromMap(): Promise<boolean>{
+        return new Promise(resolve => {
+            this.zoneCells.forEach((row, indexY) => {
+                return row.forEach((cell, indexX) => {
+                    cell.player = null //remove player everywhere
+                })
+            })
+            resolve(true)
         })
+
     }
 }
