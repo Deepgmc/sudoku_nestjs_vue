@@ -15,6 +15,10 @@ const props = defineProps({
     zone: {
         type: Object as PropType<IZone>,
         required: true
+    },
+    clickedCell: {
+        type: Object,
+        required: true
     }
 })
 
@@ -28,12 +32,8 @@ zoneManager.hydrateZoneObjects()
 
 zoneManager.setAndMovePlayer(player, player.x, player.y)
 
-const clickedCellX = ref<number>(NaN)
-const clickedCellY = ref<number>(NaN)
 function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
-    clickedCellX.value = x
-    clickedCellY.value = y
-    props.handleCellClick(x, y, cell)
+    props.handleCellClick(x, y, cell)//обработали клик на уровне зоны, прокидываем его выше
 }
 
 </script>
@@ -48,8 +48,7 @@ function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
                     :cell="cell"
                     :lineIndex="lineIndex"
                     :cellIndex="index"
-                    :clickedCellX="clickedCellX"
-                    :clickedCellY="clickedCellY"
+                    :clickedCell="props.clickedCell"
                     @cell-click="zoneHandleCellClick"
                 >
                 </Cell>
@@ -110,6 +109,13 @@ function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
 }
 .cell_item-clicked {
     border: 1px dotted rgb(170, 0, 0);
+}
+.cell_item-not_visible{
+    font-size:45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.2;
 }
 
 .palyer_cell_container{

@@ -10,13 +10,16 @@ import DistrictComponent from './DistrictComponent.vue';
 Тут же нужны данные от профиля юзера - какой district загружать.
 Вычислить их и передать дальше в DistrictComponent
 Внутри DistrictComponent тоже вычислить какую Zone загружать и передать её уже в ZoneComponent
-Всё через пропсы
 */
 const areaManager = inject ('areaManager') as AreaManager
 
 const props = defineProps({
     handleCellClick: {
         type: Function,
+        required: true
+    },
+    clickedCell: {
+        type: Object,
         required: true
     }
 })
@@ -36,6 +39,7 @@ onBeforeMount(() => {
     <DistrictComponent
         v-if="isDistrictFound"
         :district="currentDistrict"
+        :clickedCell="props.clickedCell"
         :handleCellClick="props.handleCellClick"
     ></DistrictComponent>
 </template>

@@ -26,6 +26,7 @@ export default abstract class CellEntity {
     public mapCellObjectName: string
     public orientation: string
     public infoIcons: string[] = []
+    public isVisibleToplayer: boolean = false //player visible range
 
     public player: IPlayer | null
     public mapRawFeatures: TCellFeatures

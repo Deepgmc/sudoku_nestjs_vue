@@ -48,3 +48,10 @@ export interface IFeature {
 }
 
 export type TCellActions = (() => any) | string[]
+
+
+export interface TClickedCell {
+    cell?: CellEntity,
+    x?: number,
+    y?: number
+  }

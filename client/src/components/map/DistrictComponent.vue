@@ -14,6 +14,10 @@ const props = defineProps({
     district: {
         type: Object as PropType<IDistrict>,
         required: true
+    },
+    clickedCell: {
+        type: Object,
+        required: true
     }
 })
 console.log('%c DistrictComponent got district:', 'color:darkgreen;', props.district)
@@ -39,6 +43,7 @@ onBeforeMount(async () => {
     <ZoneComponent
         v-if="isZoneFound"
         :zone="currentZone"
+        :clickedCell="props.clickedCell"
         :handleCellClick="props.handleCellClick"
     ></ZoneComponent>
 </template>

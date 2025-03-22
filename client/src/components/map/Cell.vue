@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
 import PlayerComponent from '../PlayerComponent.vue';
+import HiddenCell from './HiddenCell.vue';
 import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
 
 
 const props = defineProps({
     cellIndex: {type: Number, required: true},
     lineIndex: {type: Number, required: true},
-    clickedCellX: {type: Number, required: true},
-    clickedCellY: {type: Number, required: true},
+    clickedCell: {
+        type: Object,
+        required: true
+    },
     cell: {
         type: Object as PropType<CellEntity>,
         required: true
@@ -16,13 +19,19 @@ const props = defineProps({
 })
 
 const isMeClicked = computed(() => {
-    return props.clickedCellY === props.lineIndex && props.clickedCellX === props.cellIndex
+    return props.clickedCell.y === props.lineIndex && props.clickedCell.x === props.cellIndex
 })
+
 
 </script>
 
 <template>
+    <HiddenCell
+        class="cell_item cell_item-not_visible"
+        v-if="!props.cell.isVisibleToplayer"
+    ></HiddenCell>
     <div
+        v-else
         class="cell_item"
         :class="{'cell_item-clicked': isMeClicked}"
         @click="$emit('cellClick', cellIndex, lineIndex, props.cell)"

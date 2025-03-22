@@ -10,6 +10,7 @@ import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
 import ZoneManager from '@/umbrella/ZoneManager';
+import type { TClickedCell } from '@/interfaces/MapInterfaces';
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
@@ -31,15 +32,11 @@ onBeforeMount(() => {
     player.init() //loading player data
 })
 
-interface TClickedCell {
-  cell: CellEntity | null,
-  x: number,
-  y: number
-}
+
 const clickedCell: TClickedCell = reactive({
-    cell: null,
-    x: 0,
-    y: 0
+    cell: undefined,
+    x: undefined,
+    y: undefined
 })
 
 const isCellClicked = computed(() => {
@@ -71,6 +68,7 @@ function handleInfoActions(payload: any){
             <AreaComponent
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
                 :isCellClicked="isCellClicked"
+                :clickedCell="clickedCell"
                 :handleCellClick="handleCellClick"
             >
             </AreaComponent>

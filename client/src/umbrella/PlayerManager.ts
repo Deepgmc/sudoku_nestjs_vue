@@ -1,5 +1,6 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import { type IPlayer, type IPlayerRaw } from '@/interfaces/playerInterfaces';
+import type CellEntity from './zoneEntities/CellEntity';
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -11,6 +12,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
 
     public userName: string = ''
     public playerIcon: string = '&#129399'
+    public visibilityRange: number = 1
 
     private constructor() {
         super()
@@ -61,6 +63,10 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.store.inventory = Object.assign(this.store.inventory, dataRaw.inventory)
 
         return true
+    }
+
+    movePlayer(x:number, y: number, cell: CellEntity){
+        this.setXY(x, y)
     }
 
     setXY(x:number, y: number){

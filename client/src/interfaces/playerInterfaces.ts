@@ -7,6 +7,7 @@ export type IPlayerRaw = {
 }
 export interface IPlayer {
     playerIcon: string,
+    visibilityRange: number,
     level: number,
     experience: number,
 

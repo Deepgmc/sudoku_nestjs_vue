@@ -50,8 +50,9 @@ export default class ZoneManager extends UmbrellaManager {
         }
         this.removePlayerFromMap()
             .then(res => {
+                player.movePlayer(newX, newY, targetCell)
                 targetCell.player = player
-                player.setXY(newX, newY)
+                this.setPlayerVisibility(player)
                 console.log(`%c Player moving to: x${newX} y${newY}`, 'color:rgb(182, 86, 158);', player)
             })
     }
@@ -70,5 +71,19 @@ export default class ZoneManager extends UmbrellaManager {
             resolve(true)
         })
 
+    }
+
+    /**
+     * Player can see only the visibilityRange cells around himself
+     * @param playerManager
+     */
+    setPlayerVisibility(player: PlayerManager): void {
+        this.zoneCells.forEach((row, indexY) => {
+            return row.forEach((cell, indexX) => {
+                const xRange = Math.abs(player.x - indexX)
+                const yRange = Math.abs(player.y - indexY)
+                cell.isVisibleToplayer = !(xRange > player.visibilityRange || yRange > player.visibilityRange)
+            })
+        })
     }
 }
