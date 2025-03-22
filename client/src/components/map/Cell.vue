@@ -22,6 +22,7 @@ const isMeClicked = computed(() => {
     return props.clickedCell.y === props.lineIndex && props.clickedCell.x === props.cellIndex
 })
 
+
 </script>
 
 <template>

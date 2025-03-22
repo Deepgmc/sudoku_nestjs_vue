@@ -183,14 +183,9 @@ export const map = {
                     orientation: 's-n',
                 },
                 features: [
-<<<<<<< HEAD
                     {//!homeless
                         name: 'homeless',
                         actions: ['askAboutHome']
-=======
-                    {
-                        name: 'homeless'
->>>>>>> 8addf03 (Reorganized CellEntity and Features in map files)
                     }
                 ]
             },
