@@ -9,7 +9,7 @@ console.log('%c clickedCell component:', 'color:rgb(182, 86, 158);', props.click
 </script>
 
 
-<template><!-- {{ clickedCell.cell.objectName }} ({{ clickedCell.x }} - {{ clickedCell.y }}) -->
+<template>
     <div>
         <h3>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.objectName }})</h3>
         <hr>
