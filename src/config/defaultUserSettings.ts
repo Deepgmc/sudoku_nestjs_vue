@@ -12,7 +12,7 @@ export const player = {
     zoneX: 1,
     zoneY: 2,
     x: 1,
-    y: 7
+    y: 3
 }
 
 export const equiped = {

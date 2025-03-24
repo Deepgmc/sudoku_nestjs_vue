@@ -1,5 +1,5 @@
-import type { ICellObject, TCellFeatures } from "@/interfaces/MapInterfaces"
-import CellEntity from "../CellEntity.ts"
+import type { ICellObject, TCellRawFeatures } from "@/interfaces/MapInterfaces"
+import CellEntity from "./CellEntity.ts"
 
 export default class House extends CellEntity {
     private floors: number
@@ -7,10 +7,10 @@ export default class House extends CellEntity {
 
     public passability: boolean = false
     public backgroundClass: string = 'houseResidental'
-    public actions: string[] = ['lookWindow']
+    public defaultEntityActions: string[] = ['lookWindow']
     public textName: string = 'Жилое здание'
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellFeatures){
+    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures){
         super(objectName, mapCellFeatures)
         this.floors = objectName.floor
         this.isEntrance = objectName.isEntrance
@@ -36,10 +36,10 @@ export default class House extends CellEntity {
         return text.join(' ')
     }
 
-    getFeaturesInfo(){
-        const text: string[] = this.mapRawFeatures.map(feature => {
-            return this.getFeatureText(feature)
-        })
-        return text.join(' ')
-    }
+    // getFeaturesInfo(){
+    //     const text: string[] = this.mapRawFeatures.map(feature => {
+    //         return this.getFeatureText(feature)
+    //     })
+    //     return text.join(' ')
+    // }
 }

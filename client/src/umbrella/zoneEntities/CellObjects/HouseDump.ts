@@ -1,14 +1,14 @@
-import type { ICellObject, TCellFeatures } from "@/interfaces/MapInterfaces"
-import CellEntity from "../CellEntity.ts"
+import type { ICellObject, TCellRawFeatures, TRawActions } from "@/interfaces/MapInterfaces"
+import CellEntity from "./CellEntity.ts"
 
 export default class HouseDump extends CellEntity {
 
     public passability: boolean = false
     public backgroundClass: string = 'houseDump'
-    public actions: string[] = ['dig']
+    public defaultEntityActions: TRawActions = ['dig']
     public textName: string = 'Мусорка'
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellFeatures){
+    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures){
         super(objectName, mapCellFeatures)
     }
     generateInfoIcons(){return []}
@@ -19,10 +19,10 @@ export default class HouseDump extends CellEntity {
         return text.join(' ')
     }
 
-    getFeaturesInfo(){
-        const text: string[] = this.mapRawFeatures.map(feature => {
-            return this.getFeatureText(feature)
-        })
-        return text.join(' ')
-    }
+    // getFeaturesInfo(){
+    //     const text: string[] = this.mapRawFeatures.map(feature => {
+    //         return this.getFeatureText(feature)
+    //     })
+    //     return text.join(' ')
+    // }
 }

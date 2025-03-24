@@ -2,7 +2,7 @@
 import { computed, type PropType } from 'vue';
 import PlayerComponent from '../PlayerComponent.vue';
 import HiddenCell from './HiddenCell.vue';
-import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
+import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 
 
 const props = defineProps({
@@ -48,7 +48,7 @@ const isMeClicked = computed(() => {
             </div>
         </div>
         <div class="cell_item-bottom">
-            <div class="cell_item-bottom_button" v-for="action in props.cell.actions">{{ action }}</div>
+            <!-- <div class="cell_item-bottom_button" v-for="action in props.cell.defaultActions">{{ action }}</div> -->
         </div>
     </div>
 </template>

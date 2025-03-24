@@ -1,6 +1,6 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import { type IPlayer, type IPlayerRaw } from '@/interfaces/playerInterfaces';
-import type CellEntity from './zoneEntities/CellEntity';
+import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager

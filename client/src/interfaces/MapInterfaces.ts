@@ -1,7 +1,11 @@
-/**
-MAP GLOBAL
-*/
-import CellEntity from "@/umbrella/zoneEntities/CellEntity"
+import type ActionBase from "@/umbrella/actions/ActionBase"
+import DigAction from "@/umbrella/actions/Dig"
+import Dig from "@/umbrella/actions/Dig"
+import type FightAction from "@/umbrella/actions/Fight"
+import type MoveAction from "@/umbrella/actions/Move"
+import type RobAction from "@/umbrella/actions/Rob"
+import type TalkAction from "@/umbrella/actions/Talk"
+import CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
 export interface IArea {
     areaName: string,
     districts: IDistrict[][],
@@ -35,23 +39,31 @@ ZONE CELLS (FROM MAP)
 */
 export interface ICell {
     obj: ICellObject,
-    features: TCellFeatures,
+    features: TCellRawFeatures,
 }
 
 export interface ICellObject {
     name: string,
     [key: string]: any
 }
-export type TCellFeatures = IFeature[]
+/* RAW map features: */
+export type TCellRawFeatures = IRawFeature[]
+export interface IRawFeature {
+    name: string,
+    actions: TRawActions
+}
 export interface IFeature {
-    name: string
+    [key: string]: any
 }
 
-export type TCellActions = (() => any) | string[]
-
+export type TRawActions = TRawAction[]
+export type TRawAction = string
 
 export interface TClickedCell {
     cell?: CellEntity,
     x?: number,
     y?: number
-  }
+}
+
+export type TAction = string
+export type IAction = RobAction | DigAction | TalkAction | MoveAction | FightAction

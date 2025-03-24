@@ -8,18 +8,18 @@ console.log('%c clickedCell component:', 'color:rgb(182, 86, 158);', props.click
 </script>
 
 
-<template><!-- {{ clickedCell.cell.objectName }} ({{ clickedCell.x }} - {{ clickedCell.y }}) -->
+<template>
     <div>
-        <h3>{{ clickedCell.cell.textName }}</h3>
+        <h3>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.objectName }})</h3>
         <hr>
         Description:
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
         <hr>
         Features:
-        <div>{{ clickedCell.cell.getFeaturesInfo() }}</div>
+        <!-- <div>{{ clickedCell.cell.getFeaturesInfo() }}</div> -->
         <hr>
         Actions:
-        <button @click="$emit('actionsClick', {payload: props.clickedCell, action: 'movePlayer'})">Move here</button>
+        <!-- <button @click="$emit('actionsClick', {payload: props.clickedCell, action: 'movePlayer'})">Move here</button> -->
     </div>
 </template>
 

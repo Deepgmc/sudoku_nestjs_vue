@@ -1,14 +1,14 @@
-import type { ICellObject, TCellFeatures } from "@/interfaces/MapInterfaces"
-import CellEntity from "../CellEntity.ts"
+import type { ICellObject, TCellRawFeatures } from "@/interfaces/MapInterfaces"
+import CellEntity from "./CellEntity.ts"
 
 export default class Trees extends CellEntity {
 
     public passability: boolean = true
     public backgroundClass: string = 'trees'
-    public actions: string[] = ['look', 'dig']
+    public defaultEntityActions: string[] = ['look', 'dig']
     public textName: string = 'Парковая зона'
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellFeatures){
+    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures){
         super(objectName, mapCellFeatures)
     }
     generateInfoIcons(){return []}
@@ -19,10 +19,10 @@ export default class Trees extends CellEntity {
         return text.join(' ')
     }
 
-    getFeaturesInfo(){
-        const text: string[] = this.mapRawFeatures.map(feature => {
-            return this.getFeatureText(feature)
-        })
-        return text.join(' ')
-    }
+    // getFeaturesInfo(){
+    //     const text: string[] = this.mapRawFeatures.map(feature => {
+    //         return this.getFeatureText(feature)
+    //     })
+    //     return text.join(' ')
+    // }
 }

@@ -1,6 +1,6 @@
 import type { IZone } from '@/interfaces/MapInterfaces'
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
-import {CellEntityFactory} from '@/umbrella/zoneEntities/Factory'
+import {CellEntityFactory} from '@/umbrella/zoneEntities/CellEntityFactory'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
 import type PlayerManager from '@/umbrella/PlayerManager';
 

@@ -8,7 +8,7 @@ import PlayerManager from '@/umbrella/PlayerManager';
 import AreaComponent from '@/components/map/AreaComponent.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import type CellEntity from '@/umbrella/zoneEntities/CellEntity';
+import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 import ZoneManager from '@/umbrella/ZoneManager';
 import type { TClickedCell } from '@/interfaces/MapInterfaces';
 
@@ -40,7 +40,7 @@ const clickedCell: TClickedCell = reactive({
 })
 
 const isCellClicked = computed(() => {
-    return clickedCell.cell !== null
+    return clickedCell.cell !== undefined
 })
 const handleCellClick = function(x: number, y: number, cell: CellEntity){
     clickedCell.cell = cell

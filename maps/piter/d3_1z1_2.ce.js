@@ -15,10 +15,12 @@ export const map = {
                 },
                 features: [
                     {
-                        name: 'portal'
+                        name: 'portal',
+                        actions: []
                     },
                     {
-                        name: 'portalGuard'
+                        name: 'portalGuard',
+                        actions: []
                     },
                 ],
             },
@@ -174,15 +176,16 @@ export const map = {
                 features: []
             },
         ],
-        [//HOME DUMP
+        [//!HOME DUMP
             {
                 obj: {
                     name: 'houseDump',
                     orientation: 's-n',
                 },
                 features: [
-                    {
-                        name: 'homeless'
+                    {//!homeless
+                        name: 'homeless',
+                        actions: ['askAboutHome']
                     }
                 ]
             },
