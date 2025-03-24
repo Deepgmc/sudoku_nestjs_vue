@@ -56,10 +56,13 @@ export abstract class CellEntity {
         this.actions = entitiesOptions[objKey].actions//.concat(mapOptions.actions)
         if(mapOptions.orientation) this.orientation = mapOptions.orientation; else this.orientation = '' //some cells do not need orientation
         this.features = mapCellFeatures
+<<<<<<< HEAD
 
         this.features.forEach(f => {
             this.infoIcons.push(this.getFeatureInfoIcon(f))
         })
+=======
+>>>>>>> f13902f (Player component)
     }
     public objectName: TObjectNames
     public player: PlayerManager | null
@@ -71,6 +74,7 @@ export abstract class CellEntity {
     public features: TCellFeatures
 
     abstract generateInfoIcons(): void
+<<<<<<< HEAD
 
     getFeatureInfoIcon(type: string){
         let icon = ''
@@ -87,6 +91,8 @@ export abstract class CellEntity {
         }
         return icon
     }
+=======
+>>>>>>> f13902f (Player component)
 }
 
 class House extends CellEntity {
