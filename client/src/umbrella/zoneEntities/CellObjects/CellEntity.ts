@@ -20,7 +20,6 @@ export default abstract class CellEntity {
         this.features.forEach(feature => {
             this.infoIcons.push(feature.getFeatureInfoIcon())
         })
-        if(this.features.length > 0) console.log('%c this.features Hydrated:', 'color:rgb(182, 86, 158);', this.features)
 
     }
     abstract textName: string

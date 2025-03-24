@@ -32,7 +32,6 @@ export function FeatureFactory (
     //hydrating actions for this feature
     featureEntity.actions = featureEntity.generalDefaultActions.concat(featureEntity.defaultEntityActions, featureEntity.mapFeatureActions)
     .map((rawAction: TRawAction) => {
-        console.log('%c feature action:', 'color:rgb(182, 86, 158);', rawAction)
         return ActionsFactory(rawAction)
     })
 

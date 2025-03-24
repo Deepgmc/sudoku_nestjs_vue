@@ -36,7 +36,6 @@ export default class ZoneManager extends UmbrellaManager {
             })
         })
 
-        console.log('%c hydratedZone:', 'color:rgb(158, 2, 119);', hydratedZone)
         this.store.loadZoneToStore(hydratedZone)
     }
 
