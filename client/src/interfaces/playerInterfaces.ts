@@ -1,13 +1,33 @@
-export interface IPlayer {
-    userId: TUserId,
-    //? TODO вынести этот интерфейс в общее пространство с сервером!
-    game_settings: IPlayerGameSettings
-}
 export type TUserId = number
 
-export interface IPlayerGameSettings {
-    currentDistrict: string,
-    currentZone: string,
-    x: string,
-    y: string
+export type IPlayerRaw = {
+    player: IPlayer,
+    equiped: IEquiped,
+    inventory: IInventory
+}
+export interface IPlayer {
+    playerIcon: string,
+    visibilityRange: number,
+    level: number,
+    experience: number,
+
+    health: number,
+    strength: number,
+    agility: number,
+    intellect: number,
+
+    districtX: number,
+    districtY: number,
+    zoneX: number,
+    zoneY: number,
+    x: number,
+    y: number
+}
+
+export interface IEquiped {
+    name: string,
+    [key: string]: any
+}
+export interface IInventory {
+    [key: string]: any
 }

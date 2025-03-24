@@ -1,20 +1,20 @@
 import type { IZone } from '@/interfaces/MapInterfaces'
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
-import {CellEntityFactory} from '@/umbrella/zoneEntities/Factory'
-import type { TObjectNames } from './zoneEntities/zoneEntities'
+import {CellEntityFactory} from '@/umbrella/zoneEntities/CellEntityFactory'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
 import type PlayerManager from '@/umbrella/PlayerManager';
 
 export default class ZoneManager extends UmbrellaManager {
     static instance: ZoneManager
-    static getInstance(zoneRaw: IZone){
+    static getInstance(zoneRaw?: IZone){
         if(ZoneManager.instance) return ZoneManager.instance
         ZoneManager.instance = new ZoneManager(zoneRaw)
         return ZoneManager.instance
     }
-    private constructor(zoneRaw: IZone) {
+    private constructor(zoneRaw?: IZone) {
         super()
-        this.zoneRaw = zoneRaw //receiving the zone setting object from the server map
+        if(zoneRaw) this.zoneRaw = zoneRaw //receiving the zone setting object from the server map
+        else this.zoneRaw = {} as IZone
     }
 
     private zoneRaw: IZone
@@ -32,22 +32,56 @@ export default class ZoneManager extends UmbrellaManager {
         const hydratedZone: IZoneHydrated = {...tmpZone, zoneCells: {} as THydratedZoneCells}
         hydratedZone.zoneCells = this.zoneRaw.zoneCells.map(row => {
             return row.map(cell => {
-                return CellEntityFactory(cell.obj.name as TObjectNames, cell.obj.options, cell.features)
+                return CellEntityFactory(cell.obj, cell.features)
             })
         })
 
-        console.log('%c hydratedZone:', 'color:rgb(158, 2, 119);', hydratedZone)
         this.store.loadZoneToStore(hydratedZone)
     }
 
-    setPlayerToMap(player: PlayerManager): void {
+    setAndMovePlayer(player: PlayerManager, newX: number, newY: number): void {
+        if(typeof this.zoneCells[newY][newX] === 'undefined'){
+            throw new Error(`Incorrent zoneCells indexes: ${newX}, ${newY}`)
+        }
+        const targetCell = this.zoneCells[newY][newX]
+        if(!targetCell.isMovable()){
+            throw new Error('Passability FALSE. MAKE ERROR HANDLING')
+        }
+        this.removePlayerFromMap()
+            .then(res => {
+                player.movePlayer(newX, newY, targetCell)
+                targetCell.player = player
+                this.setPlayerVisibility(player)
+                console.log(`%c Player moving to: x${newX} y${newY}`, 'color:rgb(182, 86, 158);', player)
+            })
+    }
+
+    /**
+     * Removes player object from all the cellEntities
+     * @returns
+     */
+    removePlayerFromMap(): Promise<boolean>{
+        return new Promise(resolve => {
+            this.zoneCells.forEach((row, indexY) => {
+                return row.forEach((cell, indexX) => {
+                    cell.player = null //remove player everywhere
+                })
+            })
+            resolve(true)
+        })
+
+    }
+
+    /**
+     * Player can see only the visibilityRange cells around himself
+     * @param playerManager
+     */
+    setPlayerVisibility(player: PlayerManager): void {
         this.zoneCells.forEach((row, indexY) => {
             return row.forEach((cell, indexX) => {
-                cell.player = null //remove player everywhere
-                if(player.isHere(indexX, indexY)){
-                    cell.player = player
-                    console.log(`%c Player set to: x${indexX} y${indexY}`, 'color:rgb(182, 86, 158);', player)
-                }
+                const xRange = Math.abs(player.x - indexX)
+                const yRange = Math.abs(player.y - indexY)
+                cell.isVisibleToplayer = !(xRange > player.visibilityRange || yRange > player.visibilityRange)
             })
         })
     }

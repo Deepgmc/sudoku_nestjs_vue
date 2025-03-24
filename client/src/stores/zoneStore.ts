@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore  } from 'pinia'
 import type { IZone, IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
-import type { CellEntity } from '@/umbrella/zoneEntities/Factory'
+import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity'
 
 export const useZoneStore = defineStore('zone', () => {
 

@@ -29,7 +29,7 @@ provide('$authManager', AuthManager.getInstance( new jwtStrategy(), authStore) )
     </main>
     <UmbrellaApp
         class="main_container"
-        v-if="!authStore.authLoading"
+        v-if="!authStore.authLoading && authStore.isLogined"
     ></UmbrellaApp>
 </template>
 

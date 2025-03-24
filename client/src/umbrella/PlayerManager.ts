@@ -1,7 +1,8 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import { type IPlayer } from '@/interfaces/playerInterfaces';
+import { type IPlayer, type IPlayerRaw } from '@/interfaces/playerInterfaces';
+import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 
-export default class PlayerManager extends UmbrellaManager {
+export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
     static getInstance(){
         if(PlayerManager.instance) return PlayerManager.instance
@@ -9,17 +10,16 @@ export default class PlayerManager extends UmbrellaManager {
         return PlayerManager.instance
     }
 
+    public userName: string = ''
+    public playerIcon: string = '&#129399'
+    public visibilityRange: number = 1
+
     private constructor() {
         super()
         this._getData = this.networkManager.applyNetworkMethod('get', this._apiSection)(this.authManager)
     }
     private _getData: (action: string) => any
     private _apiSection: string = 'player'
-    private playerRaw: IPlayer = {} as IPlayer
-
-    get userId(){
-        return this.store.getUserId()
-    }
 
     API_METHODS = {
         INIT_PLAYER: 'get_full'
@@ -27,34 +27,86 @@ export default class PlayerManager extends UmbrellaManager {
 
     async init(){
         const getPlayerResult = await this._getData(this.API_METHODS.INIT_PLAYER)(null)
-        this.playerRaw = getPlayerResult.data as IPlayer
+        if(getPlayerResult.error){
+            throw new Error(`Wrong player data from server: ${getPlayerResult.error.message}`)
+        }
+
+        this.store.userId = getPlayerResult.data.userId
+        this.store.userName = getPlayerResult.data.userName
+
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
-        this.loadPlayerToStore(this.playerRaw)
+        if(!this.loadPlayerToStore(getPlayerResult.data.game_settings)){
+            throw new Error('Invalid player received raw data')
+        }
         return this
     }
 
-    loadPlayerToStore(player: IPlayer){
-        this.store.userId = player.userId
-        const districtCoordinates = this.getXYFromRawSettings(player.game_settings.currentDistrict)
-        const zoneCoordinates = this.getXYFromRawSettings(player.game_settings.currentZone)
+    loadPlayerToStore(dataRaw: IPlayerRaw): boolean {
+        if(!dataRaw || !dataRaw.player) return false
 
-        this.store.districtX = parseInt(districtCoordinates.x)
-        this.store.districtY = parseInt(districtCoordinates.y)
-        this.store.zoneX = parseInt(zoneCoordinates.x)
-        this.store.zoneY = parseInt(zoneCoordinates.y)
-        this.store.x = parseInt(player.game_settings.x)
-        this.store.y = parseInt(player.game_settings.y)
+        this.districtX = dataRaw.player.districtX
+        this.districtY = dataRaw.player.districtY
+        this.zoneX = dataRaw.player.zoneX
+        this.zoneY = dataRaw.player.zoneY
+        this.x = dataRaw.player.x
+        this.y = dataRaw.player.y
+
+        this.level = dataRaw.player.level
+        this.experience = dataRaw.player.experience
+        this.health = dataRaw.player.health
+        this.strength = dataRaw.player.strength
+        this.agility = dataRaw.player.agility
+        this.intellect = dataRaw.player.intellect
+
+
+        this.store.equiped = Object.assign(this.store.equiped, dataRaw.equiped)
+        this.store.inventory = Object.assign(this.store.inventory, dataRaw.inventory)
+
+        return true
     }
 
-    getXYFromRawSettings(rawSettingsXY: string){
-        const xy = rawSettingsXY.split('_')
-        return {
-            x: xy[0],
-            y: xy[1]
-        }
+    movePlayer(x:number, y: number, cell: CellEntity){
+        this.setXY(x, y)
     }
+
+    setXY(x:number, y: number){
+        this.x = x
+        this.y = y
+    }
+
+    get userId(){
+        return this.store.getUserId()
+    }
+    set userId(newId: number){
+        this.store.setUserId(newId)
+    }
+    get level(){return this.store.level}
+    set level(newLevel: number){this.store.level = newLevel}
+    get experience(){return this.store.experience}
+    set experience(newExperience: number){this.store.experience = newExperience}
+    get health(){return this.store.health}
+    set health(newHealth: number){this.store.level = newHealth}
+    get strength(){return this.store.strength}
+    set strength(newStrength: number){this.store.strength = newStrength}
+    get agility(){return this.store.agility}
+    set agility(newAgility: number){this.store.agility = newAgility}
+    get intellect(){return this.store.intellect}
+    set intellect(newIntellect: number){this.store.intellect = newIntellect}
+
+    get districtX(){return this.store.districtX}
+    set districtX(newDistrictX: number){this.store.districtX = newDistrictX}
+    get districtY(){return this.store.districtY}
+    set districtY(newDistrictY: number){this.store.districtY = newDistrictY}
+    get zoneX(){return this.store.zoneX}
+    set zoneX(newZoneX: number){this.store.zoneX = newZoneX}
+    get zoneY(){return this.store.zoneY}
+    set zoneY(newZoneY: number){this.store.zoneY = newZoneY}
+    get x(){return this.store.x}
+    set x(newX: number){this.store.x = newX}
+    get y(){return this.store.y}
+    set y(newY: number){this.store.y = newY}
 
     isHere(x: number, y:number): boolean{
-        return this.store.x === x && this.store.y === y
+        return this.x === x && this.y === y
     }
 }

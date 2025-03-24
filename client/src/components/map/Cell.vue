@@ -1,31 +1,44 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type PropType } from 'vue';
 import PlayerComponent from '../PlayerComponent.vue';
+import HiddenCell from './HiddenCell.vue';
+import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 
-const props = defineProps([
-    'cell',
-    'cellIndex',
-    'lineIndex',
-    'clickedCellX',
-    'clickedCellY'
-])
+
+const props = defineProps({
+    cellIndex: {type: Number, required: true},
+    lineIndex: {type: Number, required: true},
+    clickedCell: {
+        type: Object,
+        required: true
+    },
+    cell: {
+        type: Object as PropType<CellEntity>,
+        required: true
+    }
+})
 
 const isMeClicked = computed(() => {
-    return props.clickedCellY === props.cellIndex && props.clickedCellX === props.lineIndex
+    return props.clickedCell.y === props.lineIndex && props.clickedCell.x === props.cellIndex
 })
 
 </script>
 
 <template>
+    <HiddenCell
+        class="cell_item cell_item-not_visible"
+        v-if="!props.cell.isVisibleToplayer"
+    ></HiddenCell>
     <div
+        v-else
         class="cell_item"
         :class="{'cell_item-clicked': isMeClicked}"
-        @click="$emit('cellClick', lineIndex, cellIndex, props.cell)"
+        @click="$emit('cellClick', cellIndex, lineIndex, props.cell)"
     >
-    {{ isMeClicked }}
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
-                <PlayerComponent v-if="props.cell.player"></PlayerComponent>
+                <!-- need slot here!!! -->
+                <PlayerComponent v-if="props.cell.player" :player="props.cell.player"></PlayerComponent>
             </div>
             <div class="cell_item-top_right">
                 <div v-for="icon in props.cell.infoIcons">
@@ -34,7 +47,7 @@ const isMeClicked = computed(() => {
             </div>
         </div>
         <div class="cell_item-bottom">
-            <div class="cell_item-bottom_button" v-for="action in props.cell.actions">{{ action }}</div>
+            <!-- <div class="cell_item-bottom_button" v-for="action in props.cell.defaultActions">{{ action }}</div> -->
         </div>
     </div>
 </template>

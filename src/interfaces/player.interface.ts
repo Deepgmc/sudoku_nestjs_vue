@@ -4,6 +4,7 @@ export type TEntityPlayerSettings = string
 
 export interface IPlayer {
     userId: TUserId,
+    userName: string,
     game_settings: IPlayerSettings
 }
 

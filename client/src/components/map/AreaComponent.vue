@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
-import type { IArea, IDistrict } from '@/interfaces/MapInterfaces';
+import type { IDistrict } from '@/interfaces/MapInterfaces';
 import type AreaManager from '@/umbrella/AreaManager';
 
 import DistrictComponent from './DistrictComponent.vue';
@@ -14,10 +14,19 @@ import DistrictComponent from './DistrictComponent.vue';
 */
 const areaManager = inject ('areaManager') as AreaManager
 
-const props = defineProps(['handleCellClick'])
+const props = defineProps({
+    handleCellClick: {
+        type: Function,
+        required: true
+    },
+    clickedCell: {
+        type: Object,
+        required: true
+    }
+})
 let currentDistrict: IDistrict = reactive({} as IDistrict)
 const isDistrictFound = computed(() => {
-    return currentDistrict.zones.length > 0
+    return currentDistrict.zones && currentDistrict.zones.length > 0
 })
 
 onBeforeMount(() => {
@@ -29,9 +38,9 @@ onBeforeMount(() => {
 
 <template>
     <DistrictComponent
-        @cell-click="handleCellClick"
         v-if="isDistrictFound"
         :district="currentDistrict"
+        :clickedCell="props.clickedCell"
         :handleCellClick="props.handleCellClick"
     ></DistrictComponent>
 </template>

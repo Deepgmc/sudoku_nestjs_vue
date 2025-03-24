@@ -8,8 +8,9 @@ import PlayerManager from '@/umbrella/PlayerManager';
 import AreaComponent from '@/components/map/AreaComponent.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import type { ICell } from '@/interfaces/MapInterfaces';
-import type { CellEntity } from '@/umbrella/zoneEntities/Factory';
+import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
+import ZoneManager from '@/umbrella/ZoneManager';
+import type { TClickedCell } from '@/interfaces/MapInterfaces';
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
@@ -31,25 +32,32 @@ onBeforeMount(() => {
     player.init() //loading player data
 })
 
-interface TClickedCell {
-  cell: CellEntity | null,
-  x: number,
-  y: number
-}
+
 const clickedCell: TClickedCell = reactive({
-    cell: null,
-    x: 0,
-    y: 0
+    cell: undefined,
+    x: undefined,
+    y: undefined
 })
 
 const isCellClicked = computed(() => {
-    return clickedCell.cell !== null
+    return clickedCell.cell !== undefined
 })
 const handleCellClick = function(x: number, y: number, cell: CellEntity){
-    console.log('%c Clicked cell:', 'color:rgb(182, 86, 158);', cell, x, y)
     clickedCell.cell = cell
     clickedCell.x = x
     clickedCell.y = y
+}
+
+function handleInfoActions(payload: any){
+    const zoneManager = ZoneManager.getInstance()
+    switch (payload.action) {
+        case 'movePlayer':
+            zoneManager.setAndMovePlayer(player, payload.payload.x, payload.payload.y)
+            break;
+        default:
+            break;
+    }
+
 }
 
 </script>
@@ -60,6 +68,7 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
             <AreaComponent
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
                 :isCellClicked="isCellClicked"
+                :clickedCell="clickedCell"
                 :handleCellClick="handleCellClick"
             >
             </AreaComponent>
@@ -68,6 +77,7 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
             <InfoComponent
                 v-if="isCellClicked"
                 :clickedCell="clickedCell"
+                @actions-click="handleInfoActions"
             >
             </InfoComponent>
         </div>
@@ -86,11 +96,8 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
     display: flex;
     width: g.$map-width;
     min-height: g.$map-height;
-    border-right: 1px dotted rgb(163, 43, 43);
-    border-bottom: 1px dotted rgb(163, 43, 43);
 }
 .umbrella_info_container{
-    border: 1px solid rgb(54, 48, 134);
     width: g.$info-width;
     min-height: g.$info-height;
 }
