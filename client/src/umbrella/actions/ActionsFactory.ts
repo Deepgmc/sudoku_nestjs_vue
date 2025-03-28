@@ -1,4 +1,4 @@
-import type ActionBase from './ActionBase.ts'
+import type MapAction from './MapAction.ts'
 import type { TRawAction } from '@/interfaces/MapInterfaces.ts'
 import RobAction from './Rob.ts'
 import MoveAction from './Move.ts'
@@ -12,10 +12,36 @@ import AskAboutHomeAction from './AskAboutHome.ts'
 
 export function ActionsFactory (
     action: TRawAction
-): ActionBase {
-    let actionEntity: ActionBase | null = null
+): MapAction {
+    let actionEntity: MapAction | null = null
     try {
-        actionEntity = eval(`new ${capitalizeFirstLetter(action)}Action(action)`)
+        //actionEntity = eval(`new ${capitalizeFirstLetter(action)}Action(action)`)
+        switch(action){
+            case 'move':
+                actionEntity = new MoveAction(action)
+                break;
+            case 'dig':
+                actionEntity = new DigAction(action)
+                break;
+            case 'rob':
+                actionEntity = new RobAction(action)
+                break;
+            case 'fight':
+                actionEntity = new FightAction(action)
+                break;
+            case 'look':
+                actionEntity = new LookAction(action)
+                break;
+            case 'talk':
+                actionEntity = new TalkAction(action)
+                break;
+            case 'lookWindow':
+                actionEntity = new LookWindowAction(action)
+                break;
+            case 'askAboutHome':
+                actionEntity = new AskAboutHomeAction(action)
+                break;
+        }
     } catch(_e: any) {
         console.log(`%c Actions Factory eval for raw action ${action}:`, 'color:rgb(182, 86, 158);', _e)
         actionEntity = null

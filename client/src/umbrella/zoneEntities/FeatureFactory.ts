@@ -30,10 +30,10 @@ export function FeatureFactory (
     if(featureEntity === null) throw new Error('Invalid EntityFactory creation ' + featureRaw.name)
 
     //hydrating actions for this feature
-    featureEntity.actions = featureEntity.generalDefaultActions.concat(featureEntity.defaultEntityActions, featureEntity.mapFeatureActions)
-    .map((rawAction: TRawAction) => {
-        return ActionsFactory(rawAction)
-    })
+    featureEntity.actions = featureEntity.defaultActions.concat(featureEntity.generalDefaultActions, featureEntity.defaultEntityActions, featureEntity.mapFeatureActions)
+        .map((rawAction: TRawAction) => {
+            return ActionsFactory(rawAction)
+        })
 
     return featureEntity
 }

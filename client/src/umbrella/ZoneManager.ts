@@ -2,7 +2,7 @@ import type { IZone } from '@/interfaces/MapInterfaces'
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import {CellEntityFactory} from '@/umbrella/zoneEntities/CellEntityFactory'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
-import type PlayerManager from '@/umbrella/PlayerManager';
+import PlayerManager from '@/umbrella/PlayerManager';
 
 export default class ZoneManager extends UmbrellaManager {
     static instance: ZoneManager
@@ -17,6 +17,7 @@ export default class ZoneManager extends UmbrellaManager {
         else this.zoneRaw = {} as IZone
     }
 
+    public player: PlayerManager = PlayerManager.getInstance()
     private zoneRaw: IZone
 
     get zoneCells(): THydratedZoneCells{
@@ -39,20 +40,20 @@ export default class ZoneManager extends UmbrellaManager {
         this.store.loadZoneToStore(hydratedZone)
     }
 
-    setAndMovePlayer(player: PlayerManager, newX: number, newY: number): void {
+    setAndMovePlayer(newX: number, newY: number): void {
         if(typeof this.zoneCells[newY][newX] === 'undefined'){
             throw new Error(`Incorrent zoneCells indexes: ${newX}, ${newY}`)
         }
         const targetCell = this.zoneCells[newY][newX]
         if(!targetCell.isMovable()){
-            throw new Error('Passability FALSE. MAKE ERROR HANDLING')
+            throw new Error('Passability false. Cant move!')
         }
         this.removePlayerFromMap()
             .then(res => {
-                player.movePlayer(newX, newY, targetCell)
-                targetCell.player = player
-                this.setPlayerVisibility(player)
-                console.log(`%c Player moving to: x${newX} y${newY}`, 'color:rgb(182, 86, 158);', player)
+                this.player.movePlayer(newX, newY, targetCell)
+                targetCell.player = this.player
+                this.setPlayerVisibility(this.player)
+                console.log(`%c Player moving to: x${newX} y${newY}`, 'color:rgb(182, 86, 158);', this.player)
             })
     }
 

@@ -18,11 +18,4 @@ export default class Fence extends CellEntity {
         text.push('Металлический, проржавелый, краска облуплена. Но высокий, выглядит прочно.')
         return text.join(' ')
     }
-
-    // getFeaturesInfo(){
-    //     const text: string[] = this.mapRawFeatures.map(feature => {
-    //         return this.getFeatureText(feature)
-    //     })
-    //     return text.join(' ')
-    // }
 }

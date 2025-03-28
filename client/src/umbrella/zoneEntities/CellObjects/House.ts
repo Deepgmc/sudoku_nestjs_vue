@@ -35,11 +35,4 @@ export default class House extends CellEntity {
         }
         return text.join(' ')
     }
-
-    // getFeaturesInfo(){
-    //     const text: string[] = this.mapRawFeatures.map(feature => {
-    //         return this.getFeatureText(feature)
-    //     })
-    //     return text.join(' ')
-    // }
 }

@@ -9,7 +9,7 @@ export default abstract class FeatureEntity {
         this.objectName = featureRaw.name
     }
 
-    public generalDefaultActions: TRawAction[] = ['move'] as TRawAction[]
+    public generalDefaultActions: TRawAction[] = ['look'] as TRawAction[]
     abstract defaultEntityActions: TRawActions
     abstract mapFeatureActions: TRawActions
     public actions: IAction[] = [] as IAction[] //собранные с разных источников действия для этого конкретного feature

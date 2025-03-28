@@ -1,6 +1,6 @@
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { defineStore  } from 'pinia'
-import type { IArea } from '@/interfaces/MapInterfaces'
+import type { IArea, TClickedCell } from '@/interfaces/MapInterfaces'
 
 export const useAreaStore = defineStore('area', () => {
 
@@ -12,10 +12,23 @@ export const useAreaStore = defineStore('area', () => {
 
     const isStoreLoaded = computed(() => typeof area.value.districts !== 'undefined' && area.value.districts.length > 0)
 
+    const clickedCell: TClickedCell = reactive({
+        cell: undefined,
+        x: undefined,
+        y: undefined
+    })
+
+    const isCellClicked = computed(() => {
+        return clickedCell.cell !== undefined && clickedCell.x !== undefined && clickedCell.y !== undefined
+    })
+
     return {
         area,
         isStoreLoaded,
-        loadAreaToStore
+        loadAreaToStore,
+
+        clickedCell,
+        isCellClicked
     }
 })
 

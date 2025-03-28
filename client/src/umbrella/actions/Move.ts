@@ -1,14 +1,19 @@
 import type { TAction } from "@/interfaces/MapInterfaces";
-import ActionBase from "./ActionBase";
+import MapAction from "./MapAction";
+import type ZoneManager from "../ZoneManager";
 
-export default class MoveAction extends ActionBase {
+export default class MoveAction extends MapAction {
+
+    public textName: string = 'Переместиться'
 
     constructor(action: TAction){
         super(action)
     }
 
-    moveplayer(){
-        console.log('%c asdasdsad:', 'color:rgb(182, 86, 158);', 345435)
+    activate(zone: ZoneManager){
+        const clickedCell = this.areaManager.store.clickedCell
+        if(!clickedCell.x || !clickedCell.y) throw new Error('Wrong cell to move')
+        zone.setAndMovePlayer(clickedCell.x, clickedCell.y)
     }
 
 }

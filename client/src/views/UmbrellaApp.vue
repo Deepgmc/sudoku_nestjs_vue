@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeMount, onMounted, reactive, provide, computed } from 'vue';
+import { inject, onBeforeMount, provide } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
@@ -9,8 +9,7 @@ import AreaComponent from '@/components/map/AreaComponent.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
-import ZoneManager from '@/umbrella/ZoneManager';
-import type { TClickedCell } from '@/interfaces/MapInterfaces';
+import type MapAction from '@/umbrella/actions/MapAction';
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
@@ -33,31 +32,16 @@ onBeforeMount(() => {
 })
 
 
-const clickedCell: TClickedCell = reactive({
-    cell: undefined,
-    x: undefined,
-    y: undefined
-})
-
-const isCellClicked = computed(() => {
-    return clickedCell.cell !== undefined
-})
 const handleCellClick = function(x: number, y: number, cell: CellEntity){
-    clickedCell.cell = cell
-    clickedCell.x = x
-    clickedCell.y = y
+    areaManager.store.clickedCell.cell = cell
+    areaManager.store.clickedCell.x = x
+    areaManager.store.clickedCell.y = y
 }
 
-function handleInfoActions(payload: any){
-    const zoneManager = ZoneManager.getInstance()
-    switch (payload.action) {
-        case 'movePlayer':
-            zoneManager.setAndMovePlayer(player, payload.payload.x, payload.payload.y)
-            break;
-        default:
-            break;
-    }
-
+function handleInfoActions(action: MapAction){
+    if(!areaManager.store.isCellClicked) return
+    console.log('%c action:', 'color:rgb(182, 86, 158);', action)
+    player.handleMapAction(action)
 }
 
 </script>
@@ -67,17 +51,17 @@ function handleInfoActions(payload: any){
         <div class="umbrella_map_container">
             <AreaComponent
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
-                :isCellClicked="isCellClicked"
-                :clickedCell="clickedCell"
+                :isCellClicked="areaManager.store.isCellClicked"
+                :clickedCell="areaManager.store.clickedCell"
                 :handleCellClick="handleCellClick"
             >
             </AreaComponent>
         </div>
         <div class="umbrella_info_container">
             <InfoComponent
-                v-if="isCellClicked"
-                :clickedCell="clickedCell"
-                @actions-click="handleInfoActions"
+                v-if="areaManager.store.isCellClicked"
+                :clickedCell="areaManager.store.clickedCell"
+                @info-actions-click="handleInfoActions"
             >
             </InfoComponent>
         </div>

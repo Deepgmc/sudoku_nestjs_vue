@@ -18,11 +18,4 @@ export default class Trees extends CellEntity {
         text.push('Деревья, невысокая трава, всякий мусор, земля.')
         return text.join(' ')
     }
-
-    // getFeaturesInfo(){
-    //     const text: string[] = this.mapRawFeatures.map(feature => {
-    //         return this.getFeatureText(feature)
-    //     })
-    //     return text.join(' ')
-    // }
 }

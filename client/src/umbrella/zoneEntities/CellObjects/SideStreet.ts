@@ -18,11 +18,4 @@ export default class SideStreet extends CellEntity {
         text.push('Обычная асфальтированная придомная территория. Асфальт, конечно, очень условен.')
         return text.join(' ')
     }
-
-    // getFeaturesInfo(){
-    //     const text: string[] = this.mapRawFeatures.map(feature => {
-    //         return this.getFeatureText(feature)
-    //     })
-    //     return text.join(' ')
-    // }
 }

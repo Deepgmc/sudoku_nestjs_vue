@@ -1,6 +1,8 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import { type IPlayer, type IPlayerRaw } from '@/interfaces/playerInterfaces';
 import type CellEntity from './zoneEntities/CellObjects/CellEntity';
+import type MapAction from './actions/MapAction';
+import ZoneManager from './ZoneManager';
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -65,15 +67,6 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         return true
     }
 
-    movePlayer(x:number, y: number, cell: CellEntity){
-        this.setXY(x, y)
-    }
-
-    setXY(x:number, y: number){
-        this.x = x
-        this.y = y
-    }
-
     get userId(){
         return this.store.getUserId()
     }
@@ -108,5 +101,19 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
 
     isHere(x: number, y:number): boolean{
         return this.x === x && this.y === y
+    }
+
+    movePlayer(x:number, y: number, cell: CellEntity){
+        this.setXY(x, y)
+    }
+
+    setXY(x:number, y: number){
+        this.x = x
+        this.y = y
+    }
+
+    handleMapAction(action: MapAction){
+        const zoneManager = ZoneManager.getInstance()
+        action.activate(zoneManager)
     }
 }

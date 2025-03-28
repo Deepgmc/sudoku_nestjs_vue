@@ -53,26 +53,4 @@ export default abstract class CellEntity {
     isMovable(): boolean {
         return this.passability
     }
-
-    // getFeatureText(feature: IFeature){
-    //     let fText = ''
-    //     switch (feature.name) {
-    //         case 'portal':
-    //             fText = 'Портал в другую зону'
-    //             break;
-    //         case 'homeless':
-    //             fText = 'Какой-то БОМЖ'
-    //             break;
-    //         case 'portalGuard':
-    //             fText = 'Защитник'
-    //             break;
-    //         case 'houseEntrance':
-    //         console.log('%c asdasdasd:', 'color:rgb(182, 86, 158);', )
-    //             fText = 'Вход в здание'
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     return fText
-    // }
 }

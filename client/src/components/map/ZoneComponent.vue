@@ -30,7 +30,7 @@ const player = inject ('player') as PlayerManager
 const zoneManager = ZoneManager.getInstance(props.zone)
 zoneManager.hydrateZoneObjects()
 
-zoneManager.setAndMovePlayer(player, player.x, player.y)
+zoneManager.setAndMovePlayer(player.x, player.y)
 
 function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
     props.handleCellClick(x, y, cell)//обработали клик на уровне зоны, прокидываем его выше

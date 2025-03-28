@@ -1,6 +1,4 @@
-import type ActionBase from "@/umbrella/actions/ActionBase"
-import DigAction from "@/umbrella/actions/Dig"
-import Dig from "@/umbrella/actions/Dig"
+import type DigAction from "@/umbrella/actions/Dig"
 import type FightAction from "@/umbrella/actions/Fight"
 import type MoveAction from "@/umbrella/actions/Move"
 import type RobAction from "@/umbrella/actions/Rob"
