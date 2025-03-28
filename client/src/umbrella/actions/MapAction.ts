@@ -6,7 +6,7 @@ export default abstract class MapAction {
 
     public actionName: TAction
     public textName: string = ''
-    public areaManager = AreaManager.getInstance()
+    public areaManager: AreaManager = AreaManager.getInstance()
 
     constructor(action: TAction){
         this.actionName = action
