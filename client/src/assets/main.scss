@@ -1,5 +1,5 @@
 //@import '@/assets/globalVariables.scss';
-@use './globalVariables.scss' as g;
+@use './globalVariables.scss' as globals;
 *{
     padding:0;
     margin:0;
@@ -32,22 +32,22 @@ body{
     background-repeat: repeat;
 }
 a, .link {
-    color: g.$linkColor;
+    color: globals.$linkColor;
 }
 a:hover, .link:hover {
-    color: g.$linkColorHover;
+    color: globals.$linkColorHover;
 }
 
 input[type=text], input[type=email], input[type=number], button{
-    padding:7px;
+    padding:5px;
     border-radius: 4px;
     font-size:16px;
-    background-color: g.$inputBgrColor;
+    background-color: globals.$inputBgrColor;
 }
 button{
     font-size:14px;
     min-width: 70px;
-    background-color: g.$orangeColor;
+    background-color: globals.$orangeColor;
     color:black;
 }
 
@@ -69,8 +69,17 @@ button{
     flex-flow: row nowrap;
 }
 .error_text{
-    color: g.$errorTextColor
+    color: globals.$errorTextColor
 }
 .success_text{
-    color: g.$successTextColor
+    color: globals.$successTextColor
+}
+
+.info_actionButton{
+    color: globals.$linkColor;
+    cursor: pointer;
+    padding:5px;
+}
+.info_actionButton:hover{
+    color: globals.$linkColorHover
 }

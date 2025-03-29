@@ -60,6 +60,7 @@ function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
 
 
 <style lang="scss">
+@use '@/assets/globalVariables.scss' as globals;
 @use '@/assets/zoneCellsIcons.scss';
 .zone-cell-line{
     display:flex;
@@ -67,8 +68,8 @@ function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
     justify-content: center;
 }
 .cell_item {
-    height:80px;
-    width:80px;
+    height: globals.$zoneCell_height;
+    width: globals.$zoneCell_width;
     border: 1px solid grey;
     border-radius: 5px;
     margin: 1px;

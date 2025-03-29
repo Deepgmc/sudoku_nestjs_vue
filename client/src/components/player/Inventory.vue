@@ -11,19 +11,33 @@ const props = defineProps({
 </script>
 
 <template>
-    <div>
-        <div v-for="inventoryItem in inventory.items">
+    <div class="inventory_container">
+        <div class="inventory_item" v-for="inventoryItem in inventory.items">
             <div class="item_ico" v-html="inventoryItem.item.icon"></div>
-            {{ inventoryItem.item.itemId }} ({{ inventoryItem.quantity }})
+            <!-- <div class="item_ico" v-html="inventoryItem.item.icon"></div>
+            {{ inventoryItem.item.itemId }} ({{ inventoryItem.quantity }}) -->
         </div>
     </div>
 </template>
 
 <style lang="scss">
-.item_ico{
-    font-size: 4em;
+@use '@/assets/globalVariables.scss' as globals;
+.inventory_container{
+    display:flex;
+    flex-flow: row wrap;
+    .inventory_item{
+        border: 1px solid darkgrey;
+        width: 40px;
+        height: 40px;
+        margin: 0 1px 0 0;
+    }
+    .inventory_item:hover{
+        border: 1px solid globals.$oliveColor;
+        cursor:pointer;
+    }
+    .item_ico{
+        font-size: 2em;
+    }
 }
-.item_ico:hover{
-    border: 1px solid red;
-}
+
 </style>

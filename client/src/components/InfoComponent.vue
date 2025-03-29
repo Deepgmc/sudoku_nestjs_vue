@@ -20,13 +20,13 @@ const clickedCellFeatures = props.clickedCell.cell.features
 
 <template>
     <div>
-        <h3>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.mapCellObjectName }})</h3>
+        <h1>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.mapCellObjectName }})</h1>
         <hr>
         Description:
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
         <hr>
         Features:
-        <div v-for="feature in props.clickedCell.cell.features" :key="feature.objectName">
+        <div class="info_feature-item" v-for="feature in props.clickedCell.cell.features" :key="feature.objectName">
             {{ feature.textName }}
             <ActionButton
                 v-for="action in feature.actions"
@@ -50,5 +50,7 @@ const clickedCellFeatures = props.clickedCell.cell.features
 
 
 <style lang="scss">
-
+.info_feature-item{
+    display: flex;
+}
 </style>
