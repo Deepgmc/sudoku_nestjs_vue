@@ -6,6 +6,7 @@ import type { AuthManager } from '@/auth/AuthManager';
 import AreaManager from '@/umbrella/AreaManager';
 import PlayerManager from '@/umbrella/PlayerManager';
 import AreaComponent from '@/components/map/AreaComponent.vue';
+import Inventory from '@/components/player/Inventory.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
@@ -58,12 +59,17 @@ function handleInfoActions(action: MapAction){
             </AreaComponent>
         </div>
         <div class="umbrella_info_container">
-            <InfoComponent
-                v-if="areaManager.store.isCellClicked"
-                :clickedCell="areaManager.store.clickedCell"
-                @info-actions-click="handleInfoActions"
-            >
-            </InfoComponent>
+            <div class="info_block">
+                <InfoComponent
+                    v-if="areaManager.store.isCellClicked"
+                    :clickedCell="areaManager.store.clickedCell"
+                    @info-actions-click="handleInfoActions"
+                >
+                </InfoComponent>
+            </div>
+            <div class="inventory_block">
+                <Inventory :inventory="player.inventory"></Inventory>
+            </div>
         </div>
     </div>
 </template>
@@ -82,7 +88,22 @@ function handleInfoActions(action: MapAction){
     min-height: g.$map-height;
 }
 .umbrella_info_container{
-    width: g.$info-width;
-    min-height: g.$info-height;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    & > div {
+        margin-top:20px;
+        border-top: 3px dashed rgb(44, 56, 0);
+        padding-top: 5px;
+    }
+    .info_block{
+        width: g.$info-width;
+    }
+    .inventory_block{
+        width: g.$info-width;
+    }
 }
+// .umbrella_info_container > div {
+//     margin-top:20px;
+// }
 </style>

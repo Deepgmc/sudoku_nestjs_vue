@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IPlayer } from '@/interfaces/playerInterfaces';
+import type { IPlayer } from '@/interfaces/PlayerInterfaces';
 import type { PropType } from 'vue';
 
 const props = defineProps({

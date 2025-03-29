@@ -1,6 +1,7 @@
 export const player = {
     level: 1,
     experience: 0,
+    cash: 0,
 
     health: 10,
     strength: 5,
@@ -15,11 +16,13 @@ export const player = {
     y: 3
 }
 
+export const inventory = [
+    {name: 'water', quantity: 1},
+    {name: 'pants', quantity: 1}
+]
+
 export const equiped = {
-    pants: 1
-}
-export const inventory = {
-    milk: 1
+    foo: 1
 }
 
 export const playerRatios = {

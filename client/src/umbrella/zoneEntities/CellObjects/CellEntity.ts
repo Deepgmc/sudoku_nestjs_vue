@@ -1,5 +1,5 @@
 import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, IFeature, TRawAction } from '@/interfaces/MapInterfaces.ts';
-import type { IPlayer } from '@/interfaces/playerInterfaces.ts';
+import type { IPlayer } from '@/interfaces/PlayerInterfaces.ts';
 import { FeatureFactory } from '../FeatureFactory';
 
 export default abstract class CellEntity {
