@@ -1,8 +1,9 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import { type IPlayer, type IPlayerRaw } from '@/interfaces/playerInterfaces';
+import { type IInventory, type IPlayer, type IPlayerRaw } from '@/interfaces/PlayerInterfaces';
 import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 import type MapAction from './actions/MapAction';
 import ZoneManager from './ZoneManager';
+import Inventory from './items/Inventory';
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -36,6 +37,11 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.store.userId = getPlayerResult.data.userId
         this.store.userName = getPlayerResult.data.userName
 
+        //hydrate inventory
+        this.inventory = new Inventory(getPlayerResult.data.game_settings.inventory)
+        console.log('%c Hydrated inventory:', 'color:rgb(182, 86, 158);', this.inventory)
+
+
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
         if(!this.loadPlayerToStore(getPlayerResult.data.game_settings)){
             throw new Error('Invalid player received raw data')
@@ -60,9 +66,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.agility = dataRaw.player.agility
         this.intellect = dataRaw.player.intellect
 
-
         this.store.equiped = Object.assign(this.store.equiped, dataRaw.equiped)
-        this.store.inventory = Object.assign(this.store.inventory, dataRaw.inventory)
 
         return true
     }
@@ -72,6 +76,12 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
     }
     set userId(newId: number){
         this.store.setUserId(newId)
+    }
+    get inventory(){
+        return this.store.inventory
+    }
+    set inventory(newInventory: IInventory){
+        this.store.inventory = Object.assign(this.store.inventory, newInventory)
     }
     get level(){return this.store.level}
     set level(newLevel: number){this.store.level = newLevel}

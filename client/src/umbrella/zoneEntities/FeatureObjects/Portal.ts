@@ -15,6 +15,6 @@ export class Portal extends FeatureEntity {
     defaultActions = []
 
     getFeatureInfoIcon(){
-        return '&#x25CE;'
+        return '&#x1F300;'
     }
 }

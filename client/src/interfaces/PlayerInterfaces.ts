@@ -1,3 +1,5 @@
+import type { IInventoryItem } from "./ItemsInterfaces"
+
 export type TUserId = number
 
 export type IPlayerRaw = {
@@ -29,5 +31,6 @@ export interface IEquiped {
     [key: string]: any
 }
 export interface IInventory {
-    [key: string]: any
+    maxSlots: number,
+    items: IInventoryItem[]
 }
