@@ -4,10 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config vite.config.js",
+
+    "dev-debug-and-mode": "vite --debug --mode production",
+    "dev-mode": "vite --mode development",
+    "dev-sub-dir": "vite serve some/sub/dir",
+
+
+    "build-only": "vite build",
+    "build-dev-mode": "vite build --mode development",
+
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "build-only": "vite build",
     "type-check": "vue-tsc --build"
   },
   "dependencies": {

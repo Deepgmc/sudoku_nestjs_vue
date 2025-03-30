@@ -2,7 +2,11 @@ import * as nodeUrl from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
-// https://vite.dev/config/
+//import legacy from '@vitejs/plugin-legacy'
+
+
+console.log('%c Vite.config NODE_ENV:', 'color:rgb(182, 86, 158);', process.env.NODE_ENV)
+
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
@@ -10,21 +14,24 @@ export default defineConfig(({ mode }) => {
         plugins: [
             vue(),
             vueDevTools(),
+            //legacy({targets: ['defaults', 'not IE 11'],}),
         ],
-        // css: {
-        //     preprocessorOptions: {
-        //         scss: {
-        //             additionalData: `@use "@/assets/globalVariables.scss" as *;`
-        //         }
-        //     }
-        // },
+        build: {
+            rollupOptions: {
+                input: {
+                    app: './umbrella.html',
+                },
+            },
+        },
+
         resolve: {
             alias: {
                 '@': nodeUrl.fileURLToPath(new nodeUrl.URL('./src', import.meta.url))
             },
         },
         server: {
-            open: true,
+            //open: true,
+            open: '/umbrella.html',
             proxy: {
                 '/auth': {
                     target: `http://localhost:/${env.PROXY_DEV_PORT}`,
@@ -37,7 +44,14 @@ export default defineConfig(({ mode }) => {
                     //rewrite: (path) => path.replace(/^\/api/, ''),
                 },
             }
-        }
+        },
+        // css: {
+        //     preprocessorOptions: {
+        //         scss: {
+        //             additionalData: `@use "@/assets/globalVariables.scss" as *;`
+        //         }
+        //     }
+        // },
     }
 
 })

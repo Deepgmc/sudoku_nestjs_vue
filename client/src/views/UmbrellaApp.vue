@@ -75,7 +75,7 @@ function handleInfoActions(action: MapAction){
 </template>
 
 <style lang="scss">
-@use '@/assets/globalVariables.scss' as g;
+@use '@/assets/globalVariables.scss' as globals;
 .umbrella-container {
     min-height: 100vh;
     display: flex;
@@ -84,8 +84,8 @@ function handleInfoActions(action: MapAction){
 
 .umbrella_map_container {
     display: flex;
-    width: g.$map-width;
-    min-height: g.$map-height;
+    width: globals.$map-width;
+    min-height: globals.$map-height;
 }
 .umbrella_info_container{
     display: flex;
@@ -97,13 +97,10 @@ function handleInfoActions(action: MapAction){
         padding-top: 5px;
     }
     .info_block{
-        width: g.$info-width;
+        width: globals.$info-width;
     }
     .inventory_block{
-        width: g.$info-width;
+        width: globals.$info-width;
     }
 }
-// .umbrella_info_container > div {
-//     margin-top:20px;
-// }
 </style>
