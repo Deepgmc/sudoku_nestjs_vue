@@ -23,12 +23,15 @@ const props = defineProps({
 })
 
 
-console.log('%c ZoneComponent got zone (raw):', 'color:darkgreen;', props.zone)
+
 
 const player = inject ('player') as PlayerManager
 
 const zoneManager = ZoneManager.getInstance(props.zone)
 zoneManager.hydrateZoneObjects()
+
+console.log('%c ZoneComponent got raw zone:', 'color:darkgreen;', props.zone)
+console.log('%c ZoneComponent hydrated:', 'color:lightgreen;', zoneManager.store.zone.zoneCells)
 
 zoneManager.setAndMovePlayer(player.x, player.y)
 
@@ -125,7 +128,7 @@ function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
 }
 
 .icons_list_item{
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
 }
 </style>

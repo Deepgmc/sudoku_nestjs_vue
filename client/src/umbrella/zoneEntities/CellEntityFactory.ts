@@ -6,6 +6,7 @@ import Fence from './CellObjects/Fence.ts';
 import Trees from './CellObjects/Trees.ts';
 import type { TCellRawFeatures, ICellObject, TRawAction } from '@/interfaces/MapInterfaces.ts';
 import { ActionsFactory } from '../actions/ActionsFactory.ts';
+import Item from '../items/Items.ts';
 
 
 export function CellEntityFactory (
@@ -42,9 +43,8 @@ export function CellEntityFactory (
         return ActionsFactory(rawAction)
     })
 
-    return cellEntity
-}
+    //hydrating items on that map cell
+    cellEntity.items = Item.hydrateRawItemsArray(cellObject.items)
 
-function capitalizeFirstLetter(val: string) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+    return cellEntity
 }

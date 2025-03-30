@@ -17,8 +17,8 @@ export const player = {
 }
 
 export const inventory = [
-    {name: 'water', quantity: 1},
-    {name: 'pants', quantity: 1}
+    {name: 'water_bottle', quantity: 1},
+    {name: 'pants_01', quantity: 1}
 ]
 
 export const equiped = {

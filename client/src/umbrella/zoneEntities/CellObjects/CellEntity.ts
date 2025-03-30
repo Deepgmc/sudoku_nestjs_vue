@@ -1,6 +1,7 @@
 import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, IFeature, TRawAction } from '@/interfaces/MapInterfaces.ts';
 import type { IPlayer } from '@/interfaces/PlayerInterfaces.ts';
 import { FeatureFactory } from '../FeatureFactory';
+import type { IInventoryItem } from '@/interfaces/ItemsInterfaces';
 
 export default abstract class CellEntity {
     constructor(
@@ -36,6 +37,8 @@ export default abstract class CellEntity {
     public isVisibleToplayer: boolean = false //using player visible range
 
     public player: IPlayer | null
+
+    public items: IInventoryItem[] = []
 
 
     public mapRawFeatures: TCellRawFeatures

@@ -3,6 +3,7 @@ import { ActionsFactory } from "../actions/ActionsFactory"
 import { Homeless } from "./FeatureObjects/Homeless"
 import { Portal } from "./FeatureObjects/Portal"
 import { PortalGuard } from "./FeatureObjects/PortalGuard"
+import Item from "../items/Items"
 
 
 export function FeatureFactory (
@@ -35,9 +36,8 @@ export function FeatureFactory (
             return ActionsFactory(rawAction)
         })
 
-    return featureEntity
-}
+    //hydrating feature items
+    featureEntity.items = Item.hydrateRawItemsArray(featureRaw.items)
 
-function capitalizeFirstLetter(val: string) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+    return featureEntity
 }

@@ -48,6 +48,9 @@ const isMeClicked = computed(() => {
             </div>
         </div>
         <div class="cell_item-bottom">
+            <div v-for="item in props.cell.items">
+                <span v-html="item.item.icon" class="icons_list_item"></span>
+            </div>
             <!-- <div class="cell_item-bottom_button" v-for="action in props.cell.defaultActions">{{ action }}</div> -->
         </div>
     </div>

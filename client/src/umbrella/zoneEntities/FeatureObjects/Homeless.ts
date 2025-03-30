@@ -5,11 +5,11 @@ export class Homeless extends FeatureEntity {
 
     textName: string = 'БОМЖ'
     public defaultEntityActions: TRawActions = []
-    public mapFeatureActions: TRawActions = []
+    public isUnit = true
+
 
     constructor(featureRaw: IRawFeature){
         super(featureRaw)
-        this.mapFeatureActions = featureRaw.actions
     }
 
     defaultActions = ['fight', 'talk', 'rob']

@@ -39,7 +39,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
 
         //hydrate inventory
         this.inventory = new Inventory(getPlayerResult.data.game_settings.inventory)
-        console.log('%c Hydrated inventory:', 'color:rgb(182, 86, 158);', this.inventory)
+        console.log('%c Hydrated inventory:', 'color:darkgreen;', this.inventory)
 
 
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok

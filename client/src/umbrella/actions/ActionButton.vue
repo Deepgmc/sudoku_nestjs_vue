@@ -10,7 +10,6 @@ const props = defineProps({
         required: true
     },
 })
-console.log('%c Button props.action:', 'color:rgb(182, 86, 158);', props.action)
 </script>
 
 <template>

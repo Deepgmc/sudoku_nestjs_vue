@@ -5,11 +5,10 @@ export class Portal extends FeatureEntity {
 
     textName: string = 'Переход в другую зону'
     public defaultEntityActions: string[] = []
-    public mapFeatureActions: TRawActions = []
+    public isUnit = false
 
     constructor(featureRaw: IRawFeature){
         super(featureRaw)
-        this.mapFeatureActions = featureRaw.actions
     }
 
     defaultActions = []

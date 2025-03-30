@@ -4,6 +4,7 @@ import type MoveAction from "@/umbrella/actions/Move"
 import type RobAction from "@/umbrella/actions/Rob"
 import type TalkAction from "@/umbrella/actions/Talk"
 import CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
+import type { rawItem } from "./ItemsInterfaces"
 export interface IArea {
     areaName: string,
     districts: IDistrict[][],
@@ -48,7 +49,8 @@ export interface ICellObject {
 export type TCellRawFeatures = IRawFeature[]
 export interface IRawFeature {
     name: string,
-    actions: TRawActions
+    actions: TRawActions,
+    items: rawItem[]
 }
 export interface IFeature {
     [key: string]: any

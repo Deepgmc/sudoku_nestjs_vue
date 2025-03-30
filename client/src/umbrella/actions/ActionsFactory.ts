@@ -49,7 +49,3 @@ export function ActionsFactory (
     if(actionEntity === null) throw new Error('Invalid ActionFactory creation: ' + action)
     return actionEntity
 }
-
-function capitalizeFirstLetter(val: string) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-}

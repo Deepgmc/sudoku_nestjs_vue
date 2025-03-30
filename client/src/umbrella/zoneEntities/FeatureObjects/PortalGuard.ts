@@ -5,11 +5,10 @@ export class PortalGuard extends FeatureEntity {
 
     textName: string = 'Охранник портала'
     public defaultEntityActions: string[] = []
-    public mapFeatureActions: TRawActions = []
+    public isUnit = true
 
     constructor(featureRaw: IRawFeature){
         super(featureRaw)
-        this.mapFeatureActions = featureRaw.actions
     }
 
     defaultActions = ['fight', 'talk', 'rob']

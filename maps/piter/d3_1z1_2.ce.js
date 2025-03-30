@@ -176,16 +176,26 @@ export const map = {
                 features: []
             },
         ],
-        [//!HOME DUMP
+        [//! DUMP
             {
                 obj: {
                     name: 'houseDump',
                     orientation: 's-n',
                 },
                 features: [
-                    {//!homeless
+                    {//! homeless
                         name: 'homeless',
-                        actions: ['askAboutHome']
+                        actions: ['askAboutHome'],
+                        items: [
+                            {
+                                name: 'knife_01',
+                                quantity: 1
+                            },
+                            {
+                                name: 'shirt_01',
+                                quantity: 1
+                            },
+                        ]
                     }
                 ]
             },
@@ -242,10 +252,16 @@ export const map = {
                 },
                 features: []
             },
-            {
+            {//!umbrella badge
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
+                    items: [
+                        {
+                            name: 'umbrellaBadge',
+                            quantity: 1
+                        },
+                    ]
                 },
                 features: []
             },
