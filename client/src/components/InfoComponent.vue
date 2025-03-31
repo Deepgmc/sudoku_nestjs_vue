@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineEmits } from 'vue'
 import ActionButton from '@/umbrella/actions/ActionButton.vue';
-import type MapAction from '@/umbrella/actions/MapAction';
+import type { TActionPayload } from '@/interfaces/MapInterfaces';
 
 
 
@@ -10,11 +10,10 @@ console.log('%c clickedCell component:', 'color:rgb(182, 86, 158);', props.click
 
 
 const emit = defineEmits(['infoActionsClick'])
-const handleInfoActions = (action: MapAction) => {
+const handleInfoActions = (actionPayload: TActionPayload) => {
     //прокидываем событие выше
-    emit('infoActionsClick', action)
+    emit('infoActionsClick', actionPayload)
 }
-const clickedCellFeatures = props.clickedCell.cell.features
 </script>
 
 
@@ -25,9 +24,9 @@ const clickedCellFeatures = props.clickedCell.cell.features
         Description:
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
         <hr>
-        <span v-if="props.clickedCell.cell.items.length">На земле валяется:</span>
+        <span v-if="props.clickedCell.cell.inventory.items.length">На земле валяется:</span>
         <span v-else>На земле нет ничего примечательного</span>
-        <div v-for="item in props.clickedCell.cell.items">
+        <div v-for="item in props.clickedCell.cell.inventory.items">
             <span class="ground_item_icon" v-html="item.item.icon"></span> {{ item.item.description }}
         </div>
         <hr>
@@ -39,6 +38,8 @@ const clickedCellFeatures = props.clickedCell.cell.features
                 v-for="action in feature.actions"
                 :action="action"
                 :clickedCell="clickedCell"
+                type="featureAction"
+                :feature="feature"
                 @info-actions-click="handleInfoActions"
             >{{action.textName}}</ActionButton>
         </div>
@@ -48,6 +49,7 @@ const clickedCellFeatures = props.clickedCell.cell.features
             v-for="action in props.clickedCell.cell.actions"
             :action="action"
             :clickedCell="clickedCell"
+            type="mapAction"
             @info-actions-click="handleInfoActions"
         >{{action.textName}}</ActionButton>
 

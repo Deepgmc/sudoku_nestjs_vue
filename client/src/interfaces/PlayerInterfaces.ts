@@ -32,5 +32,9 @@ export interface IEquiped {
 }
 export interface IInventory {
     maxSlots: number,
-    items: IInventoryItem[]
+    items: IInventoryItem[],
+    getItems: () => IInventoryItem[],
+    addItems: (items: IInventoryItem[]) => void,
+    clean: () => void,
+    [key: string]: any
 }

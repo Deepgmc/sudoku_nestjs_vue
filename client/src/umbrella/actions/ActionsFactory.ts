@@ -1,5 +1,7 @@
 import type MapAction from './MapAction.ts'
 import type { TRawAction } from '@/interfaces/MapInterfaces.ts'
+import type FeatureEntity from '../zoneEntities/FeatureObjects/FeatureEntity.ts'
+
 import RobAction from './Rob.ts'
 import MoveAction from './Move.ts'
 import FightAction from './Fight.ts'
@@ -10,8 +12,10 @@ import LookWindowAction from './LookWindow.ts'
 import AskAboutHomeAction from './AskAboutHome.ts'
 
 
+
 export function ActionsFactory (
-    action: TRawAction
+    action: TRawAction,
+    feature?: FeatureEntity
 ): MapAction {
     let actionEntity: MapAction | null = null
     try {
@@ -24,16 +28,19 @@ export function ActionsFactory (
                 actionEntity = new DigAction(action)
                 break;
             case 'rob':
-                actionEntity = new RobAction(action)
+                if(!feature) throw new Error('No feature')
+                actionEntity = new RobAction(action, feature)
                 break;
             case 'fight':
-                actionEntity = new FightAction(action)
+                if(!feature) throw new Error('No feature')
+                actionEntity = new FightAction(action, feature)
                 break;
             case 'look':
                 actionEntity = new LookAction(action)
                 break;
             case 'talk':
-                actionEntity = new TalkAction(action)
+                if(!feature) throw new Error('No feature')
+                actionEntity = new TalkAction(action, feature)
                 break;
             case 'lookWindow':
                 actionEntity = new LookWindowAction(action)

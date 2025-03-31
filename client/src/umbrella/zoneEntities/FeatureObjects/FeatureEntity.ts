@@ -1,5 +1,5 @@
-import type { IInventoryItem } from "@/interfaces/ItemsInterfaces";
 import type { IAction, IRawFeature, TRawAction, TRawActions } from "@/interfaces/MapInterfaces";
+import type { IInventory } from "@/interfaces/PlayerInterfaces";
 
 export default abstract class FeatureEntity {
 
@@ -7,13 +7,14 @@ export default abstract class FeatureEntity {
     abstract textName: string
     abstract isUnit: boolean
 
-    public items: IInventoryItem[] = []
+    public inventory: IInventory = {} as IInventory
 
     constructor(featureRaw: IRawFeature){
         this.objectName = featureRaw.name
         this.mapFeatureActions = featureRaw.actions
     }
 
+    abstract defaultActions: TRawActions
     public mapFeatureActions: TRawActions
     public generalDefaultActions: TRawAction[] = ['look'] as TRawAction[]
     abstract defaultEntityActions: TRawActions

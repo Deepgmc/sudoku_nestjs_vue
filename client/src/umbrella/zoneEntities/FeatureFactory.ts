@@ -1,15 +1,16 @@
-import type { IRawFeature, IFeature, TRawAction } from "@/interfaces/MapInterfaces"
+import type { IRawFeature, TRawAction } from "@/interfaces/MapInterfaces"
 import { ActionsFactory } from "../actions/ActionsFactory"
 import { Homeless } from "./FeatureObjects/Homeless"
 import { Portal } from "./FeatureObjects/Portal"
 import { PortalGuard } from "./FeatureObjects/PortalGuard"
-import Item from "../items/Items"
+import Inventory from "../items/Inventory"
+import type FeatureEntity from "./FeatureObjects/FeatureEntity"
 
 
 export function FeatureFactory (
     featureRaw: IRawFeature
-): IFeature {
-    let featureEntity: IFeature | null
+): FeatureEntity {
+    let featureEntity: FeatureEntity | null
     try {
         //featureEntity = eval(`new ${capitalizeFirstLetter(featureRaw.name)}(featureRaw)`)
         switch(featureRaw.name){
@@ -33,11 +34,11 @@ export function FeatureFactory (
     //hydrating actions for this feature
     featureEntity.actions = featureEntity.defaultActions.concat(featureEntity.generalDefaultActions, featureEntity.defaultEntityActions, featureEntity.mapFeatureActions)
         .map((rawAction: TRawAction) => {
-            return ActionsFactory(rawAction)
+            return ActionsFactory(rawAction, featureEntity)
         })
 
     //hydrating feature items
-    featureEntity.items = Item.hydrateRawItemsArray(featureRaw.items)
+    featureEntity.inventory = new Inventory(featureRaw.items, 5)
 
     return featureEntity
 }

@@ -3,8 +3,13 @@ import type FightAction from "@/umbrella/actions/Fight"
 import type MoveAction from "@/umbrella/actions/Move"
 import type RobAction from "@/umbrella/actions/Rob"
 import type TalkAction from "@/umbrella/actions/Talk"
-import CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
+import type CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
 import type { rawItem } from "./ItemsInterfaces"
+import type FeatureEntity from "@/umbrella/zoneEntities/FeatureObjects/FeatureEntity"
+import type ZoneManager from "@/umbrella/ZoneManager"
+import type PlayerManager from "@/umbrella/PlayerManager"
+
+
 export interface IArea {
     areaName: string,
     districts: IDistrict[][],
@@ -67,3 +72,12 @@ export interface TClickedCell {
 
 export type TAction = string
 export type IAction = RobAction | DigAction | TalkAction | MoveAction | FightAction
+export type TActionPayload = {
+    type: string,
+    clickedCell: CellEntity,
+    action: IAction,
+
+    feature?: FeatureEntity,
+    zoneManager?: ZoneManager
+    player?: PlayerManager
+}

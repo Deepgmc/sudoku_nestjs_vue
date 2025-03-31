@@ -38,7 +38,6 @@ const isMeClicked = computed(() => {
     >
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
-                <!-- need slot here!!! -->
                 <PlayerComponent v-if="props.cell.player" :player="props.cell.player"></PlayerComponent>
             </div>
             <div class="cell_item-top_right">
@@ -48,10 +47,9 @@ const isMeClicked = computed(() => {
             </div>
         </div>
         <div class="cell_item-bottom">
-            <div v-for="item in props.cell.items">
+            <div v-for="item in props.cell.inventory.items">
                 <span v-html="item.item.icon" class="icons_list_item"></span>
             </div>
-            <!-- <div class="cell_item-bottom_button" v-for="action in props.cell.defaultActions">{{ action }}</div> -->
         </div>
     </div>
 </template>

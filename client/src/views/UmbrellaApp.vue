@@ -5,7 +5,7 @@ import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
-import type MapAction from '@/umbrella/actions/MapAction';
+import type { TActionPayload } from '@/interfaces/MapInterfaces';
 import AreaManager from '@/umbrella/AreaManager';
 import PlayerManager from '@/umbrella/PlayerManager';
 
@@ -13,6 +13,7 @@ import AreaComponent from '@/components/map/AreaComponent.vue';
 import Inventory from '@/components/player/Inventory.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import Character from '@/components/player/Character.vue';
+
 
 
 const $networkManager = inject('$networkManager') as NetworkManager
@@ -42,10 +43,9 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
     areaManager.store.clickedCell.y = y
 }
 
-function handleInfoActions(action: MapAction){
+function handleInfoActions(actionPayload: TActionPayload){
     if(!areaManager.store.isCellClicked) return
-    console.log('%c action:', 'color:rgb(182, 86, 158);', action)
-    player.handleMapAction(action)
+    player.handleMapAction(actionPayload)
 }
 
 </script>

@@ -1,6 +1,5 @@
-import type { TAction } from "@/interfaces/MapInterfaces"
+import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces"
 import AreaManager from "../AreaManager"
-import type ZoneManager from "../ZoneManager"
 
 export default abstract class MapAction {
 
@@ -12,5 +11,5 @@ export default abstract class MapAction {
         this.actionName = action
     }
 
-    abstract activate(zone: ZoneManager): void
+    abstract activate(actionPayload: TActionPayload): void
 }

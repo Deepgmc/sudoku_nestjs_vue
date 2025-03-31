@@ -32,8 +32,9 @@
     color: rgb(116, 116, 116);
 }
 .sideStreet:after {
-    content: "\2225";//1D11B   //2551
-    color:rgb(54, 48, 45);
+    content: "\2225";//"\25AE";//"\2225";//1D11B   //2551
+    color:rgb(68, 57, 52);
+    font-size: 5.5em;
 }
 .houseDump:after {
     content: "\1F5D1";

@@ -1,9 +1,9 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import { type IInventory, type IPlayer, type IPlayerRaw } from '@/interfaces/PlayerInterfaces';
 import type CellEntity from './zoneEntities/CellObjects/CellEntity';
-import type MapAction from './actions/MapAction';
 import ZoneManager from './ZoneManager';
 import Inventory from './items/Inventory';
+import type { TActionPayload } from '@/interfaces/MapInterfaces';
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -39,7 +39,6 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
 
         //hydrate inventory
         this.inventory = new Inventory(getPlayerResult.data.game_settings.inventory)
-        console.log('%c Hydrated inventory:', 'color:darkgreen;', this.inventory)
 
 
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
@@ -81,7 +80,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         return this.store.inventory
     }
     set inventory(newInventory: IInventory){
-        this.store.inventory = Object.assign(this.store.inventory, newInventory)
+        this.store.inventory = newInventory
     }
     get level(){return this.store.level}
     set level(newLevel: number){this.store.level = newLevel}
@@ -122,8 +121,9 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.y = y
     }
 
-    handleMapAction(action: MapAction){
-        const zoneManager = ZoneManager.getInstance()
-        action.activate(zoneManager)
+    handleMapAction(actionPayload: TActionPayload){
+        actionPayload.zoneManager = ZoneManager.getInstance()
+        actionPayload.player = this
+        actionPayload.action.activate(actionPayload)
     }
 }

@@ -1,16 +1,28 @@
-import type { TAction } from "@/interfaces/MapInterfaces";
+import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
+import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 
 export default class RobAction extends MapAction {
 
     public textName: string = 'Ограбить'
+    public feature: FeatureEntity
 
-    constructor(action: TAction){
+    constructor(action: TAction, feature: FeatureEntity){
         super(action)
+        this.feature = feature
     }
 
-    activate(){
-        console.log('%c ROB activate:', 'color:rgb(182, 86, 158);', 123)
+    activate(actionPayload: TActionPayload){
+        console.log('%c ROB activate (this.feature): ', 'color:rgb(182, 86, 158);', this.feature)
+        console.log('%c actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
+
+        if(!actionPayload.player) throw new Error('Wrong actionPayload, no player')
+        if(!actionPayload.feature) throw new Error('Wrong actionPayload, no feature')
+
+        actionPayload.player.inventory.addItems(actionPayload.feature.inventory.getItems())
+        actionPayload.feature.inventory.clean()
+
+        //actionPayload.player.inventory = actionPayload.feature.inventory
     }
 
 }

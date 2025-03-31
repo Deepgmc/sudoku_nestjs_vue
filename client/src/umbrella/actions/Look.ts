@@ -1,5 +1,6 @@
 import type { TAction } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
+import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 
 export default class LookAction extends MapAction {
 

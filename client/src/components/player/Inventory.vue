@@ -23,7 +23,7 @@ const props = defineProps({
 .inventory_container{
     display:flex;
     flex-flow: row wrap;
-    .inventory_item{
+    .inventory_item {
         border: 1px solid darkgrey;
         width: 40px;
         height: 40px;
