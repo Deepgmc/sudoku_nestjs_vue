@@ -30,8 +30,9 @@ export default defineConfig(({ mode }) => {
             },
         },
         server: {
-            //open: true,
-            open: '/umbrella.html',
+            open: true,
+            //open: '/umbrella.html',
+            //port: 5555,
             proxy: {
                 '/auth': {
                     target: `http://localhost:/${env.PROXY_DEV_PORT}`,

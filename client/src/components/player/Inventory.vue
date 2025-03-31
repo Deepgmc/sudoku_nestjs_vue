@@ -12,10 +12,8 @@ const props = defineProps({
 
 <template>
     <div class="inventory_container">
-        <div class="inventory_item" v-for="inventoryItem in inventory.items">
-            <div class="item_ico" v-html="inventoryItem.item.icon"></div>
-            <!-- <div class="item_ico" v-html="inventoryItem.item.icon"></div>
-            {{ inventoryItem.item.itemId }} ({{ inventoryItem.quantity }}) -->
+        <div class="inventory_item" v-for="(inventoryCell, index) in inventory.maxSlots">
+            <div v-if="inventory.items[index]" class="item_ico" v-html="inventory.items[index].item.icon"></div>
         </div>
     </div>
 </template>
@@ -30,6 +28,7 @@ const props = defineProps({
         width: 40px;
         height: 40px;
         margin: 0 1px 0 0;
+        padding: 2px 0 0 0;
     }
     .inventory_item:hover{
         border: 1px solid globals.$oliveColor;

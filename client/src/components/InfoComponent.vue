@@ -19,14 +19,21 @@ const clickedCellFeatures = props.clickedCell.cell.features
 
 
 <template>
-    <div>
+    <div class="infoComponent_container">
         <h1>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.mapCellObjectName }})</h1>
         <hr>
         Description:
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
         <hr>
+        <span v-if="props.clickedCell.cell.items.length">На земле валяется:</span>
+        <span v-else>На земле нет ничего примечательного</span>
+        <div v-for="item in props.clickedCell.cell.items">
+            <span class="ground_item_icon" v-html="item.item.icon"></span> {{ item.item.description }}
+        </div>
+        <hr>
         Features:
         <div class="info_feature-item" v-for="feature in props.clickedCell.cell.features" :key="feature.objectName">
+            <span class="info_feature-item_icon" v-html="feature.getFeatureInfoIcon()"></span>
             {{ feature.textName }}
             <ActionButton
                 v-for="action in feature.actions"
@@ -52,5 +59,12 @@ const clickedCellFeatures = props.clickedCell.cell.features
 <style lang="scss">
 .info_feature-item{
     display: flex;
+    flex-flow: column wrap;
+    .info_feature-item_icon{
+        font-size: 5em;
+    }
+}
+.ground_item_icon{
+    font-size: 3em;
 }
 </style>

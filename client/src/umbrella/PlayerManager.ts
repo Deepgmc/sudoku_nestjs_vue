@@ -88,7 +88,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
     get experience(){return this.store.experience}
     set experience(newExperience: number){this.store.experience = newExperience}
     get health(){return this.store.health}
-    set health(newHealth: number){this.store.level = newHealth}
+    set health(newHealth: number){this.store.health = newHealth}
     get strength(){return this.store.strength}
     set strength(newStrength: number){this.store.strength = newStrength}
     get agility(){return this.store.agility}

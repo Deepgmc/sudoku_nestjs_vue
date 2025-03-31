@@ -28,7 +28,7 @@ export function ItemFactory(rawItem: rawItem): IItem {
             break
         case 'umbrellaBadge':
             factoryOptions.description = 'Удостоверение сотрудника корпорации Umbrella'
-            factoryOptions.icon = '&#127746'
+            factoryOptions.icon = '&#128220'
             break
     }
     return new Item(factoryOptions)

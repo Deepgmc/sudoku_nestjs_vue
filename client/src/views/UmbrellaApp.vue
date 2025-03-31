@@ -3,14 +3,17 @@ import { inject, onBeforeMount, provide } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
-import AreaManager from '@/umbrella/AreaManager';
-import PlayerManager from '@/umbrella/PlayerManager';
-import AreaComponent from '@/components/map/AreaComponent.vue';
-import Inventory from '@/components/player/Inventory.vue';
-import InfoComponent from '@/components/InfoComponent.vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 import type MapAction from '@/umbrella/actions/MapAction';
+import AreaManager from '@/umbrella/AreaManager';
+import PlayerManager from '@/umbrella/PlayerManager';
+
+import AreaComponent from '@/components/map/AreaComponent.vue';
+import Inventory from '@/components/player/Inventory.vue';
+import InfoComponent from '@/components/InfoComponent.vue';
+import Character from '@/components/player/Character.vue';
+
 
 const $networkManager = inject('$networkManager') as NetworkManager
 const $authManager = inject('$authManager') as AuthManager
@@ -49,7 +52,7 @@ function handleInfoActions(action: MapAction){
 
 <template>
     <div class="umbrella-container">
-        <div class="umbrella_map_container">
+        <div class="umbrella_map_container block_component">
             <AreaComponent
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
                 :isCellClicked="areaManager.store.isCellClicked"
@@ -59,16 +62,25 @@ function handleInfoActions(action: MapAction){
             </AreaComponent>
         </div>
         <div class="umbrella_info_container">
-            <div class="info_block">
+            <div class="umbrella_info_block">
                 <InfoComponent
                     v-if="areaManager.store.isCellClicked"
                     :clickedCell="areaManager.store.clickedCell"
                     @info-actions-click="handleInfoActions"
+                    class="block_component"
                 >
                 </InfoComponent>
             </div>
-            <div class="inventory_block">
-                <Inventory :inventory="player.inventory"></Inventory>
+            <div class="player_block">
+                <Character
+                    :player="player"
+                    class="block_component"
+                ></Character>
+                <Inventory
+                    :inventory="player.inventory"
+                    class="block_component"
+                >
+                </Inventory>
             </div>
         </div>
     </div>
@@ -76,6 +88,11 @@ function handleInfoActions(action: MapAction){
 
 <style lang="scss">
 @use '@/assets/globalVariables.scss' as globals;
+.block_component{
+    border: 2px dashed globals.$oliveColor;
+    margin: 10px 5px 5px 5px;
+    padding: 5px;
+}
 .umbrella-container {
     min-height: 100vh;
     display: flex;
@@ -92,14 +109,13 @@ function handleInfoActions(action: MapAction){
     flex-direction: column;
     flex-wrap: nowrap;
     & > div {
-        margin-top:20px;
-        border-top: 3px dashed rgb(44, 56, 0);
-        padding-top: 5px;
+        // margin-top:20px;
+        // padding-top: 5px;
     }
-    .info_block{
+    .umbrella_info_block{
         width: globals.$info-width;
     }
-    .inventory_block{
+    .player_block{
         width: globals.$info-width;
     }
 }
