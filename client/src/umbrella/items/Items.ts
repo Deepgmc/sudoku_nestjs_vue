@@ -7,28 +7,34 @@ export function ItemFactory(rawItem: rawItem): IItem {
         itemId     : itemId,
         itemNumber : itemNumber,
         description: '',
-        icon       : ''
+        icon       : '',
+        textName   : ''
     }
     switch(itemId){
         case 'pants':
-            factoryOptions.description = 'Штаны'
+            factoryOptions.description = 'Штаны. Мятые и грязные'
             factoryOptions.icon = '&#128086' //1F456
+            factoryOptions.textName = 'Штаны'
             break
         case 'water':
             factoryOptions.description = 'Питьевая вода'
             factoryOptions.icon = '&#127862' //1F376
+            factoryOptions.textName = 'Вода'
             break
         case 'knife':
             factoryOptions.description = 'Нож'
             factoryOptions.icon = '&#128298'
+            factoryOptions.textName = 'Нож'
             break
         case 'shirt':
-            factoryOptions.description = 'Футболка'
+            factoryOptions.description = 'Грязная футболка'
             factoryOptions.icon = '&#128085'
+            factoryOptions.textName = 'Футболка'
             break
         case 'umbrellaBadge':
             factoryOptions.description = 'Удостоверение сотрудника корпорации Umbrella'
             factoryOptions.icon = '&#128220'
+            factoryOptions.textName = 'Удостоверение'
             break
     }
     return new Item(factoryOptions)
@@ -55,11 +61,13 @@ export default class Item implements IItem {
     public itemNumber : string
     public icon       : string = '&#10067'              //'&#x2753;'         //default icon
     public description: string = 'Default description'
+    public textName   : string = 'Text name'
 
     constructor(factoryOptions: IfactoryItemOptions){
         this.itemId      = factoryOptions.itemId
         this.itemNumber  = factoryOptions.itemNumber
         this.description = factoryOptions.description
+        this.textName    = factoryOptions.textName
         this.icon        = factoryOptions.icon
     }
 }

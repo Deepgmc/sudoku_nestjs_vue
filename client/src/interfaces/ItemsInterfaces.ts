@@ -1,11 +1,12 @@
 export interface IItem {
-    itemId: TItemId,
-    itemNumber: string,
-    icon: string
-    description: string
+    itemId     : TItemId,
+    itemNumber : string,
+    icon       : string,
+    description: string,
+    textName   : string
 }
 export interface IInventoryItem {
-    item: IItem
+    item: IItem,
     quantity: number
 }
 
@@ -20,8 +21,9 @@ export interface rawItem {
 
 //transmission from itemFactory to Item
 export interface IfactoryItemOptions {
-    itemId     : string
+    itemId     : string,
+    textName   : string,
     itemNumber : string,
-    description: string
+    description: string,
     icon       : string
 }

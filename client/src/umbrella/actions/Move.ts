@@ -2,6 +2,7 @@ import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type { IChatMessage } from "../Chat";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
+import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 
 export default class MoveAction extends MapAction {
 
@@ -11,7 +12,7 @@ export default class MoveAction extends MapAction {
         super(action)
     }
 
-    activate(actionPayload: TActionPayload): IChatMessage{
+    activate(actionPayload: TActionPayload): IChatMessage {
         //! убрать отсюда clickedCell, ведь перемещение может быть не только к нажатой ячейке
         //! сюда нужно передавать координаты в чистом виде (или ячейку)
         const clickedCell = this.areaManager.store.clickedCell
@@ -19,10 +20,8 @@ export default class MoveAction extends MapAction {
         if(!clickedCell.x || !clickedCell.y) {throw new Error('Wrong cell to move')}
         if(!actionPayload.zoneManager) {throw new Error('Wrong actionPayload, no zoneManager')}
 
-        const chatMessage = this.getChatMessage(actionPayload, clickedCell.cell)
-
-        actionPayload.zoneManager.setAndMovePlayer(clickedCell.x, clickedCell.y)
-        return chatMessage
+        actionPayload.zoneManager.setAndMovePlayer({x: clickedCell.x, y: clickedCell.y})
+        return this.getChatMessage(actionPayload, clickedCell.cell)
     }
 
     getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
@@ -38,6 +37,12 @@ export default class MoveAction extends MapAction {
         }
 
         return {text: text.join('. ')}
+    }
+
+    isActionActive(player: IPlayer, cell: CellEntity) {
+        let isMovable = false
+        isMovable = cell.isMovable()
+        return isMovable
     }
 
     /** в какую сторону перемещаемся (просто текст) */

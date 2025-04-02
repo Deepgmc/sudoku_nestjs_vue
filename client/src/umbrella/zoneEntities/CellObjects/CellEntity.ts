@@ -31,7 +31,7 @@ export default abstract class CellEntity {
     abstract passability: boolean
     abstract backgroundClass: string
 
-    public generalDefaultActions: TRawAction[] = ['move', 'look', 'pickUp'] as TRawAction[]
+    public generalDefaultActions: TRawAction[] = ['move', 'pickUp'] as TRawAction[]
     abstract defaultEntityActions: TRawActions
     public actions: IAction[] = [] as IAction[] //собранные с разных источников действия внутри конкретной одной ячейки
 

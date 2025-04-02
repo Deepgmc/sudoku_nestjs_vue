@@ -83,3 +83,7 @@ button{
 .info_actionButton:hover{
     color: globals.$linkColorHover
 }
+.info_actionButton_disabled{
+    padding:3px;
+    color: rgb(85, 87, 88);
+}

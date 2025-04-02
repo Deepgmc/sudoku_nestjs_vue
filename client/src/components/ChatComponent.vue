@@ -19,7 +19,7 @@ const props = defineProps({
                         <span>&#129399;</span>
                     </div>
                     <div class="chat_message_text">
-                        {{ message.text }}
+                        <span v-html="message.text"></span>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@ const props = defineProps({
 .chat_message_block {
     display: flex;
     flex-flow: row nowrap;
-    font-size:16px;
+    font-size:12px;
     .chat_message_who{
         width:9%;
     }

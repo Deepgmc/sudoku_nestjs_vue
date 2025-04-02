@@ -33,7 +33,7 @@ zoneManager.hydrateZoneObjects()
 console.log('%c ZoneComponent got raw zone:', 'color:darkgreen;', props.zone)
 console.log('%c ZoneComponent hydrated:', 'color:lightgreen;', zoneManager.store.zone.zoneCells)
 
-zoneManager.setAndMovePlayer(player.x, player.y)
+zoneManager.setAndMovePlayer({x: player.x, y: player.y})
 
 function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
     props.handleCellClick(x, y, cell)//обработали клик на уровне зоны, прокидываем его выше

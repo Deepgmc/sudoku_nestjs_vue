@@ -19,6 +19,7 @@ const handleInfoActions = (actionPayload: TActionPayload) => {
     //прокидываем событие выше
     emit('infoActionsClick', actionPayload)
 }
+
 </script>
 
 
@@ -26,37 +27,38 @@ const handleInfoActions = (actionPayload: TActionPayload) => {
     <div class="infoComponent_container">
         <h1>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.mapCellObjectName }})</h1>
         <hr>
-        Description:
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
-        <hr>
         <span v-if="props.clickedCell.cell.inventory.items.length">На земле валяется:</span>
         <span v-else>На земле нет ничего примечательного</span>
         <div v-for="item in props.clickedCell.cell.inventory.items">
             <span class="ground_item_icon" v-html="item.item.icon"></span> {{ item.item.description }}
         </div>
-        <hr>
-        Features:
-        <div class="info_feature-item" v-for="feature in props.clickedCell.cell.features" :key="feature.objectName">
-            <span class="info_feature-item_icon" v-html="feature.getFeatureInfoIcon()"></span>
-            {{ feature.textName }}
-            <ActionButton
-                v-for="action in feature.actions"
-                :action="action"
-                :clickedCell="clickedCell"
-                type="featureAction"
-                :feature="feature"
-                @info-actions-click="handleInfoActions"
-            >{{action.textName}}</ActionButton>
-        </div>
-        <hr>
-        Actions:
+
+
+        <template v-if="props.clickedCell.cell.features.length > 0">
+            Features:
+            <div class="info_feature-item" v-for="feature in props.clickedCell.cell.features" :key="feature.objectName">
+                <span class="info_feature-item_icon" v-html="feature.getFeatureInfoIcon()"></span>
+                {{ feature.textName }}
+                Feature actions:
+                <ActionButton
+                    v-for="action in feature.actions"
+                    :action="action"
+                    :clickedCell="clickedCell"
+                    type="featureAction"
+                    :feature="feature"
+                    @info-actions-click="handleInfoActions"
+                ></ActionButton>
+            </div>
+        </template>
+        Cell entity actions:
         <ActionButton
             v-for="action in props.clickedCell.cell.actions"
             :action="action"
             :clickedCell="clickedCell"
             type="mapAction"
             @info-actions-click="handleInfoActions"
-        >{{action.textName}}</ActionButton>
+        ></ActionButton>
 
 
     </div>

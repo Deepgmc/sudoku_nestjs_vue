@@ -1,6 +1,9 @@
 import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
+import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
+import type { IChatMessage } from "../Chat";
+import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 
 export default class RobAction extends MapAction {
 
@@ -20,6 +23,16 @@ export default class RobAction extends MapAction {
         if(!actionPayload.feature) throw new Error('Wrong actionPayload, no feature')
 
         actionPayload.player.inventory.transferItemsFrom(actionPayload.feature.inventory)
+    }
+
+    getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
+        if(!cellToMove) return {text: 'Wrong move parameters'}
+        const text: string[] = []
+        return {text: text.join('. ')}
+    }
+
+    isActionActive(player: IPlayer, cell: CellEntity) {
+        return true
     }
 
 }

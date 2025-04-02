@@ -1,4 +1,3 @@
-import type { TActionPayload } from "@/interfaces/MapInterfaces"
 import type AreaManager from "./AreaManager"
 
 export interface IChatMessage {

@@ -2,6 +2,7 @@ import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces"
 import AreaManager from "../AreaManager"
 import type { IChatMessage } from "../Chat"
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity"
+import type { IPlayer } from "@/interfaces/PlayerInterfaces"
 
 export default abstract class MapAction {
 
@@ -16,4 +17,6 @@ export default abstract class MapAction {
     abstract activate(actionPayload: TActionPayload): void
 
     abstract getChatMessage(actionPayload: TActionPayload, cell?: CellEntity): IChatMessage
+
+    abstract isActionActive(player: IPlayer, cell: CellEntity): boolean
 }

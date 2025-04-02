@@ -1,4 +1,4 @@
-import type { IZone } from '@/interfaces/MapInterfaces'
+import type { IZone, TCoords } from '@/interfaces/MapInterfaces'
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import {CellEntityFactory} from '@/umbrella/zoneEntities/CellEntityFactory'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
@@ -40,20 +40,20 @@ export default class ZoneManager extends UmbrellaManager {
         this.store.loadZoneToStore(hydratedZone)
     }
 
-    setAndMovePlayer(newX: number, newY: number): void {
-        if(typeof this.zoneCells[newY][newX] === 'undefined'){
-            throw new Error(`Incorrent zoneCells indexes: ${newX}, ${newY}`)
+    setAndMovePlayer(newCoords: TCoords): void {
+        if(typeof this.zoneCells[newCoords.y][newCoords.x] === 'undefined'){
+            throw new Error(`Incorrent zoneCells indexes: ${newCoords.x}, ${newCoords.y}`)
         }
-        const targetCell = this.zoneCells[newY][newX]
+        const targetCell = this.zoneCells[newCoords.y][newCoords.x]
         if(!targetCell.isMovable()){
             throw new Error('Passability false. Cant move!')
         }
         this.removePlayerFromMap()
             .then(res => {
-                this.player.movePlayer(newX, newY, targetCell)
+                this.player.movePlayer(newCoords.x, newCoords.y, targetCell)
                 targetCell.player = this.player
                 this.setPlayerVisibility(this.player)
-                console.log(`%c Player moving to: x${newX} y${newY}`, 'color:rgb(182, 86, 158);', this.player)
+                console.log(`%c Player moving to: x${newCoords.x} y${newCoords.y}`, 'color:rgb(182, 86, 158);', this.player)
             })
     }
 
