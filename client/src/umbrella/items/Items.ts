@@ -1,8 +1,12 @@
-import type { IfactoryItemOptions, IInventoryItem, IItem, rawItem, TItemId, TItemQuantity } from "@/interfaces/ItemsInterfaces"
+import type { IfactoryItemOptions, IInventoryItem, IItem, rawItem, TItemId } from "@/interfaces/ItemsInterfaces"
+import {items} from './ItemsList.ts'
 
 export function ItemFactory(rawItem: rawItem): IItem {
     const itemId = Item.splitRawName(rawItem.name).itemId
     const itemNumber = Item.splitRawName(rawItem.name).itemNumber
+
+    type itemsKey = keyof typeof items
+
     const factoryOptions: IfactoryItemOptions = {
         itemId     : itemId,
         itemNumber : itemNumber,
@@ -10,33 +14,36 @@ export function ItemFactory(rawItem: rawItem): IItem {
         icon       : '',
         textName   : ''
     }
-    switch(itemId){
-        case 'pants':
-            factoryOptions.description = 'Штаны. Мятые и грязные'
-            factoryOptions.icon = '&#128086' //1F456
-            factoryOptions.textName = 'Штаны'
-            break
-        case 'water':
-            factoryOptions.description = 'Питьевая вода'
-            factoryOptions.icon = '&#127862' //1F376
-            factoryOptions.textName = 'Вода'
-            break
-        case 'knife':
-            factoryOptions.description = 'Нож'
-            factoryOptions.icon = '&#128298'
-            factoryOptions.textName = 'Нож'
-            break
-        case 'shirt':
-            factoryOptions.description = 'Грязная футболка'
-            factoryOptions.icon = '&#128085'
-            factoryOptions.textName = 'Футболка'
-            break
-        case 'umbrellaBadge':
-            factoryOptions.description = 'Удостоверение сотрудника корпорации Umbrella'
-            factoryOptions.icon = '&#128220'
-            factoryOptions.textName = 'Удостоверение'
-            break
-    }
+    factoryOptions.description = items[itemId as itemsKey].description
+    factoryOptions.icon = items[itemId as itemsKey].icon
+    factoryOptions.textName = items[itemId as itemsKey].textName
+    // switch(itemId){
+    //     case 'pants':
+    //         factoryOptions.description = items[itemId].description
+    //         factoryOptions.icon = '&#128086' //1F456
+    //         factoryOptions.textName = 'Штаны'
+    //         break
+    //     case 'water':
+    //         factoryOptions.description = 'Питьевая вода'
+    //         factoryOptions.icon = '&#127862' //1F376
+    //         factoryOptions.textName = 'Вода'
+    //         break
+    //     case 'knife':
+    //         factoryOptions.description = 'Нож'
+    //         factoryOptions.icon = '&#128298'
+    //         factoryOptions.textName = 'Нож'
+    //         break
+    //     case 'shirt':
+    //         factoryOptions.description = 'Грязная футболка'
+    //         factoryOptions.icon = '&#128085'
+    //         factoryOptions.textName = 'Футболка'
+    //         break
+    //     case 'umbrellaBadge':
+    //         factoryOptions.description = 'Удостоверение сотрудника корпорации Umbrella'
+    //         factoryOptions.icon = '&#128220'
+    //         factoryOptions.textName = 'Удостоверение'
+    //         break
+    // }
     return new Item(factoryOptions)
 }
 
