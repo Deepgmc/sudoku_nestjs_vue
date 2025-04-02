@@ -3,6 +3,9 @@ import type FightAction from "@/umbrella/actions/Fight"
 import type MoveAction from "@/umbrella/actions/Move"
 import type RobAction from "@/umbrella/actions/Rob"
 import type TalkAction from "@/umbrella/actions/Talk"
+import type PickUpAction from "@/umbrella/actions/PickUp"
+import type LookWindow from "@/umbrella/actions/LookWindow"
+
 import type CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
 import type { rawItem } from "./ItemsInterfaces"
 import type FeatureEntity from "@/umbrella/zoneEntities/FeatureObjects/FeatureEntity"
@@ -71,13 +74,15 @@ export interface TClickedCell {
 }
 
 export type TAction = string
-export type IAction = RobAction | DigAction | TalkAction | MoveAction | FightAction
+
+export type IAction = RobAction | DigAction | TalkAction | MoveAction | FightAction | PickUpAction | LookWindow
+
 export type TActionPayload = {
     type: string,
-    clickedCell: CellEntity,
+    clickedCell: TClickedCell,
     action: IAction,
 
     feature?: FeatureEntity,
     zoneManager?: ZoneManager
-    player?: PlayerManager
+    player: PlayerManager
 }

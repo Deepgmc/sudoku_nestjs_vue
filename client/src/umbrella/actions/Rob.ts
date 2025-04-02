@@ -19,10 +19,7 @@ export default class RobAction extends MapAction {
         if(!actionPayload.player) throw new Error('Wrong actionPayload, no player')
         if(!actionPayload.feature) throw new Error('Wrong actionPayload, no feature')
 
-        actionPayload.player.inventory.addItems(actionPayload.feature.inventory.getItems())
-        actionPayload.feature.inventory.clean()
-
-        //actionPayload.player.inventory = actionPayload.feature.inventory
+        actionPayload.player.inventory.transferItemsFrom(actionPayload.feature.inventory)
     }
 
 }

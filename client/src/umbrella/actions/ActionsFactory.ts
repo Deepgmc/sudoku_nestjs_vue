@@ -9,7 +9,7 @@ import TalkAction from './Talk.ts'
 import DigAction from './Dig.ts'
 import LookAction from './Look.ts'
 import LookWindowAction from './LookWindow.ts'
-import AskAboutHomeAction from './AskAboutHome.ts'
+import PickUpAction from './PickUp.ts'
 
 
 
@@ -45,8 +45,8 @@ export function ActionsFactory (
             case 'lookWindow':
                 actionEntity = new LookWindowAction(action)
                 break;
-            case 'askAboutHome':
-                actionEntity = new AskAboutHomeAction(action)
+            case 'pickUp':
+                actionEntity = new PickUpAction(action)
                 break;
         }
     } catch(_e: any) {

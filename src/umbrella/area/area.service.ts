@@ -16,8 +16,8 @@ export class AreaService {
 
     async getZoneFile(districtCoords: any, zoneCoords: any) {
         try {
-            const {map} = await import(`../../../maps/piter/d${districtCoords.x}_${districtCoords.y}z${zoneCoords.x}_${zoneCoords.y}.ce.js`)
-            return JSON.stringify(map)
+            const {zone} = await import(`../../../maps/piter/d${districtCoords.x}_${districtCoords.y}z${zoneCoords.x}_${zoneCoords.y}.ce.js`)
+            return JSON.stringify(zone)
         } catch (_e: any) {
             throw new NotFoundException()
         }

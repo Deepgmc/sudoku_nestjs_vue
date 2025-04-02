@@ -1,4 +1,5 @@
-export const map = {
+export const zone = {
+    level: 1,
     zoneCells: [
         [//HOME PORTAL
             {
@@ -185,7 +186,7 @@ export const map = {
                 features: [
                     {//! homeless
                         name: 'homeless',
-                        actions: ['askAboutHome'],
+                        actions: [],
                         items: [
                             {
                                 name: 'knife_01',
