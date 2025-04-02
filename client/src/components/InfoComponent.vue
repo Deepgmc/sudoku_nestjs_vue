@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { defineEmits } from 'vue'
+import { defineEmits, type PropType } from 'vue'
 import ActionButton from '@/umbrella/actions/ActionButton.vue';
-import type { TActionPayload } from '@/interfaces/MapInterfaces';
+import type { TActionPayload, TClickedCell } from '@/interfaces/MapInterfaces';
 
 
 
-const props = defineProps(['clickedCell'])
+const props = defineProps({
+    clickedCell: {
+        type: Object as PropType<TClickedCell>,
+        required: true
+    },
+})
 console.log('%c clickedCell component:', 'color:rgb(182, 86, 158);', props.clickedCell)
 
 

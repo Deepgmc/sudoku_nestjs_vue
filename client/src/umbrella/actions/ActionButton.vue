@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { IAction, TActionPayload } from '@/interfaces/MapInterfaces';
-import type { PropType } from 'vue';
-import type CellEntity from '../zoneEntities/CellObjects/CellEntity';
+import type { IAction, TActionPayload, TClickedCell } from '@/interfaces/MapInterfaces';
+import { inject, type PropType } from 'vue';
 import type FeatureEntity from '../zoneEntities/FeatureObjects/FeatureEntity';
+import type PlayerManager from '../PlayerManager';
 
-
+const player = inject('player') as PlayerManager
 const props = defineProps({
     type: {
         type: String,
@@ -15,7 +15,7 @@ const props = defineProps({
         required: true
     },
     clickedCell: {
-        type: Object as PropType<CellEntity>,
+        type: Object as PropType<TClickedCell>,
         required: true
     },
     feature: {
@@ -25,6 +25,7 @@ const props = defineProps({
 })
 const actionPayload: TActionPayload = {
     type: props.type,
+    player: player,
     clickedCell: props.clickedCell,
     feature: props.feature,
     action: props.action,

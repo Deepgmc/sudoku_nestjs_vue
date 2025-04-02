@@ -121,9 +121,10 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.y = y
     }
 
-    handleMapAction(actionPayload: TActionPayload){
+    handleMapAction(actionPayload: TActionPayload, next: (msg: any) => void){
         actionPayload.zoneManager = ZoneManager.getInstance()
         actionPayload.player = this
-        actionPayload.action.activate(actionPayload)
+        const chatMessage = actionPayload.action.activate(actionPayload)
+        next(chatMessage)
     }
 }

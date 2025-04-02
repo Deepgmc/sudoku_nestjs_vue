@@ -8,11 +8,13 @@ import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 import type { TActionPayload } from '@/interfaces/MapInterfaces';
 import AreaManager from '@/umbrella/AreaManager';
 import PlayerManager from '@/umbrella/PlayerManager';
+import Chat, { type IChatMessage } from '@/umbrella/Chat'
 
 import AreaComponent from '@/components/map/AreaComponent.vue';
 import Inventory from '@/components/player/Inventory.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import Character from '@/components/player/Character.vue';
+import ChatComponent from '@/components/ChatComponent.vue';
 
 
 
@@ -24,17 +26,22 @@ UmbrellaManager.$authManager = $authManager;
 UmbrellaManager.$networkManager = $networkManager;
 
 //instantiating this objects, just they create a new instance
-const areaManager = AreaManager.getInstance()
-const player = PlayerManager.getInstance()
+const areaManager: AreaManager = AreaManager.getInstance()
+const player: PlayerManager = PlayerManager.getInstance()
+const chat: Chat = new Chat(areaManager)
 
 provide('areaManager', areaManager)
 provide('player', player)
+provide('chat', chat)
 
 
 onBeforeMount(() => {
     areaManager.init() //loading map
     player.init() //loading player data
+    //chat.addMessage().plainText('Umbrella init finished. Some long message here for seen what happens')
 })
+
+
 
 
 const handleCellClick = function(x: number, y: number, cell: CellEntity){
@@ -45,7 +52,9 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
 
 function handleInfoActions(actionPayload: TActionPayload){
     if(!areaManager.store.isCellClicked) return
-    player.handleMapAction(actionPayload)
+    player.handleMapAction(actionPayload, (msg: any) => {
+        chat.addMessage(msg)
+    })
 }
 
 </script>
@@ -62,6 +71,12 @@ function handleInfoActions(actionPayload: TActionPayload){
             </AreaComponent>
         </div>
         <div class="umbrella_info_container">
+            <div class="umbrella_chat_block block_component">
+                <ChatComponent
+                    :chat="chat"
+                    class="chat_component"
+                ></ChatComponent>
+            </div>
             <div class="umbrella_info_block">
                 <InfoComponent
                     v-if="areaManager.store.isCellClicked"
@@ -88,26 +103,25 @@ function handleInfoActions(actionPayload: TActionPayload){
 
 <style lang="scss">
 @use '@/assets/globalVariables.scss' as globals;
-.block_component{
-    border: 2px dashed globals.$oliveColor;
-    margin: 10px 5px 5px 5px;
-    padding: 5px;
-}
 .umbrella-container {
     min-height: 100vh;
     display: flex;
     flex-direction: row;
 }
-
 .umbrella_map_container {
     display: flex;
     width: globals.$map-width;
     min-height: globals.$map-height;
 }
+.block_component{
+    border: 2px dashed globals.$oliveColor;
+    margin: 10px 5px 5px 5px;
+    padding: 5px;
+}
+
 .umbrella_info_container{
     display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
+    flex-flow: column nowrap;
     & > div {
         // margin-top:20px;
         // padding-top: 5px;
@@ -118,5 +132,11 @@ function handleInfoActions(actionPayload: TActionPayload){
     .player_block{
         width: globals.$info-width;
     }
+}
+.umbrella_chat_block {
+    display:flex;
+    flex-flow: column nowrap;
+    // width: globals.$chat-width;
+    height: globals.$chat-block-height;
 }
 </style>

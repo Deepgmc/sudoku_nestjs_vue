@@ -31,9 +31,9 @@ export default class ZoneManager extends UmbrellaManager {
         //replacing zoneCells with new one
         const {zoneCells, ...tmpZone} = this.zoneRaw
         const hydratedZone: IZoneHydrated = {...tmpZone, zoneCells: {} as THydratedZoneCells}
-        hydratedZone.zoneCells = this.zoneRaw.zoneCells.map(row => {
-            return row.map(cell => {
-                return CellEntityFactory(cell.obj, cell.features)
+        hydratedZone.zoneCells = this.zoneRaw.zoneCells.map((row, indexY) => {
+            return row.map((cell, indexX) => {
+                return CellEntityFactory(cell.obj, cell.features, {x: indexX, y: indexY})
             })
         })
 

@@ -35,4 +35,8 @@ export default class Inventory implements IInventory {
     public clean(){
         this.items = []
     }
+
+    public isEmpty(){
+        return this.items.length < 1
+    }
 }

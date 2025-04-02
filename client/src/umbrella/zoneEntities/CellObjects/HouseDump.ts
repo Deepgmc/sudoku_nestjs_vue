@@ -1,4 +1,4 @@
-import type { ICellObject, TCellRawFeatures, TRawActions } from "@/interfaces/MapInterfaces"
+import type { ICellObject, TCellRawFeatures, TCoords, TRawActions } from "@/interfaces/MapInterfaces"
 import CellEntity from "./CellEntity.ts"
 
 export default class HouseDump extends CellEntity {
@@ -8,8 +8,8 @@ export default class HouseDump extends CellEntity {
     public defaultEntityActions: TRawActions = ['dig']
     public textName: string = 'Мусорка'
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures){
-        super(objectName, mapCellFeatures)
+    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
+        super(objectName, mapCellFeatures, coords)
     }
     generateInfoIcons(){return []}
 

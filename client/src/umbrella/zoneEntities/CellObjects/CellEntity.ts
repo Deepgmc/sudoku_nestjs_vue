@@ -1,11 +1,13 @@
-import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, IFeature, TRawAction } from '@/interfaces/MapInterfaces.ts';
+import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, TRawAction } from '@/interfaces/MapInterfaces.ts';
 import type { IInventory, IPlayer } from '@/interfaces/PlayerInterfaces.ts';
 import { FeatureFactory } from '../FeatureFactory';
+import type FeatureEntity from '../FeatureObjects/FeatureEntity';
 
 export default abstract class CellEntity {
     constructor(
         mapCellObject: ICellObject,
-        mapCellFeatures: TCellRawFeatures
+        mapCellFeatures: TCellRawFeatures,
+        coords: {x: number, y: number}
     ){
         this.mapCellObjectName = mapCellObject.name
 
@@ -21,6 +23,9 @@ export default abstract class CellEntity {
             this.infoIcons.push(feature.getFeatureInfoIcon())
         })
 
+        this.x = coords.x
+        this.y = coords.y
+
     }
     abstract textName: string
     abstract passability: boolean
@@ -29,6 +34,9 @@ export default abstract class CellEntity {
     public generalDefaultActions: TRawAction[] = ['move', 'look', 'pickUp'] as TRawAction[]
     abstract defaultEntityActions: TRawActions
     public actions: IAction[] = [] as IAction[] //собранные с разных источников действия внутри конкретной одной ячейки
+
+    public x: number
+    public y: number
 
     public mapCellObjectName: string
     public orientation: string
@@ -41,7 +49,7 @@ export default abstract class CellEntity {
 
 
     public mapRawFeatures: TCellRawFeatures
-    public features: IFeature[] //hydratedFeatures
+    public features: FeatureEntity[] //hydratedFeatures
 
     abstract generateInfoIcons(): void
     abstract getInfoDescription(): string

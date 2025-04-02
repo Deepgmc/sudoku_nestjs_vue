@@ -44,6 +44,7 @@ export type IZonePosition = {
 /**
 ZONE CELLS (FROM MAP)
 */
+export type TCoords = {x: number, y: number}
 export interface ICell {
     obj: ICellObject,
     features: TCellRawFeatures,
@@ -60,17 +61,14 @@ export interface IRawFeature {
     actions: TRawActions,
     items: rawItem[]
 }
-export interface IFeature {
-    [key: string]: any
-}
 
 export type TRawActions = TRawAction[]
 export type TRawAction = string
 
 export interface TClickedCell {
-    cell?: CellEntity,
-    x?: number,
-    y?: number
+    cell: CellEntity,
+    x: number,
+    y: number
 }
 
 export type TAction = string
@@ -78,11 +76,14 @@ export type TAction = string
 export type IAction = RobAction | DigAction | TalkAction | MoveAction | FightAction | PickUpAction | LookWindow
 
 export type TActionPayload = {
-    type: string,
+    type       : string,
     clickedCell: TClickedCell,
-    action: IAction,
+    action     : IAction,
+    player     : PlayerManager
 
     feature?: FeatureEntity,
-    zoneManager?: ZoneManager
-    player: PlayerManager
+    zoneManager?: ZoneManager,
+
+    [key: string]: any
+
 }
