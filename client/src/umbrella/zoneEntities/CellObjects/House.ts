@@ -6,6 +6,7 @@ export default class House extends CellEntity {
     private isEntrance: boolean
 
     public passability: boolean = false
+    public canDig: boolean = false
     public backgroundClass: string = 'houseResidental'
     public defaultEntityActions: string[] = []
     public textName: string = 'Жилое здание'

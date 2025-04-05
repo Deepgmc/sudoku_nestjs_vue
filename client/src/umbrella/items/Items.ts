@@ -1,5 +1,9 @@
-import type { IfactoryItemOptions, IInventoryItem, IItem, rawItem, TItemId } from "@/interfaces/ItemsInterfaces"
+import type { IfactoryItemOptions, IInventoryItem, IItem, rawItem, TItemId, TItemNumber } from "@/interfaces/ItemsInterfaces"
 import {items} from './ItemsList.ts'
+
+//предметы, необходимые для:
+//копания
+export const enum itemsNeedToDig {SHOVEL = 'shovel'}
 
 export function ItemFactory(rawItem: rawItem): IItem {
     const itemId = Item.splitRawName(rawItem.name).itemId
@@ -49,5 +53,22 @@ export default class Item implements IItem {
         this.description = factoryOptions.description
         this.textName    = factoryOptions.textName
         this.icon        = factoryOptions.icon
+    }
+
+    static generateInventoryItem(itemId: TItemId, itemNumber: TItemNumber): IInventoryItem | null{
+        if(typeof items[itemId as keyof typeof items] === 'undefined'){
+            return null
+        }
+        const thisItem = items[itemId as keyof typeof items]
+        return {
+            item: {
+                itemId     : itemId,
+                itemNumber : itemNumber,
+                icon       : thisItem.icon,
+                description: thisItem.description,
+                textName   : thisItem.textName
+            },
+            quantity: 1
+        }
     }
 }

@@ -4,6 +4,7 @@ import CellEntity from "./CellEntity.ts"
 export default class Fence extends CellEntity {
 
     public passability: boolean = false
+    public canDig: boolean = false
     public backgroundClass: string = 'fenceIron'
     public defaultEntityActions: string[] = []
     public textName: string = 'Забор'

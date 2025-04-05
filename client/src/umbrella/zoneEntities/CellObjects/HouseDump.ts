@@ -4,6 +4,7 @@ import CellEntity from "./CellEntity.ts"
 export default class HouseDump extends CellEntity {
 
     public passability: boolean = false
+    public canDig: boolean = false
     public backgroundClass: string = 'houseDump'
     public defaultEntityActions: TRawActions = []
     public textName: string = 'Мусорка'

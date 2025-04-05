@@ -38,5 +38,25 @@ export const items = {
         description: 'Лопата штыковая. Землю копать можно.',
         icon: '&#129679',
         textName: 'Лопата'
-    }
+    },
+
+    //food
+    bug: {
+        description: 'С голоду чего только не съешь. Белок все-таки',
+        type: 'food',
+        icon: '&#129714',
+        textName: 'Жук'
+    },
+    berry: {
+        description: 'Высохшая, но вроде есть можно',
+        type: 'food',
+        icon: '&#129744',
+        textName: 'Ягода'
+    },
+    acorn: {
+        description: 'Съедобно, раз животные едят',
+        type: 'food',
+        icon: '&#129684',
+        textName: 'Желудь'
+    },
 }

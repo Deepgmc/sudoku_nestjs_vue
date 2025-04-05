@@ -1,4 +1,4 @@
-import type { IInventoryItem, rawItem } from "@/interfaces/ItemsInterfaces";
+import type { IInventoryItem, rawItem, TItemId } from "@/interfaces/ItemsInterfaces";
 import type { IInventory } from "@/interfaces/PlayerInterfaces";
 import Item from "./Items";
 
@@ -46,5 +46,12 @@ export default class Inventory implements IInventory {
 
     public isEmpty(){
         return this.items.length < 1
+    }
+
+    /** есть ли предмет с itemId в инвенторе */
+    hasItem(itemId: TItemId){
+        return this.items.find(item => {
+            return item.item.itemId === itemId
+        })
     }
 }

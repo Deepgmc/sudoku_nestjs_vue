@@ -4,6 +4,7 @@ import CellEntity from "./CellEntity.ts"
 export default class SideStreet extends CellEntity {
 
     public passability: boolean = true
+    public canDig: boolean = false
     public backgroundClass: string = 'sideStreet'
     public defaultEntityActions: string[] = []
     public textName: string = 'Дорога'

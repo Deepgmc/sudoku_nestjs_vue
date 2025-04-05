@@ -1,29 +1,69 @@
 import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
-import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IChatMessage } from "../Chat";
+import type PlayerManager from "../PlayerManager";
+import Item, { itemsNeedToDig } from "../items/Items";
+
+function roll(): number {
+    return parseInt((Math.random() * 100).toFixed(2))
+}
+function getRandomFrom(start: number, end: number): number {
+    return Math.round(Math.random() * end) + start
+}
 
 export default class DigAction extends MapAction {
-
-    public textName: string = 'Копать'
 
     constructor(action: TAction){
         super(action)
     }
 
-    activate(){
-        console.log('%c DIG activate:', 'color:rgb(182, 86, 158);', 123)
+    public textName: string = 'Копать'
+    private digChances = [
+        {
+            name: 'food',
+            chancePercent: 30,
+            items: ['bug', 'berry', 'acorn']
+        },
+        {
+            name: 'clothes',
+            chancePercent: 10,
+            items: ['shirt', 'pants']
+        },
+    ]
+
+    activate(actionPayload: TActionPayload): IChatMessage {
+        const chatText: string[] = []
+
+        this.digChances.forEach(digChance => {
+            if(roll() <= digChance.chancePercent){
+                const thisItem = Item.generateInventoryItem(digChance.items[getRandomFrom(0, 2)], '01')
+                if(!thisItem) {
+                    return {text: 'Error generating inventory item'}
+                }
+                actionPayload.player.inventory.addItems([thisItem])
+                chatText.push(thisItem.item.textName)
+            }
+        })
+
+        if(chatText.length > 0){
+            return {text: 'Выкопали: ' + chatText.join (' ')}
+        } else {
+            return {text: 'Не нашлось ничего интересного'}
+        }
     }
 
-    getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
-        if(!cellToMove) return {text: 'Wrong move parameters'}
+    getChatMessage(payload: TActionPayload, cellToDig: CellEntity): IChatMessage {
+        if(!cellToDig) return {text: 'Wrong move parameters'}
         const text: string[] = []
         return {text: text.join('. ')}
     }
 
-    isActionActive(player: IPlayer, cell: CellEntity) {
-        return true
+    /** ячейка должна иметь свойство canDig, игрок должен на ней стоять и в инвенторе должна быть лопата */
+    isActionActive(player: PlayerManager, cell: CellEntity): boolean {
+        return player.standsIn(cell) &&
+               cell.canDig &&
+               player.inventory.hasItem(itemsNeedToDig.SHOVEL)
     }
 
 }

@@ -112,6 +112,10 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         return this.x === x && this.y === y
     }
 
+    standsIn(cell: CellEntity): boolean {
+        return this.isHere(cell.x, cell. y)
+    }
+
     movePlayer(x:number, y: number, cell: CellEntity){
         this.setXY(x, y)
     }

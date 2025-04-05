@@ -30,6 +30,7 @@ export default abstract class CellEntity {
     abstract textName: string
     abstract chatDescription: string
     abstract passability: boolean
+    abstract canDig: boolean
     abstract backgroundClass: string
 
     public generalDefaultActions: TRawAction[] = ['move', 'pickUp', 'look'] as TRawAction[]

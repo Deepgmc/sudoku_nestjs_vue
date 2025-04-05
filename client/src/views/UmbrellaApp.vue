@@ -38,7 +38,6 @@ provide('chat', chat)
 onBeforeMount(() => {
     areaManager.init() //loading map
     player.init() //loading player data
-    //chat.addMessage().plainText('Umbrella init finished. Some long message here for seen what happens')
 })
 
 
@@ -50,6 +49,10 @@ const handleCellClick = function(x: number, y: number, cell: CellEntity){
     areaManager.store.clickedCell.y = y
 }
 
+/**
+ * обработка событий игрока, ячейки, юнитов
+ * @param actionPayload вся необходимая инфа по действию
+ */
 function handleInfoActions(actionPayload: TActionPayload){
     if(!areaManager.store.isCellClicked) return
     player.handleMapAction(actionPayload, (msg: any) => {

@@ -11,6 +11,7 @@ export interface IInventoryItem {
 }
 
 export type TItemId = string
+export type TItemNumber = string
 export type TItemQuantity = number
 
 //все предметы на сервере ДОЛЖНЫ храниться в таком виде
@@ -22,8 +23,8 @@ export interface rawItem {
 //transmission from itemFactory to Item
 export interface IfactoryItemOptions {
     itemId     : string,
-    textName   : string,
     itemNumber : string,
+    textName   : string,
     description: string,
     icon       : string
 }

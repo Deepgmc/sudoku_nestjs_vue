@@ -4,8 +4,9 @@ import CellEntity from "./CellEntity.ts"
 export default class Trees extends CellEntity {
 
     public passability: boolean = true
+    public canDig: boolean = true
     public backgroundClass: string = 'trees'
-    public defaultEntityActions: string[] = ['look', 'dig']
+    public defaultEntityActions: string[] = ['dig']
     public textName: string = 'Парковая зона'
     public chatDescription = 'Деревья, кусты, трава. Ничего интересного на поверхности не видно. Но обычно в таких местах люди закапывали ценное имущество, расчитывая потом сюда вернуться.'
 
