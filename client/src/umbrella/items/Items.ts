@@ -9,7 +9,7 @@ export function ItemFactory(rawItem: rawItem): IItem {
 
     const factoryOptions: IfactoryItemOptions = {
         itemId     : itemId,
-        itemNumber : itemNumber,
+        itemNumber : itemNumber, // это подтип предмета knife_01 knife_02 - ножи, но разные
         description: '',
         icon       : '',
         textName   : ''
@@ -17,33 +17,6 @@ export function ItemFactory(rawItem: rawItem): IItem {
     factoryOptions.description = items[itemId as itemsKey].description
     factoryOptions.icon = items[itemId as itemsKey].icon
     factoryOptions.textName = items[itemId as itemsKey].textName
-    // switch(itemId){
-    //     case 'pants':
-    //         factoryOptions.description = items[itemId].description
-    //         factoryOptions.icon = '&#128086' //1F456
-    //         factoryOptions.textName = 'Штаны'
-    //         break
-    //     case 'water':
-    //         factoryOptions.description = 'Питьевая вода'
-    //         factoryOptions.icon = '&#127862' //1F376
-    //         factoryOptions.textName = 'Вода'
-    //         break
-    //     case 'knife':
-    //         factoryOptions.description = 'Нож'
-    //         factoryOptions.icon = '&#128298'
-    //         factoryOptions.textName = 'Нож'
-    //         break
-    //     case 'shirt':
-    //         factoryOptions.description = 'Грязная футболка'
-    //         factoryOptions.icon = '&#128085'
-    //         factoryOptions.textName = 'Футболка'
-    //         break
-    //     case 'umbrellaBadge':
-    //         factoryOptions.description = 'Удостоверение сотрудника корпорации Umbrella'
-    //         factoryOptions.icon = '&#128220'
-    //         factoryOptions.textName = 'Удостоверение'
-    //         break
-    // }
     return new Item(factoryOptions)
 }
 

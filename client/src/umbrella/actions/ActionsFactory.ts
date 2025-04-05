@@ -8,7 +8,6 @@ import FightAction from './Fight.ts'
 import TalkAction from './Talk.ts'
 import DigAction from './Dig.ts'
 import LookAction from './Look.ts'
-import LookWindowAction from './LookWindow.ts'
 import PickUpAction from './PickUp.ts'
 
 
@@ -41,9 +40,6 @@ export function ActionsFactory (
             case 'talk':
                 if(!feature) throw new Error('No feature')
                 actionEntity = new TalkAction(action, feature)
-                break;
-            case 'lookWindow':
-                actionEntity = new LookWindowAction(action)
                 break;
             case 'pickUp':
                 actionEntity = new PickUpAction(action)

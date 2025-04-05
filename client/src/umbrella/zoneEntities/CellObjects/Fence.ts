@@ -7,6 +7,7 @@ export default class Fence extends CellEntity {
     public backgroundClass: string = 'fenceIron'
     public defaultEntityActions: string[] = []
     public textName: string = 'Забор'
+    public chatDescription = 'Ограждение металлическое, проржавелое, краска облуплена. Высокое, выглядит прочно, не перебраться'
 
     constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
         super(objectName, mapCellFeatures, coords)
@@ -15,7 +16,7 @@ export default class Fence extends CellEntity {
 
     getInfoDescription(){
         const text: string[] = []
-        text.push('Металлический, проржавелый, краска облуплена. Но высокий, выглядит прочно.')
+        text.push(this.chatDescription)
         return text.join(' ')
     }
 }

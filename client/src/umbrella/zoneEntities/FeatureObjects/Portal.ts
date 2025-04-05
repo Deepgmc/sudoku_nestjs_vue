@@ -6,6 +6,7 @@ export class Portal extends FeatureEntity {
     textName: string = 'Переход в другую зону'
     public defaultEntityActions: string[] = []
     public isUnit = false
+    public chatDescription = 'Впереди вы видите загадочное завихрение синеватого цвета, висящее в воздухе. Что-то магическое. Или научное. При взгляде на него в мозгу проскальзывает строго звучащее слово "портал", что-бы оно ни значило'
 
     constructor(featureRaw: IRawFeature){
         super(featureRaw)

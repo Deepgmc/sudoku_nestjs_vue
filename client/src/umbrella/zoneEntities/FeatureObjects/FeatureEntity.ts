@@ -6,6 +6,7 @@ export default abstract class FeatureEntity {
     public objectName: string = ''
     abstract textName: string
     abstract isUnit: boolean
+    abstract chatDescription: string
 
     public inventory: IInventory = {} as IInventory
 
@@ -16,7 +17,7 @@ export default abstract class FeatureEntity {
 
     abstract defaultActions: TRawActions
     public mapFeatureActions: TRawActions
-    public generalDefaultActions: TRawAction[] = ['look'] as TRawAction[]
+    public generalDefaultActions: TRawAction[] = [] as TRawAction[]
     abstract defaultEntityActions: TRawActions
 
     public actions: IAction[] = [] as IAction[] //собранные с разных источников действия для этого конкретного feature

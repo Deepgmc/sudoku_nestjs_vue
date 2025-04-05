@@ -7,8 +7,9 @@ export default class House extends CellEntity {
 
     public passability: boolean = false
     public backgroundClass: string = 'houseResidental'
-    public defaultEntityActions: string[] = ['lookWindow']
+    public defaultEntityActions: string[] = []
     public textName: string = 'Жилое здание'
+    public chatDescription = 'Высотное здание. Вы можете заглянуть только в окна первого этажа. Там все разбито, покрыто пылью и т.п. Обычно на первых этажах таких зданий нет ничего интересного.'
 
     constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
         super(objectName, mapCellFeatures, coords)
@@ -19,7 +20,7 @@ export default class House extends CellEntity {
 
     generateInfoIcons(){
         if(this.isEntrance){
-            this.infoIcons.push('&#128726;')
+            this.infoIcons.push('&#128682;')
             //this.features.push('houseEntrance')
         }
     }

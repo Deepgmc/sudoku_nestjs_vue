@@ -4,6 +4,7 @@ import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IChatMessage } from "../Chat";
 import type { IPlayer } from "@/interfaces/PlayerInterfaces";
+import type { IInventoryItem } from "@/interfaces/ItemsInterfaces";
 
 export default class RobAction extends MapAction {
 
@@ -19,16 +20,31 @@ export default class RobAction extends MapAction {
         console.log('%c ROB activate (this.feature): ', 'color:rgb(182, 86, 158);', this.feature)
         console.log('%c actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
 
-        if(!actionPayload.player) throw new Error('Wrong actionPayload, no player')
-        if(!actionPayload.feature) throw new Error('Wrong actionPayload, no feature')
+        if(!actionPayload.player) {throw new Error('Wrong actionPayload, no player')}
+        if(!actionPayload.feature) {throw new Error('Wrong actionPayload, no feature')}
+
+        const chatMessage = this.getChatMessage(actionPayload, actionPayload.clickedCell.cell)
 
         actionPayload.player.inventory.transferItemsFrom(actionPayload.feature.inventory)
+
+        return chatMessage
     }
 
-    getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
-        if(!cellToMove) return {text: 'Wrong move parameters'}
+    getChatMessage(payload: TActionPayload, cellToRob: CellEntity): IChatMessage {
+        if(!cellToRob) return {text: 'Wrong move parameters'}
         const text: string[] = []
-        return {text: text.join('. ')}
+        const robFeature = cellToRob.features.find(feature => {
+            return feature.actions.find(action => {
+                return action.actionName === this.actionName
+            })
+        })
+        if(!robFeature) {
+            return {text: 'Не найден объект кражи'}
+        }
+        text.push(`Вы пытаетесь ограбить: ${robFeature.textName}`)
+        text.push(`${robFeature.inventory.getItemsForChat()}`)
+
+        return {text: text.join(' ')}
     }
 
     isActionActive(player: IPlayer, cell: CellEntity) {

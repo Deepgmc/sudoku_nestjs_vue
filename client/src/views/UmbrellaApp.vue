@@ -136,7 +136,7 @@ function handleInfoActions(actionPayload: TActionPayload){
 .umbrella_chat_block {
     display:flex;
     flex-flow: column nowrap;
-    // width: globals.$chat-width;
+    width: globals.$chat-width;
     height: globals.$chat-block-height;
 }
 </style>

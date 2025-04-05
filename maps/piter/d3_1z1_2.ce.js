@@ -15,13 +15,24 @@ export const zone = {
                     orientation: 's-n',
                 },
                 features: [
-                    {
+                    {//!Portal
                         name: 'portal',
                         actions: []
                     },
-                    {
+                    {//!portalGuard
                         name: 'portalGuard',
-                        actions: []
+                        actions: [],
+                        level: 10,
+                        items: [
+                            {
+                                name: 'lazerBlaster_01',
+                                quantity: 1
+                            },
+                            {
+                                name: 'armorMez_01',
+                                quantity: 1
+                            },
+                        ]
                     },
                 ],
             },
@@ -438,6 +449,12 @@ export const zone = {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
+                    items: [
+                        {
+                            name: 'shovel_01',
+                            quantity: 1
+                        },
+                    ]
                 },
                 features: []
             },

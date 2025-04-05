@@ -28,6 +28,14 @@ export default class Inventory implements IInventory {
         return this.items
     }
 
+    public getItemsForChat(): string {
+        const itemsText: string[] = []
+        this.getItems().forEach((item: IInventoryItem) => {
+            itemsText.push(`${item.item.textName} (${item.item.icon})`)
+        })
+        return itemsText.join(', ')
+    }
+
     public addItems(newItems: IInventoryItem[]){
         this.items = this.items.concat(newItems)
     }

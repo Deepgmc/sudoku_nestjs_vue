@@ -1,16 +1,16 @@
-import type DigAction from "@/umbrella/actions/Dig"
-import type FightAction from "@/umbrella/actions/Fight"
-import type MoveAction from "@/umbrella/actions/Move"
-import type RobAction from "@/umbrella/actions/Rob"
-import type TalkAction from "@/umbrella/actions/Talk"
-import type PickUpAction from "@/umbrella/actions/PickUp"
-import type LookWindow from "@/umbrella/actions/LookWindow"
+// import type DigAction from "@/umbrella/actions/Dig"
+// import type FightAction from "@/umbrella/actions/Fight"
+// import type MoveAction from "@/umbrella/actions/Move"
+// import type RobAction from "@/umbrella/actions/Rob"
+// import type TalkAction from "@/umbrella/actions/Talk"
+// import type PickUpAction from "@/umbrella/actions/PickUp"
 
 import type CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
 import type { rawItem } from "./ItemsInterfaces"
 import type FeatureEntity from "@/umbrella/zoneEntities/FeatureObjects/FeatureEntity"
 import type ZoneManager from "@/umbrella/ZoneManager"
 import type PlayerManager from "@/umbrella/PlayerManager"
+import type MapAction from "@/umbrella/actions/MapAction"
 
 
 export interface IArea {
@@ -73,7 +73,8 @@ export interface TClickedCell {
 
 export type TAction = string
 
-export type IAction = RobAction | DigAction | TalkAction | MoveAction | FightAction | PickUpAction | LookWindow
+//RobAction | DigAction | TalkAction | MoveAction | FightAction | PickUpAction
+export type IAction = MapAction
 
 export type TActionPayload = {
     type       : string,

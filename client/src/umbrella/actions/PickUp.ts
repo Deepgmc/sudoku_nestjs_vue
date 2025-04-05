@@ -26,11 +26,12 @@ export default class PickUpAction extends MapAction {
     getChatMessage(payload: TActionPayload, targetCell: CellEntity): IChatMessage {
         if(!targetCell || targetCell.inventory.isEmpty()) return {text: 'Wrong move parameters'}
         const text: string[] = []
-        text.push('Вы подбираете предметы: ')
 
-        targetCell.inventory.items.forEach((item: IInventoryItem) => {
-            text.push(`${item.item.textName} (${item.item.icon})`)
-        })
+
+        // .items.forEach((item: IInventoryItem) => {
+        //     text.push(`${item.item.textName} (${item.item.icon})`)
+        // })
+        text.push(`Вы подбираете предметы: ${targetCell.inventory.getItemsForChat()}`)
 
         return {text: text.join(' ')}
     }

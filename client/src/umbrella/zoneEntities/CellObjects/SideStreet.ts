@@ -7,6 +7,8 @@ export default class SideStreet extends CellEntity {
     public backgroundClass: string = 'sideStreet'
     public defaultEntityActions: string[] = []
     public textName: string = 'Дорога'
+    public chatDescription = `Обычная асфальтированная придомная территория, правда асфальта остались только отдельные куски.
+    Ходить можно, и хватит. Копать не получится. Или нужен инструмент посерьёзнее`
 
     constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
         super(objectName, mapCellFeatures, coords)
@@ -15,7 +17,7 @@ export default class SideStreet extends CellEntity {
 
     getInfoDescription(){
         const text: string[] = []
-        text.push('Обычная асфальтированная придомная территория. Асфальт, конечно, очень условен.')
+        text.push(this.chatDescription)
         return text.join(' ')
     }
 }

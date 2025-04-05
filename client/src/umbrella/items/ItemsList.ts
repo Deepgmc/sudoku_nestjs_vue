@@ -23,5 +23,20 @@ export const items = {
         description: 'Удостоверение сотрудника корпорации Umbrella',
         icon: '&#128220',
         textName: 'Удостоверение'
+    },
+    lazerBlaster: {
+        description: 'Лазерный бластер',
+        icon: '&#128297',
+        textName: 'Бластер'
+    },
+    armorMez: {
+        description: 'Мезоструктурная броня',
+        icon: '&#128090',
+        textName: 'Броня'
+    },
+    shovel: {
+        description: 'Лопата штыковая. Землю копать можно.',
+        icon: '&#129679',
+        textName: 'Лопата'
     }
 }
