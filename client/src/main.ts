@@ -1,8 +1,11 @@
 //import './assets/globalVariables.scss'
 import './assets/main.scss'
+import 'quasar/src/css/index.sass'
+import '@quasar/extras/material-icons/material-icons.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { Quasar } from 'quasar'
 
 import App from '@/App.vue'
 //import router from './router/router.ts'
@@ -20,5 +23,9 @@ app.config.globalProperties.capitalizeFirstLetter = (val: string) => String(val)
 
 //app.use(router)
 app.use(createPinia())
+
+app.use(Quasar, {
+    plugins: {},
+})
 
 app.mount('#umbrella_root_container')

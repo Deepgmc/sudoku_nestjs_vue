@@ -25,7 +25,7 @@ const handleInfoActions = (actionPayload: TActionPayload) => {
 
 <template>
     <div class="infoComponent_container">
-        <h1>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.mapCellObjectName }})</h1>
+        <h5>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.mapCellObjectName }})</h5>
         <hr>
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
         <span v-if="props.clickedCell.cell.inventory.items.length">На земле валяется:</span>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeMount, provide } from 'vue';
+import { inject, onBeforeMount, provide, ref, defineComponent } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
@@ -8,12 +8,11 @@ import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 import type { TActionPayload } from '@/interfaces/MapInterfaces';
 import AreaManager from '@/umbrella/AreaManager';
 import PlayerManager from '@/umbrella/PlayerManager';
-import Chat, { type IChatMessage } from '@/umbrella/Chat'
+import Chat from '@/umbrella/Chat'
 
 import AreaComponent from '@/components/map/AreaComponent.vue';
-import Inventory from '@/components/player/Inventory.vue';
+import CharacterCard from '@/components/player/CharacterCard.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
-import Character from '@/components/player/Character.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 
 
@@ -60,6 +59,31 @@ function handleInfoActions(actionPayload: TActionPayload){
     })
 }
 
+let currentDialogComponent: typeof CharacterCard
+const isWindowCardOpen = ref(false)
+
+const modalComponents = {
+    CharacterCard: {
+        component: CharacterCard,
+        // params: {
+        //     player: player
+        // }
+    },
+    // Inventory: {
+    //     component: Inventory,
+    //     params: {
+    //         inventory: player.inventory,
+    //         player: player
+    //     }
+    // }
+}
+
+function loadModal(modalName: string): void {
+    currentDialogComponent = modalComponents[modalName as keyof typeof modalComponents].component
+    //currentDialogParams = modalComponents[modalName as keyof typeof modalComponents].params
+    isWindowCardOpen.value = true
+}
+
 </script>
 
 <template>
@@ -74,6 +98,48 @@ function handleInfoActions(actionPayload: TActionPayload){
             </AreaComponent>
         </div>
         <div class="umbrella_info_container">
+
+
+
+            <div class="umbrella_buttons_block">
+                <div class="q-pa-md q-gutter-md">
+                    <q-btn round color="black" icon="person" size="lg" @click="loadModal('CharacterCard')" />
+                </div>
+            </div>
+
+
+
+            <q-dialog v-model="isWindowCardOpen" backdrop-filter="brightness(80%)">
+                <q-card :dark="true" :bordered="true" style="min-width: 20vw">
+                    <q-card-section>
+                        <component :is="currentDialogComponent" :player="player"></component>
+                        <!-- <Character
+                            :player="player"
+                        ></Character> -->
+                    </q-card-section>
+                    <!-- <q-card-section>
+                        <Inventory
+                            :inventory="player.inventory"
+                        ></Inventory>
+                    </q-card-section> -->
+
+                    <!-- <q-separator />
+
+                    <q-card-actions align="right">
+                        <q-btn v-close-popup flat color="primary" label="Закрыть" />
+                    </q-card-actions> -->
+
+                </q-card>
+            </q-dialog>
+
+
+
+
+
+
+
+
+
             <div class="umbrella_chat_block block_component">
                 <ChatComponent
                     :chat="chat"
@@ -89,7 +155,7 @@ function handleInfoActions(actionPayload: TActionPayload){
                 >
                 </InfoComponent>
             </div>
-            <div class="player_block">
+            <!-- <div class="player_block">
                 <Character
                     :player="player"
                     class="block_component"
@@ -97,9 +163,8 @@ function handleInfoActions(actionPayload: TActionPayload){
                 <Inventory
                     :inventory="player.inventory"
                     class="block_component"
-                >
-                </Inventory>
-            </div>
+                ></Inventory>
+            </div> -->
         </div>
     </div>
 </template>
@@ -141,5 +206,10 @@ function handleInfoActions(actionPayload: TActionPayload){
     flex-flow: column nowrap;
     width: globals.$chat-width;
     height: globals.$chat-block-height;
+}
+.umbrella_buttons_block {
+    display:flex;
+    flex-flow: column nowrap;
+    width: globals.$info-width;
 }
 </style>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import type { IInventory } from '@/interfaces/PlayerInterfaces';
+import type { IInventory, IPlayer } from '@/interfaces/PlayerInterfaces';
+import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
 
 const props = defineProps({
-    inventory: {
-        type: Object as PropType<IInventory>,
+    player: {
+        type: Object as PropType<PlayerManager>,
         required: true
     }
 })
@@ -12,8 +13,8 @@ const props = defineProps({
 
 <template>
     <div class="inventory_container">
-        <div class="inventory_item" v-for="(inventoryCell, index) in inventory.maxSlots">
-            <div v-if="inventory.items[index]" class="item_ico" v-html="inventory.items[index].item.icon"></div>
+        <div class="inventory_item" v-for="(inventoryCell, index) in player.inventory.maxSlots">
+            <div v-if="player.inventory.items[index]" class="item_ico" v-html="player.inventory.items[index].item.icon"></div>
         </div>
     </div>
 </template>
