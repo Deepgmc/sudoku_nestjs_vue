@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
-import Inventory from '@/components/player/Inventory.vue';
+import Inventory from '@/components/player/PlayerInventory.vue';
 import Character from '@/components/player/Character.vue';
 
 const props = defineProps({

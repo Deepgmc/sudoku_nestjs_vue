@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { IInventory, IPlayer } from '@/interfaces/PlayerInterfaces';
-import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
+import type PlayerManager from '@/umbrella/PlayerManager';
 
 const props = defineProps({
     player: {
@@ -14,7 +13,14 @@ const props = defineProps({
 <template>
     <div class="inventory_container">
         <div class="inventory_item" v-for="(inventoryCell, index) in player.inventory.maxSlots">
-            <div v-if="player.inventory.items[index]" class="item_ico" v-html="player.inventory.items[index].item.icon"></div>
+            <div v-if="player.inventory.items[index]" class="item_ico">
+                <span v-html="player.inventory.items[index].item.icon"></span>
+                <q-tooltip>
+                    {{ player.inventory.items[index].item.textName }}
+                    <q-separator class="q-my-xs" />
+                    {{ player.inventory.items[index].item.description }}
+                </q-tooltip>
+            </div>
         </div>
     </div>
 </template>

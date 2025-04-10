@@ -1,36 +1,36 @@
 export const items = {
     pants: {
-        description: 'Штаны. Мятые и грязные',
+        description: 'Мятые и грязные. Возможно, защитят от крапивы.',
         icon: '&#128086', //1F456
         textName: 'Штаны'
     },
     water: {
-        description: 'Питьевая вода',
+        description: 'Питьевая чистая вода.',
         icon: '&#127862', //1F376
         textName: 'Вода'
     },
     knife: {
-        description: 'Нож',
+        description: 'Нож кухонный, конечно незаточенный',
         icon: '&#128298',
         textName: 'Нож'
     },
     shirt: {
-        description: 'Грязная футболка',
+        description: 'Мятая и грязная. От ветра немного прикроет.',
         icon: '&#128085',
         textName: 'Футболка'
     },
     umbrellaBadge: {
-        description: 'Удостоверение сотрудника корпорации Umbrella',
+        description: 'На лицевой стороне красуется логотип корпорации Umbrella, на обратной - всё размыло водой и грязью, ничего не разобрать',
         icon: '&#128220',
         textName: 'Удостоверение'
     },
     lazerBlaster: {
-        description: 'Лазерный бластер',
+        description: 'Лазерный ионный квадротрансферический бластер',
         icon: '&#128297',
         textName: 'Бластер'
     },
     armorMez: {
-        description: 'Мезоструктурная броня',
+        description: 'Мезоструктурная ионная квадротрансферическая броня',
         icon: '&#128090',
         textName: 'Броня'
     },

@@ -15,6 +15,6 @@ export class Homeless extends FeatureEntity {
     defaultActions = ['fight', 'talk', 'rob']
 
     getFeatureInfoIcon(){
-        return '&#x1F6B6;'
+        return {icon: '&#x1F6B6;', description: this.textName}
     }
 }

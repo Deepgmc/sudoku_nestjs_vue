@@ -15,6 +15,6 @@ export class PortalGuard extends FeatureEntity {
     defaultActions = ['fight', 'talk', 'rob']
 
     getFeatureInfoIcon(){
-        return '&#x1F93A;'
+        return {icon: '&#x1F93A;', description: this.textName}
     }
 }

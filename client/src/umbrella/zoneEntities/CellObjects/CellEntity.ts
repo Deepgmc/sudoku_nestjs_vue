@@ -1,4 +1,4 @@
-import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, TRawAction } from '@/interfaces/MapInterfaces.ts';
+import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, TRawAction, infoIconsObject } from '@/interfaces/MapInterfaces.ts';
 import type { IInventory, IPlayer } from '@/interfaces/PlayerInterfaces.ts';
 import { FeatureFactory } from '../FeatureFactory';
 import type FeatureEntity from '../FeatureObjects/FeatureEntity';
@@ -42,7 +42,7 @@ export default abstract class CellEntity {
 
     public mapCellObjectName: string
     public orientation: string
-    public infoIcons: string[] = []
+    public infoIcons: infoIconsObject[] = []
     public isVisibleToplayer: boolean = false //using player visible range
 
     public player: IPlayer | null

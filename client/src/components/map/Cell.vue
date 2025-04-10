@@ -39,16 +39,28 @@ const isMeClicked = computed(() => {
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
                 <PlayerComponent v-if="props.cell.player" :player="props.cell.player"></PlayerComponent>
+                <q-tooltip v-if="props.cell.player">
+                    Это вы
+                </q-tooltip>
+                <q-tooltip v-else>
+                    {{ props.cell.textName }}
+                </q-tooltip>
             </div>
             <div class="cell_item-top_right">
-                <div v-for="icon in props.cell.infoIcons">
-                    <span v-html="icon" class="icons_list_item"></span>
+                <div v-for="infoIcon in props.cell.infoIcons">
+                    <span v-html="infoIcon.icon" class="icons_list_item"></span>
+                    <q-tooltip>
+                        {{ infoIcon.description }}
+                    </q-tooltip>
                 </div>
             </div>
         </div>
         <div class="cell_item-bottom">
             <div v-for="item in props.cell.inventory.items">
                 <span v-html="item.item.icon" class="icons_list_item"></span>
+                <q-tooltip>
+                    {{ item.item.textName }}
+                </q-tooltip>
             </div>
         </div>
     </div>

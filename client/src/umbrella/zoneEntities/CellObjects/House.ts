@@ -21,7 +21,7 @@ export default class House extends CellEntity {
 
     generateInfoIcons(){
         if(this.isEntrance){
-            this.infoIcons.push('&#128682;')
+            this.infoIcons.push({icon: '&#128682;', description: 'Вход в здание'})
             //this.features.push('houseEntrance')
         }
     }

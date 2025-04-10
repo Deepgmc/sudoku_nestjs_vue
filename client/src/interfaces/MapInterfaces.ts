@@ -41,6 +41,10 @@ export type IZonePosition = {
     x: number,
     y: number
 }
+export type infoIconsObject = {
+    icon: string,
+    description: string
+}
 /**
 ZONE CELLS (FROM MAP)
 */
