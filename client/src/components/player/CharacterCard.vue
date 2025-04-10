@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
-import PlayerInventory from '@/components/player/PlayerInventory.vue';
+import InventoryComponent from '@/components/InventoryComponent.vue';
 import Character from '@/components/player/Character.vue';
 
 const props = defineProps({
@@ -17,7 +17,7 @@ const props = defineProps({
     <div>
         <Character :player="player"></Character>
         <q-separator class="q-my-md" />
-        <PlayerInventory :player="player" :isPlayer="true"></PlayerInventory>
+        <InventoryComponent :inventory="player.inventory" :isPlayer="true"></InventoryComponent>
     </div>
 </template>
 

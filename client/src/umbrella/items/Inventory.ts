@@ -1,5 +1,4 @@
-import type { IInventoryItem, IRawItem, TItemId } from "@/interfaces/ItemsInterfaces";
-import type { IInventory } from "@/interfaces/PlayerInterfaces";
+import type { IInventoryItem, IRawItem, TItemId, IInventory } from "@/interfaces/ItemsInterfaces";
 import Item from "./Items";
 
 export default class Inventory implements IInventory {
@@ -18,7 +17,7 @@ export default class Inventory implements IInventory {
      * перемещает в инвентарь все предметы из указанного инвентаря
         RobAction, PickUpAction etc.
      */
-    transferItemsFrom(targetInventory: IInventory): IInventory {
+    transferItemsFrom(targetInventory: IInventory): Inventory {
         this.addItems(targetInventory.getItems())
         targetInventory.clean()
         return this
@@ -50,8 +49,18 @@ export default class Inventory implements IInventory {
 
     /** есть ли предмет с itemId в инвенторе */
     hasItem(itemId: TItemId){
-        return this.items.find(item => {
+        return !!this.items.find(item => {
             return item.item.itemId === itemId
         })
+    }
+
+    /** удалить предмет с itemId из инвенторя */
+    removeItem(itemId: TItemId){
+
+        const itemIndex = this.items.findIndex((item, index) => {
+            return item.item.itemId === itemId
+        })
+        this.items.splice(itemIndex, 1)
+        return true
     }
 }

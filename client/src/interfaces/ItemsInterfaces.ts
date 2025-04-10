@@ -1,9 +1,21 @@
+export interface IInventory {
+    maxSlots: number,
+    items: IInventoryItem[],
+    getItems: () => IInventoryItem[],
+    addItems: (items: IInventoryItem[]) => void,
+    removeItem: (itemId: TItemId) => boolean,
+    hasItem: (itemId: TItemId) => boolean,
+    clean: () => void,
+    [key: string]: any,
+}
+
 export interface IItem {
     itemId     : TItemId,
     itemNumber : string,
     icon       : string,
     description: string,
     textName   : string
+    slotType   : SLOT_TYPES
 }
 export interface IInventoryItem {
     item: IItem,
@@ -35,6 +47,7 @@ export interface IfactoryItemOptions {
     itemId     : string,
     itemNumber : string,
     textName   : string,
+    slotType   : SLOT_TYPES,
     description: string,
     icon       : string
 }

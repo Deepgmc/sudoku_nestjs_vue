@@ -4,6 +4,7 @@ import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IChatMessage } from "../Chat";
 import type PlayerManager from "../PlayerManager";
 import Item, { itemsNeedToDig } from "../items/Items";
+import { SLOT_TYPES } from "@/interfaces/ItemsInterfaces";
 
 function roll(): number {
     return parseInt((Math.random() * 100).toFixed(2))
@@ -63,7 +64,7 @@ export default class DigAction extends MapAction {
     isActionActive(player: PlayerManager, cell: CellEntity): boolean {
         return player.standsIn(cell) &&
                cell.canDig &&
-               player.inventory.hasItem(itemsNeedToDig.SHOVEL)
+               player.isItemEquiped(itemsNeedToDig.SHOVEL, SLOT_TYPES.RHAND)
     }
 
 }

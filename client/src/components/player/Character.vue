@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import ItemTooltip from '@/components/ItemTooltip.vue'
+import { dropItem } from '@/composables/dnd';
 
 import type { IEquiped } from '@/interfaces/PlayerInterfaces';
 import type PlayerManager from '@/umbrella/PlayerManager';
@@ -12,6 +13,7 @@ const props = defineProps({
         required: true
     }
 })
+
 </script>
 
 <template>
@@ -26,12 +28,19 @@ const props = defineProps({
             <div class="char_stat_line">Ловкость: {{ player.agility }}</div>
         </div>
         <div class="character_equiped">
-            <div class="equiped_item" v-for="slot in player.equipedSlots">
+            <div class="equiped_item"
+                @drop.stop="dropItem($event)"
+                @dragenter.prevent=""
+                @dragover.prevent=""
+
+                v-for="slot in player.equipedSlots"
+                :data-slotName="slot.name"
+            >
                 <div v-if="player.equiped[slot.name as keyof IEquiped]">
                     <span class="equiped_item_icon" v-html="player.equiped[slot.name as keyof IEquiped]?.icon"></span>
                     <ItemTooltip :item="(player.equiped[slot.name as keyof IEquiped] as IItem)"></ItemTooltip>
                 </div>
-                <div v-else>{{ slot.textName }}</div>
+                <div v-else class="equiped_item_icon_empty">{{ slot.textName }}</div>
             </div>
         </div>
     </div>
@@ -60,8 +69,11 @@ const props = defineProps({
             margin: 2px;
             font-size:0.8em;
             .equiped_item_icon{
-                font-size: 3em;
+                font-size: 4em;
                 cursor: pointer;
+            }
+            .equiped_item_icon_empty{
+                border: 1px solid green;
             }
         }
     }

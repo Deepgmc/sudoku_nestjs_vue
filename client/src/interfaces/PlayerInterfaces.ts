@@ -41,11 +41,3 @@ export interface IRawEquiped {
     rhand: IRawItem,
     lhand: IRawItem,
 }
-export interface IInventory {
-    maxSlots: number,
-    items: IInventoryItem[],
-    getItems: () => IInventoryItem[],
-    addItems: (items: IInventoryItem[]) => void,
-    clean: () => void,
-    [key: string]: any
-}

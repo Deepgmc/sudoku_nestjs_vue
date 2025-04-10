@@ -1,4 +1,4 @@
-import type { IfactoryItemOptions, IInventoryItem, IItem, IRawItem, TItemId, TItemNumber } from "@/interfaces/ItemsInterfaces"
+import { SLOT_TYPES, type IfactoryItemOptions, type IInventoryItem, type IItem, type IRawItem, type TItemId, type TItemNumber } from "@/interfaces/ItemsInterfaces"
 import {items} from './ItemsList.ts'
 
 //предметы, необходимые для:
@@ -16,11 +16,13 @@ export function ItemFactory(rawItem: IRawItem): IItem {
         itemNumber : itemNumber, // это подтип предмета knife_01 knife_02 - ножи, но разные
         description: '',
         icon       : '',
-        textName   : ''
+        textName   : '',
+        slotType   : SLOT_TYPES.INV_ONLY,
     }
     factoryOptions.description = items[itemId as itemsKey].description
     factoryOptions.icon = items[itemId as itemsKey].icon
     factoryOptions.textName = items[itemId as itemsKey].textName
+    factoryOptions.slotType = items[itemId as itemsKey].slotType
     return new Item(factoryOptions)
 }
 
@@ -31,6 +33,9 @@ export default class Item implements IItem {
     static splitRawName(rawName: string){
         const splitted = rawName.split('_')
         return {itemId: splitted[0], itemNumber: splitted[1]}
+    }
+    static getRawNameFromId(itemId: TItemId, itemNumber: string){
+        return `${itemId}_${itemNumber}`
     }
 
     //получает на вход массив "сырых" вещей (хранятся на карте, в сумках юнитов и т.п.) и возвращает созданные сущности-объекты
@@ -46,6 +51,7 @@ export default class Item implements IItem {
     public icon       : string = '&#10067'              //'&#x2753;'         //default icon
     public description: string = 'Default description'
     public textName   : string = 'Text name'
+    public slotType   : SLOT_TYPES
 
     constructor(factoryOptions: IfactoryItemOptions){
         this.itemId      = factoryOptions.itemId
@@ -53,6 +59,7 @@ export default class Item implements IItem {
         this.description = factoryOptions.description
         this.textName    = factoryOptions.textName
         this.icon        = factoryOptions.icon
+        this.slotType    = factoryOptions.slotType
     }
 
     static generateInventoryItem(itemId: TItemId, itemNumber: TItemNumber): IInventoryItem | null{
@@ -66,7 +73,8 @@ export default class Item implements IItem {
                 itemNumber : itemNumber,
                 icon       : thisItem.icon,
                 description: thisItem.description,
-                textName   : thisItem.textName
+                textName   : thisItem.textName,
+                slotType   : thisItem.slotType,
             },
             quantity: 1
         }

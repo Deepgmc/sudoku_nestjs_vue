@@ -1,11 +1,13 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import { type IEquiped, type IInventory, type IPlayer, type IPlayerRaw, type IRawEquiped } from '@/interfaces/PlayerInterfaces';
-import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 import ZoneManager from './ZoneManager';
+import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 import Inventory from './items/Inventory';
-import type { TActionPayload } from '@/interfaces/MapInterfaces';
 import { ItemFactory } from './items/Items';
-import { SLOT_TYPES, type TSlotItem } from '@/interfaces/ItemsInterfaces';
+
+import { type IEquiped, type IPlayer, type IPlayerRaw, type IRawEquiped } from '@/interfaces/PlayerInterfaces';
+import { SLOT_TYPES, type TSlotItem, type IInventory, type IInventoryItem, type TItemId } from '@/interfaces/ItemsInterfaces';
+import type { TActionPayload } from '@/interfaces/MapInterfaces';
+
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -153,5 +155,15 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         actionPayload.player = this
         const chatMessage = actionPayload.action.activate(actionPayload)
         next(chatMessage)
+    }
+
+    equipItem(item: IInventoryItem, slotName: string){
+        this.equiped[slotName as keyof IEquiped] = item.item
+    }
+
+    isItemEquiped(itemId: TItemId, slotType: SLOT_TYPES){
+        const item = this.equiped[slotType as keyof IEquiped]
+        if(!item) return false
+        return item.itemId === itemId
     }
 }
