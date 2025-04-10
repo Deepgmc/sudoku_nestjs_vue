@@ -1,3 +1,5 @@
+import { IEquiped } from "../interfaces/player.interface"
+
 export const player = {
     level: 1,
     experience: 0,
@@ -18,11 +20,15 @@ export const player = {
 
 export const inventory = [
     {name: 'water_bottle', quantity: 1},
-    {name: 'pants_01', quantity: 1}
+    {name: 'shirt_01', quantity: 1},
 ]
 
-export const equiped = {
-    foo: 1
+export const equiped: IEquiped = {
+    head: {name: '', quantity: 0},
+    body: {name: '', quantity: 0},
+    legs: {name: 'pants_01', quantity: 1},
+    rhand: {name: '', quantity: 0},
+    lhand: {name: '', quantity: 0},
 }
 
 export const playerRatios = {

@@ -6,7 +6,7 @@ export const usePlayerStore = defineStore('player', () => {
 
     const userId = ref<TUserId>(0)
     const userName = ref<string>('')
-    const equiped = reactive<IEquiped>({} as IEquiped)
+    const equiped = ref<IEquiped>({} as IEquiped)
     const inventory = ref<IInventory>({} as IInventory)
 
     function getUserId(){

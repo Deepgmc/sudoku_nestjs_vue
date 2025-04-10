@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import ItemTooltip from '@/components/ItemTooltip.vue'
 import type PlayerManager from '@/umbrella/PlayerManager';
 
 const props = defineProps({
     player: {
         type: Object as PropType<PlayerManager>,
         required: true
+    },
+    isPlayer: {//инвентарь юзера (вкл возможность манипуляций) или нет
+        type: Boolean,
+        required: false,
+        default: function(){
+            return false
+        }
     }
 })
 </script>
@@ -15,11 +23,7 @@ const props = defineProps({
         <div class="inventory_item" v-for="(inventoryCell, index) in player.inventory.maxSlots">
             <div v-if="player.inventory.items[index]" class="item_ico">
                 <span v-html="player.inventory.items[index].item.icon"></span>
-                <q-tooltip>
-                    {{ player.inventory.items[index].item.textName }}
-                    <q-separator class="q-my-xs" />
-                    {{ player.inventory.items[index].item.description }}
-                </q-tooltip>
+                <ItemTooltip :item="player.inventory.items[index].item"></ItemTooltip>
             </div>
         </div>
     </div>

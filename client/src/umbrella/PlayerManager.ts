@@ -1,9 +1,11 @@
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import { type IInventory, type IPlayer, type IPlayerRaw } from '@/interfaces/PlayerInterfaces';
+import { type IEquiped, type IInventory, type IPlayer, type IPlayerRaw, type IRawEquiped } from '@/interfaces/PlayerInterfaces';
 import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 import ZoneManager from './ZoneManager';
 import Inventory from './items/Inventory';
 import type { TActionPayload } from '@/interfaces/MapInterfaces';
+import { ItemFactory } from './items/Items';
+import { SLOT_TYPES, type TSlotItem } from '@/interfaces/ItemsInterfaces';
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -16,6 +18,13 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
     public userName: string = ''
     public playerIcon: string = '&#129399'
     public visibilityRange: number = 1
+    public equipedSlots: TSlotItem[] = [
+        {name: SLOT_TYPES.HEAD, textName: 'Голова'},
+        {name: SLOT_TYPES.BODY, textName: 'Тело'},
+        {name: SLOT_TYPES.LEGS, textName: 'Ноги'},
+        {name: SLOT_TYPES.RHAND, textName: 'Правая рука'},
+        {name: SLOT_TYPES.LHAND, textName: 'Левая рука'},
+    ]
 
     private constructor() {
         super()
@@ -36,9 +45,6 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
 
         this.store.userId = getPlayerResult.data.userId
         this.store.userName = getPlayerResult.data.userName
-
-        //hydrate inventory
-        this.inventory = new Inventory(getPlayerResult.data.game_settings.inventory)
 
 
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
@@ -65,7 +71,18 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.agility = dataRaw.player.agility
         this.intellect = dataRaw.player.intellect
 
-        this.store.equiped = Object.assign(this.store.equiped, dataRaw.equiped)
+        //hydrate equiped items
+        this.equiped = this.equipedSlots.reduce<IEquiped>((acc, slot: TSlotItem) => {
+            acc[slot.name as keyof IRawEquiped] = dataRaw.equiped[slot.name as keyof IRawEquiped].quantity > 0
+                ?
+                ItemFactory(dataRaw.equiped[slot.name as keyof IRawEquiped])
+                :
+                null;
+            return acc
+        }, {} as IEquiped)
+
+        //hydrate inventory
+        this.inventory = new Inventory(dataRaw.inventory)
 
         return true
     }
@@ -81,6 +98,12 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
     }
     set inventory(newInventory: IInventory){
         this.store.inventory = newInventory
+    }
+    get equiped(){
+        return this.store.equiped
+    }
+    set equiped(newEquiped: IEquiped){
+        this.store.equiped = newEquiped
     }
     get level(){return this.store.level}
     set level(newLevel: number){this.store.level = newLevel}

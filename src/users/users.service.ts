@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { TUserId } from '../interfaces/user.interface';
-import { IPlayerSettings } from '../interfaces/player.interface';
 
 @Injectable()
 export class UsersService {

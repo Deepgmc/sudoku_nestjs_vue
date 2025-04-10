@@ -1,11 +1,11 @@
-import type { IInventoryItem } from "./ItemsInterfaces"
+import type { IInventoryItem, IItem, IRawItem } from "./ItemsInterfaces"
 
 export type TUserId = number
 
 export type IPlayerRaw = {
     player: IPlayer,
-    equiped: IEquiped,
-    inventory: IInventory
+    equiped: IRawEquiped,
+    inventory: IRawItem[]
 }
 export interface IPlayer {
     playerIcon: string,
@@ -26,9 +26,20 @@ export interface IPlayer {
     y: number
 }
 
+//EQUIPED
 export interface IEquiped {
-    name: string,
-    [key: string]: any
+    head: IItem | null,
+    body: IItem | null,
+    legs: IItem | null,
+    rhand: IItem | null,
+    lhand: IItem | null,
+}
+export interface IRawEquiped {
+    head: IRawItem,
+    body: IRawItem,
+    legs: IRawItem,
+    rhand: IRawItem,
+    lhand: IRawItem,
 }
 export interface IInventory {
     maxSlots: number,

@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
+import ItemTooltip from '@/components/ItemTooltip.vue'
+
+import type { IEquiped } from '@/interfaces/PlayerInterfaces';
+import type PlayerManager from '@/umbrella/PlayerManager';
+import type { IItem } from '@/interfaces/ItemsInterfaces';
 
 const props = defineProps({
     player: {
@@ -12,20 +16,55 @@ const props = defineProps({
 
 <template>
     <div class="characterComponent_container">
-        <span class="char_player_icon" v-html="player.playerIcon"></span>
-        <div class="char_stat_line">Уровень: {{ player.level }}</div>
-        <div class="char_stat_line">Опыт: {{ player.experience }}</div>
-        <div class="char_stat_line">Здоровье: {{ player.health }}</div>
-        <div class="char_stat_line">Интеллект: {{ player.intellect }}</div>
-        <div class="char_stat_line">Сила: {{ player.strength }}</div>
-        <div class="char_stat_line">Ловкость: {{ player.agility }}</div>
+        <div class="character_stats">
+            <span class="char_player_icon" v-html="player.playerIcon"></span>
+            <div class="char_stat_line">Уровень: {{ player.level }}</div>
+            <div class="char_stat_line">Опыт: {{ player.experience }}</div>
+            <div class="char_stat_line">Здоровье: {{ player.health }}</div>
+            <div class="char_stat_line">Интеллект: {{ player.intellect }}</div>
+            <div class="char_stat_line">Сила: {{ player.strength }}</div>
+            <div class="char_stat_line">Ловкость: {{ player.agility }}</div>
+        </div>
+        <div class="character_equiped">
+            <div class="equiped_item" v-for="slot in player.equipedSlots">
+                <div v-if="player.equiped[slot.name as keyof IEquiped]">
+                    <span class="equiped_item_icon" v-html="player.equiped[slot.name as keyof IEquiped]?.icon"></span>
+                    <ItemTooltip :item="(player.equiped[slot.name as keyof IEquiped] as IItem)"></ItemTooltip>
+                </div>
+                <div v-else>{{ slot.textName }}</div>
+            </div>
+        </div>
     </div>
 </template>
 
 <style lang="scss">
 .characterComponent_container{
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    .character_stats, .character_equiped{
+        border: 1px solid darkgrey;
+        display: flex;
+        padding: 2px;
+    }
+    .character_stats{
+        width:30%;
+        flex-flow: column nowrap;
+    }
+    .character_equiped{
+        width:70%;
+        .equiped_item{
+            border: 1px solid red;
+            width: 70px;
+            height: 70px;
+            margin: 2px;
+            font-size:0.8em;
+            .equiped_item_icon{
+                font-size: 3em;
+                cursor: pointer;
+            }
+        }
+    }
     .char_player_icon{
         font-size: 3em
     }

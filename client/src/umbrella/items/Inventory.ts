@@ -1,4 +1,4 @@
-import type { IInventoryItem, rawItem, TItemId } from "@/interfaces/ItemsInterfaces";
+import type { IInventoryItem, IRawItem, TItemId } from "@/interfaces/ItemsInterfaces";
 import type { IInventory } from "@/interfaces/PlayerInterfaces";
 import Item from "./Items";
 
@@ -7,7 +7,7 @@ export default class Inventory implements IInventory {
     public items: IInventoryItem[]
 
     constructor(
-        rawInventory: rawItem[],
+        rawInventory: IRawItem[],
         maxSlots?: number
     ) {
         this.items = Item.hydrateRawItemsArray(rawInventory)
@@ -16,7 +16,7 @@ export default class Inventory implements IInventory {
 
     /**
      * перемещает в инвентарь все предметы из указанного инвентаря
-        RobAction, PickUpAction
+        RobAction, PickUpAction etc.
      */
     transferItemsFrom(targetInventory: IInventory): IInventory {
         this.addItems(targetInventory.getItems())

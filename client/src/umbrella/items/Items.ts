@@ -1,11 +1,11 @@
-import type { IfactoryItemOptions, IInventoryItem, IItem, rawItem, TItemId, TItemNumber } from "@/interfaces/ItemsInterfaces"
+import type { IfactoryItemOptions, IInventoryItem, IItem, IRawItem, TItemId, TItemNumber } from "@/interfaces/ItemsInterfaces"
 import {items} from './ItemsList.ts'
 
 //предметы, необходимые для:
 //копания
 export const enum itemsNeedToDig {SHOVEL = 'shovel'}
 
-export function ItemFactory(rawItem: rawItem): IItem {
+export function ItemFactory(rawItem: IRawItem): IItem {
     const itemId = Item.splitRawName(rawItem.name).itemId
     const itemNumber = Item.splitRawName(rawItem.name).itemNumber
 
@@ -34,9 +34,9 @@ export default class Item implements IItem {
     }
 
     //получает на вход массив "сырых" вещей (хранятся на карте, в сумках юнитов и т.п.) и возвращает созданные сущности-объекты
-    static hydrateRawItemsArray(rawItems: rawItem[]): IInventoryItem[]{
+    static hydrateRawItemsArray(rawItems: IRawItem[]): IInventoryItem[]{
         if(!rawItems || !rawItems.length) return []
-        return rawItems.map((rawItem: rawItem) => {
+        return rawItems.map((rawItem: IRawItem) => {
             return {item: ItemFactory(rawItem), quantity: rawItem.quantity}
         })
     }
