@@ -157,8 +157,12 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         next(chatMessage)
     }
 
-    equipItem(item: IInventoryItem, slotName: string){
-        this.equiped[slotName as keyof IEquiped] = item.item
+    equipItem(item: IInventoryItem, slotType: string){
+        this.equiped[slotType as keyof IEquiped] = item.item
+    }
+
+    unequipItem(slotType: string){
+        this.equiped[slotType as keyof IEquiped] = null
     }
 
     isItemEquiped(itemId: TItemId, slotType: SLOT_TYPES){

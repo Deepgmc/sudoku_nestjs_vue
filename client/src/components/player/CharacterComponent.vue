@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import ItemTooltip from '@/components/ItemTooltip.vue'
-import { dropItem } from '@/composables/dnd';
+import { dragItem, dropItem } from '@/composables/dnd';
 
 import type { IEquiped } from '@/interfaces/PlayerInterfaces';
 import type PlayerManager from '@/umbrella/PlayerManager';
@@ -29,12 +29,15 @@ const props = defineProps({
         </div>
         <div class="character_equiped">
             <div class="equiped_item"
+                draggable="true"
+                data-dnd_entity="equiped"
                 @drop.stop="dropItem($event)"
                 @dragenter.prevent=""
                 @dragover.prevent=""
+                @dragstart="dragItem($event, player.equiped[slot.name as keyof IEquiped])"
 
                 v-for="slot in player.equipedSlots"
-                :data-slotName="slot.name"
+                :data-slot_type="slot.name"
             >
                 <div v-if="player.equiped[slot.name as keyof IEquiped]">
                     <span class="equiped_item_icon" v-html="player.equiped[slot.name as keyof IEquiped]?.icon"></span>

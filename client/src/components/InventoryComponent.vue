@@ -2,7 +2,7 @@
 import type { PropType } from 'vue';
 import ItemTooltip from '@/components/ItemTooltip.vue'
 import type { IInventory } from '@/interfaces/ItemsInterfaces'
-import { dragItem } from '@/composables/dnd'
+import { dragItem, dropItem } from '@/composables/dnd'
 
 const props = defineProps({
     inventory: {
@@ -21,14 +21,23 @@ const props = defineProps({
 
 <template>
     <div class="inventory_container">
-        <div class="inventory_item" v-for="(_, index) in inventory.maxSlots">
+        <div class="inventory_item"
+            v-for="(_, index) in inventory.maxSlots"
+            @drop.stop="dropItem($event)"
+            @dragenter.prevent=""
+            @dragover.prevent=""
+            data-dnd_entity="inventory"
+        >
             <div
                 v-if="inventory.items[index]"
-                class="item_ico draggable"
+                class="item_ico"
                 draggable="true"
+                data-dnd_entity="inventory_item_ico"
+                :data-isPlayer="isPlayer"
                 @dragstart="dragItem($event, inventory.items[index].item)"
             >
-                <span v-html="inventory.items[index].item.icon"></span>
+                <div class="item_quantity_number">{{ inventory.items[index].quantity }}</div>
+                <div v-html="inventory.items[index].item.icon"></div>
                 <ItemTooltip :item="inventory.items[index].item"></ItemTooltip>
             </div>
         </div>
@@ -53,6 +62,11 @@ const props = defineProps({
     }
     .item_ico{
         font-size: 2.4em;
+        .item_quantity_number{
+            position: absolute;
+            margin: 30px 0 0 40px;
+            font-size:0.3em;
+        }
     }
 }
 

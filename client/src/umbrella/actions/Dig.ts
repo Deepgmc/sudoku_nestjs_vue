@@ -23,12 +23,12 @@ export default class DigAction extends MapAction {
     private digChances = [
         {
             name: 'food',
-            chancePercent: 30,
+            chancePercent: 100, //30
             items: ['bug', 'berry', 'acorn']
         },
         {
             name: 'clothes',
-            chancePercent: 10,
+            chancePercent: 100, //10
             items: ['shirt', 'pants']
         },
     ]

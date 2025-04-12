@@ -35,8 +35,35 @@ export default class Inventory implements IInventory {
         return itemsText.join(', ')
     }
 
+    /**
+     * Добавляет предметы в этот инвентарь. Мержит quantity если предмет уже есть
+     * @param newItems Добавляемые предметы в формате InventoryItem
+     */
     public addItems(newItems: IInventoryItem[]){
-        this.items = this.items.concat(newItems)
+        newItems.forEach(newItem => {
+            let isFoundThisItem = false
+            this.items.forEach(item => {
+                if(item.item.itemId === newItem.item.itemId){
+                    isFoundThisItem = true
+                    item.quantity += newItem.quantity
+                }
+            })
+            if(!isFoundThisItem){
+                this.items.push(newItem)
+            }
+        })
+    }
+
+    /** удалить предмет с itemId из инвентаря */
+    removeItem(itemId: TItemId){
+        const itemIndex = this.items.findIndex(item => {
+            return item.item && item.item.itemId === itemId
+        })
+        this.items[itemIndex].quantity -= 1
+        if(this.items[itemIndex].quantity < 1){
+            this.items.splice(itemIndex, 1)
+        }
+        return true
     }
 
     public clean(){
@@ -54,13 +81,4 @@ export default class Inventory implements IInventory {
         })
     }
 
-    /** удалить предмет с itemId из инвенторя */
-    removeItem(itemId: TItemId){
-
-        const itemIndex = this.items.findIndex((item, index) => {
-            return item.item.itemId === itemId
-        })
-        this.items.splice(itemIndex, 1)
-        return true
-    }
 }
