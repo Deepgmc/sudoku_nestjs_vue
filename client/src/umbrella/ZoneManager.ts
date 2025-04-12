@@ -1,4 +1,4 @@
-import type { IZone, TCoords } from '@/interfaces/MapInterfaces'
+import type { IZone, TCoords, TObjectWithZonePosition } from '@/interfaces/MapInterfaces'
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import {CellEntityFactory} from '@/umbrella/zoneEntities/CellEntityFactory'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
@@ -85,6 +85,15 @@ export default class ZoneManager extends UmbrellaManager {
                 cell.isVisibleToplayer = !(xRange > player.visibilityRange || yRange > player.visibilityRange)
             })
         })
+    }
+
+    // дистанция между 2 объектами, у которых есть zone-координаты x y
+    // по одной оси, возвращается максимальная
+    getDistanceBetween(obj1: TObjectWithZonePosition, obj2: TObjectWithZonePosition): number{
+        return Math.max(
+            Math.abs(obj1.x - obj2.x),
+            Math.abs(obj1.y - obj2.y),
+        )
     }
 
 }

@@ -3,10 +3,12 @@ import type { NetworkManager } from '@/network/NetworkManager';
 import { useAreaStore as AreaManagerStore } from '@/stores/areaStore'
 import { usePlayerStore as PlayerManagerStore } from '@/stores/playerStore'
 import { useZoneStore as ZoneManagerStore } from '@/stores/zoneStore'
+import { useChatStore as ChatManagerStore } from '@/stores/chatStore'
 
 type TAreaStore = ReturnType<typeof AreaManagerStore>;
 type TPlayerStore = ReturnType<typeof PlayerManagerStore>;
 type TZoneStore = ReturnType<typeof ZoneManagerStore>;
+type TChatStore = ReturnType<typeof ChatManagerStore>;
 
 export default class UmbrellaManager {
 

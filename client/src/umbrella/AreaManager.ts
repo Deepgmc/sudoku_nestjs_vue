@@ -1,5 +1,3 @@
-import { NetworkManager } from "@/network/NetworkManager"
-import type { AuthManager } from "@/auth/AuthManager"
 import {type IArea, type IDistrict, type IZone} from '@/interfaces/MapInterfaces'
 
 import { RESPONSE_STATUS_CODES } from '@/constants';

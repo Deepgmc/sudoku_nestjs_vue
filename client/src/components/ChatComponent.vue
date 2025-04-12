@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type Chat from '@/umbrella/Chat';
+import type Chat from '@/umbrella/ChatManager';
 
 const props = defineProps({
     chat: {

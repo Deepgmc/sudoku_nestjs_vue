@@ -1,8 +1,8 @@
-import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
+import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
-import type { IChatMessage } from "../Chat";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IPlayer } from "@/interfaces/PlayerInterfaces";
+import Chat from "../ChatManager";
 
 export default class MoveAction extends MapAction {
 
@@ -25,7 +25,7 @@ export default class MoveAction extends MapAction {
     }
 
     getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
-        if(!cellToMove) return {text: 'Wrong move parameters'}
+        if(!cellToMove) throw new Error('Wrong move parameters')
         const text: string[] = []
 
         //move direction
@@ -36,7 +36,7 @@ export default class MoveAction extends MapAction {
             text.push('Под ногами вы замечаете что-то интересное')
         }
 
-        return {text: text.join('. ')}
+        return Chat.getChatMessage(text.join(' '))
     }
 
     isActionActive(player: IPlayer, cell: CellEntity) {

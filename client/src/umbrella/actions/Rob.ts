@@ -1,10 +1,8 @@
-import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
+import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IChatMessage } from "../Chat";
 import type { IPlayer } from "@/interfaces/PlayerInterfaces";
-import type { IInventoryItem } from "@/interfaces/ItemsInterfaces";
 
 export default class RobAction extends MapAction {
 

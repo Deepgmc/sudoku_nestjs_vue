@@ -1,4 +1,5 @@
 import type { IInventoryItem, IItem } from "@/interfaces/ItemsInterfaces"
+import ChatManager from "@/umbrella/ChatManager"
 import Item, { ItemFactory } from "@/umbrella/items/Items"
 import PlayerManager from "@/umbrella/PlayerManager"
 
@@ -47,7 +48,8 @@ export function dropItem(event: DragEvent): boolean{
         const slotType = eventTarget.dataset.slot_type
         console.log('%c slotType:', 'color:rgb(182, 86, 158);', slotType)
         if(slotType !== iitem.item.slotType){
-            console.log('%c Нельзя одеть в этот слот', 'color:red;')
+            ChatManager.getInstance().addMessage(ChatManager.getChatMessage('Этот предмет нельзя сюда одеть'))
+            throw new Error('Нельзя одеть в этот слот')
             return false
         }
 

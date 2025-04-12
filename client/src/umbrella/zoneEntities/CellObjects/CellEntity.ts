@@ -1,7 +1,8 @@
 import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, TRawAction, infoIconsObject } from '@/interfaces/MapInterfaces.ts';
-import type { IInventory, IPlayer } from '@/interfaces/PlayerInterfaces.ts';
+import type { IPlayer } from '@/interfaces/PlayerInterfaces.ts';
 import { FeatureFactory } from '../FeatureFactory';
 import type FeatureEntity from '../FeatureObjects/FeatureEntity';
+import type { IInventory } from '@/interfaces/ItemsInterfaces';
 
 export default abstract class CellEntity {
     constructor(

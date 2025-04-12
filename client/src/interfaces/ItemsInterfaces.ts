@@ -6,6 +6,8 @@ export interface IInventory {
     removeItem: (itemId: TItemId) => boolean,
     hasItem: (itemId: TItemId) => boolean,
     clean: () => void,
+    isEmpty: () => boolean,
+
     [key: string]: any,
 }
 

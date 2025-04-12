@@ -1,8 +1,9 @@
 import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IChatMessage } from "../Chat";
+import type { IChatMessage } from '@/interfaces/MapInterfaces'
 import type { IPlayer } from "@/interfaces/PlayerInterfaces";
+import Chat from "../ChatManager";
 
 export default class LookAction extends MapAction {
 
@@ -19,7 +20,7 @@ export default class LookAction extends MapAction {
     }
 
     getChatMessage(payload: TActionPayload, targetCell: CellEntity): IChatMessage {
-        if(!targetCell) return {text: 'Wrong parameters'}
+        if(!targetCell) throw new Error('Wrong look parameters')
         const text: string[] = []
 
         //предметы на земле, фичи, непроходимые объекты дают какойто отклик в чат
@@ -27,8 +28,11 @@ export default class LookAction extends MapAction {
         targetCell.features.forEach(feature => {
             text.push(feature.chatDescription)
         })
+        if(!targetCell.inventory.isEmpty()){
+            text.push('На земле вы замечаете что-то интересное')
+        }
 
-        return {text: text.join(' ')}
+        return Chat.getChatMessage(text.join('. '))
     }
 
     isActionActive(player: IPlayer, cell: CellEntity) {

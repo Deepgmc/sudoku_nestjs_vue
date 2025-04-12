@@ -66,16 +66,16 @@ export default class Inventory implements IInventory {
         return true
     }
 
-    public clean(){
+    public clean(): void{
         this.items = []
     }
 
-    public isEmpty(){
+    public isEmpty(): boolean{
         return this.items.length < 1
     }
 
     /** есть ли предмет с itemId в инвенторе */
-    hasItem(itemId: TItemId){
+    hasItem(itemId: TItemId): boolean{
         return !!this.items.find(item => {
             return item.item.itemId === itemId
         })

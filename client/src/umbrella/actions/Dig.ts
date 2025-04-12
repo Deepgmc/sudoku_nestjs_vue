@@ -1,10 +1,11 @@
 import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IChatMessage } from "../Chat";
+import type { IChatMessage } from '@/interfaces/MapInterfaces';
 import type PlayerManager from "../PlayerManager";
 import Item, { itemsNeedToDig } from "../items/Items";
 import { SLOT_TYPES } from "@/interfaces/ItemsInterfaces";
+import Chat from "../ChatManager";
 
 function roll(): number {
     return parseInt((Math.random() * 100).toFixed(2))
@@ -38,7 +39,7 @@ export default class DigAction extends MapAction {
 
         this.digChances.forEach(digChance => {
             if(roll() <= digChance.chancePercent){
-                const thisItem = Item.generateInventoryItem(digChance.items[getRandomFrom(0, 2)], '01')
+                const thisItem = Item.generateInventoryItem(digChance.items[getRandomFrom(0, 1)], '01')
                 if(!thisItem) {
                     return {text: 'Error generating inventory item'}
                 }
@@ -48,16 +49,16 @@ export default class DigAction extends MapAction {
         })
 
         if(chatText.length > 0){
-            return {text: 'Выкопали: ' + chatText.join (' ')}
+            return Chat.getChatMessage('Выкопали: ' + chatText.join (' '))
         } else {
-            return {text: 'Не нашлось ничего интересного'}
+            return Chat.getChatMessage('Не нашлось ничего интересного')
         }
     }
 
     getChatMessage(payload: TActionPayload, cellToDig: CellEntity): IChatMessage {
         if(!cellToDig) return {text: 'Wrong move parameters'}
         const text: string[] = []
-        return {text: text.join('. ')}
+        return Chat.getChatMessage(text.join(' '))
     }
 
     /** ячейка должна иметь свойство canDig, игрок должен на ней стоять и в инвенторе должна быть лопата */

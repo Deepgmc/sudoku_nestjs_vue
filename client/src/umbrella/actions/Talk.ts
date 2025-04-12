@@ -1,9 +1,9 @@
-import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
+import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IChatMessage } from "../Chat";
 import type { IPlayer } from "@/interfaces/PlayerInterfaces";
+import Chat from "../ChatManager";
 
 export default class TalkAction extends MapAction {
 
@@ -20,9 +20,9 @@ export default class TalkAction extends MapAction {
     }
 
     getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
-        if(!cellToMove) return {text: 'Wrong move parameters'}
+        if(!cellToMove) throw new Error('Wrong talk parameters')
         const text: string[] = []
-        return {text: text.join('. ')}
+        return Chat.getChatMessage(text.join(' '))
     }
 
     isActionActive(player: IPlayer, cell: CellEntity) {

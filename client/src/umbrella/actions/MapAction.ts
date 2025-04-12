@@ -1,6 +1,5 @@
-import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces"
+import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces"
 import AreaManager from "../AreaManager"
-import type { IChatMessage } from "../Chat"
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity"
 import type PlayerManager from "../PlayerManager"
 

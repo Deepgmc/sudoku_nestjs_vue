@@ -1,7 +1,6 @@
 import { computed, reactive, ref } from 'vue'
 import { defineStore  } from 'pinia'
 import type { IArea, TClickedCell } from '@/interfaces/MapInterfaces'
-import Chat, { type IChatMessage } from '@/umbrella/Chat'
 
 export const useAreaStore = defineStore('area', () => {
 
@@ -19,8 +18,6 @@ export const useAreaStore = defineStore('area', () => {
         return clickedCell.cell !== undefined && clickedCell.x !== undefined && clickedCell.y !== undefined
     })
 
-    const chatMessages: IChatMessage[] = reactive([])
-
     return {
         area,
         isStoreLoaded,
@@ -28,8 +25,6 @@ export const useAreaStore = defineStore('area', () => {
 
         clickedCell,
         isCellClicked,
-
-        chatMessages,
     }
 })
 

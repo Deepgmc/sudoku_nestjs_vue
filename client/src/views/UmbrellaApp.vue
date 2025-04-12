@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onBeforeMount, provide, ref, defineComponent } from 'vue';
+import { inject, onBeforeMount, provide, ref } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
@@ -8,7 +8,7 @@ import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 import type { TActionPayload } from '@/interfaces/MapInterfaces';
 import AreaManager from '@/umbrella/AreaManager';
 import PlayerManager from '@/umbrella/PlayerManager';
-import Chat from '@/umbrella/Chat'
+import Chat from '@/umbrella/ChatManager'
 
 import AreaComponent from '@/components/map/AreaComponent.vue';
 import CharacterCard from '@/components/player/CharacterCard.vue';
@@ -27,11 +27,11 @@ UmbrellaManager.$networkManager = $networkManager;
 //instantiating this objects, just they create a new instance
 const areaManager: AreaManager = AreaManager.getInstance()
 const player: PlayerManager = PlayerManager.getInstance()
-const chat: Chat = new Chat(areaManager)
+const chat: Chat = Chat.getInstance()
 
 provide('areaManager', areaManager)
 provide('player', player)
-provide('chat', chat)
+//provide('chat', chat)
 
 
 onBeforeMount(() => {
