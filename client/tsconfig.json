@@ -12,6 +12,9 @@
     "allowJs": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "noImplicitThis": true,
+
+    "strictPropertyInitialization": true, //class props need to be initialized
+
     "paths": {
       "@/*": [
         "./src/*"

@@ -1,6 +1,7 @@
 import { computed, reactive, ref } from 'vue'
 import { defineStore  } from 'pinia'
-import type { IEquiped, IInventory, TUserId } from '@/interfaces/PlayerInterfaces'
+import type { IEquiped, TUserId } from '@/interfaces/PlayerInterfaces'
+import type { IInventory } from '@/interfaces/ItemsInterfaces'
 
 export const usePlayerStore = defineStore('player', () => {
 

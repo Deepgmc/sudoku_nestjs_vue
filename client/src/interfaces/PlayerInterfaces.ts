@@ -1,3 +1,4 @@
+import type CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
 import type { IInventoryItem, IItem, IRawItem } from "./ItemsInterfaces"
 
 export type TUserId = number
@@ -10,6 +11,7 @@ export type IPlayerRaw = {
 export interface IPlayer {
     playerIcon: string,
     visibilityRange: number,
+    moveRange: number,
     level: number,
     experience: number,
 
@@ -23,7 +25,10 @@ export interface IPlayer {
     zoneX: number,
     zoneY: number,
     x: number,
-    y: number
+    y: number,
+
+    canMoveToCell: (cell: CellEntity) => boolean,
+    applyItemStats: (item: IItem, actionType: string) => boolean,
 }
 
 //EQUIPED

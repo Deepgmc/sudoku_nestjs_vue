@@ -12,16 +12,38 @@ export interface IInventory {
 }
 
 export interface IItem {
+    //generated
     itemId     : TItemId,
     itemNumber : string,
+    item_type  : ITEM_TYPES,
+
+    //default from itemsList.ts
     icon       : string,
     description: string,
     textName   : string
     slotType   : SLOT_TYPES
+
+    //clothes
+    intellect  : number,
+    strength   : number,
+    agility    : number,
+    add_health : number,
+
+    //food
+    hp_regen   : number,
+
+    //weapon
+    damage     : number,
+
+    getItemType: () => ITEM_TYPES
 }
 export interface IInventoryItem {
     item: IItem,
     quantity: number
+}
+//transmission from itemFactory to Item
+export interface IfactoryItemOptions extends IItem{
+
 }
 
 export const enum SLOT_TYPES {
@@ -32,6 +54,11 @@ export const enum SLOT_TYPES {
     LHAND = 'lhand',
 
     INV_ONLY = 'inventory'
+}
+export enum ITEM_TYPES {
+    CLOTHES = 'clothes',
+    WEAPON  = 'weapon',
+    FOOD    = 'food',
 }
 
 export type TItemId = string
@@ -44,17 +71,8 @@ export interface IRawItem {
     quantity: number
 }
 
-//transmission from itemFactory to Item
-export interface IfactoryItemOptions {
-    itemId     : string,
-    itemNumber : string,
-    textName   : string,
-    slotType   : SLOT_TYPES,
-    description: string,
-    icon       : string
-}
-
+//тип одетой вещи
 export type TSlotItem = {
-    name: string,
+    name: SLOT_TYPES,
     textName: string
 }

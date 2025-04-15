@@ -19,7 +19,6 @@ export default class MoveAction extends MapAction {
 
         if(!clickedCell.x || !clickedCell.y) {throw new Error('Wrong cell to move')}
         if(!actionPayload.zoneManager) {throw new Error('Wrong actionPayload, no zoneManager')}
-
         actionPayload.zoneManager.setAndMovePlayer({x: clickedCell.x, y: clickedCell.y})
         return this.getChatMessage(actionPayload, clickedCell.cell)
     }
@@ -39,10 +38,14 @@ export default class MoveAction extends MapAction {
         return Chat.getChatMessage(text.join(' '))
     }
 
+    /**
+     *
+     * @param player Is move button active
+     * @param cell
+     * @returns
+     */
     isActionActive(player: IPlayer, cell: CellEntity) {
-        let isMovable = false
-        isMovable = cell.isMovable()
-        return isMovable
+        return cell.isMovable() && player.canMoveToCell(cell)
     }
 
     /** в какую сторону перемещаемся (просто текст) */

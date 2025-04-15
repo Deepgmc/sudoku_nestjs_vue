@@ -2,10 +2,10 @@ import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import ZoneManager from './ZoneManager';
 import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 import Inventory from './items/Inventory';
-import { ItemFactory } from './items/Items';
+import Item, { ItemFactory } from './items/Items';
 
 import { type IEquiped, type IPlayer, type IPlayerRaw, type IRawEquiped } from '@/interfaces/PlayerInterfaces';
-import { SLOT_TYPES, type TSlotItem, type IInventory, type IInventoryItem, type TItemId } from '@/interfaces/ItemsInterfaces';
+import { SLOT_TYPES, type TSlotItem, type IInventory, type IInventoryItem, type TItemId, type IItem, ITEM_TYPES } from '@/interfaces/ItemsInterfaces';
 import type { TActionPayload } from '@/interfaces/MapInterfaces';
 
 
@@ -19,7 +19,8 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
 
     public userName: string = ''
     public playerIcon: string = '&#129399'
-    public visibilityRange: number = 1
+    public visibilityRange: number = 2
+    public moveRange: number = 1
     public equipedSlots: TSlotItem[] = [
         {name: SLOT_TYPES.HEAD, textName: 'Голова'},
         {name: SLOT_TYPES.BODY, textName: 'Тело'},
@@ -74,19 +75,123 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.intellect = dataRaw.player.intellect
 
         //hydrate equiped items
-        this.equiped = this.equipedSlots.reduce<IEquiped>((acc, slot: TSlotItem) => {
-            acc[slot.name as keyof IRawEquiped] = dataRaw.equiped[slot.name as keyof IRawEquiped].quantity > 0
-                ?
-                ItemFactory(dataRaw.equiped[slot.name as keyof IRawEquiped])
-                :
-                null;
-            return acc
-        }, {} as IEquiped)
+        {
+            this.equiped = this.equipedSlots.reduce<IEquiped>((acc, slot: TSlotItem) => {
+                acc[slot.name as keyof IRawEquiped] = null
+                return acc
+            }, {} as IEquiped)
+
+            //"одеваем" вещи при инициализации
+            this.equipedSlots.forEach((slot: TSlotItem) => {
+                if(dataRaw.equiped[slot.name as keyof IRawEquiped].quantity > 0){
+                    this.equipItem(
+                        Item.hydrateRawItem(dataRaw.equiped[slot.name as keyof IRawEquiped]),
+                        slot.name
+                    )
+                }
+            })
+        }
 
         //hydrate inventory
         this.inventory = new Inventory(dataRaw.inventory)
 
         return true
+    }
+
+    isHere(x: number, y:number): boolean{
+        return this.x === x && this.y === y
+    }
+
+    standsIn(cell: CellEntity): boolean {
+        return this.isHere(cell.x, cell. y)
+    }
+
+    movePlayer(x:number, y: number, cell: CellEntity){
+        this.setXY(x, y)
+    }
+
+    setXY(x:number, y: number){
+        this.x = x
+        this.y = y
+    }
+
+    handleMapAction(actionPayload: TActionPayload, next: (msg: any) => void){
+        actionPayload.zoneManager = ZoneManager.getInstance()
+        actionPayload.player = this
+        const chatMessage = actionPayload.action.activate(actionPayload)
+        next(chatMessage)
+    }
+
+    equipItem(item: IInventoryItem, slotType: SLOT_TYPES): boolean{
+        if(!this.isSlotEmpty(slotType)){
+            return false
+        }
+        this.applyItemStats(item.item, 'add')
+        this.equiped[slotType as keyof IEquiped] = item.item
+        return true
+    }
+
+    unequipItem(slotType: string){
+        const item = this.equiped[slotType as keyof IEquiped]
+        if(item !== null){
+            this.applyItemStats(item, 'remove')
+        }
+
+        this.equiped[slotType as keyof IEquiped] = null
+    }
+
+    isItemEquiped(itemId: TItemId, slotType: SLOT_TYPES){
+        const item = this.equiped[slotType as keyof IEquiped]
+        if(!item) return false
+        return item.itemId === itemId
+    }
+
+    isSlotEmpty(slotType: SLOT_TYPES){
+        return this.equiped[slotType as keyof IEquiped] === null
+    }
+
+    applyItemStats(item: IItem, actionType: string): boolean {
+        const itemType = item.getItemType()
+        if(itemType === ITEM_TYPES.CLOTHES){
+            if(item.intellect) {
+                if(actionType === 'add'){
+                    this.intellect += item.intellect
+                } else {
+                    this.intellect -= item.intellect
+                }
+            }
+            if(item.strength) {
+                if(actionType === 'add'){
+                    this.strength += item.strength
+                } else {
+                    this.strength -= item.strength
+                }
+            }
+            if(item.agility) {
+                if(actionType === 'add'){
+                    this.agility += item.agility
+                } else {
+                    this.agility -= item.agility
+                }
+            }
+        } else {
+            return false
+        }
+        return true
+    }
+
+    /**
+     * Перемещаться можно только на 1 клетку по оси X или Y
+     * По диагонали нельзя, следовательно, смещение по одной из координат должно быть 0, а по второй - не больше шага персонажа
+     * @param cell ячейка, куда хотим переместиться
+     * @returns можно или нет
+     */
+    canMoveToCell(cell: CellEntity): boolean{
+        const distanceX = Math.abs(this.x - cell.x)
+        const distanceY = Math.abs(this.y - cell.y)
+        return distanceX <= this.moveRange &&
+            distanceY <= this.moveRange &&
+            (distanceX === 0 || distanceY === 0)
     }
 
     get userId(){
@@ -132,42 +237,4 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
     set x(newX: number){this.store.x = newX}
     get y(){return this.store.y}
     set y(newY: number){this.store.y = newY}
-
-    isHere(x: number, y:number): boolean{
-        return this.x === x && this.y === y
-    }
-
-    standsIn(cell: CellEntity): boolean {
-        return this.isHere(cell.x, cell. y)
-    }
-
-    movePlayer(x:number, y: number, cell: CellEntity){
-        this.setXY(x, y)
-    }
-
-    setXY(x:number, y: number){
-        this.x = x
-        this.y = y
-    }
-
-    handleMapAction(actionPayload: TActionPayload, next: (msg: any) => void){
-        actionPayload.zoneManager = ZoneManager.getInstance()
-        actionPayload.player = this
-        const chatMessage = actionPayload.action.activate(actionPayload)
-        next(chatMessage)
-    }
-
-    equipItem(item: IInventoryItem, slotType: string){
-        this.equiped[slotType as keyof IEquiped] = item.item
-    }
-
-    unequipItem(slotType: string){
-        this.equiped[slotType as keyof IEquiped] = null
-    }
-
-    isItemEquiped(itemId: TItemId, slotType: SLOT_TYPES){
-        const item = this.equiped[slotType as keyof IEquiped]
-        if(!item) return false
-        return item.itemId === itemId
-    }
 }
