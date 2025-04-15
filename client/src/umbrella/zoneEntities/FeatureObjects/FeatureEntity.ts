@@ -1,5 +1,5 @@
+import type { IInventory } from "@/interfaces/ItemsInterfaces";
 import type { IAction, infoIconsObject, IRawFeature, TRawAction, TRawActions } from "@/interfaces/MapInterfaces";
-import type { IInventory } from "@/interfaces/PlayerInterfaces";
 
 export default abstract class FeatureEntity {
 

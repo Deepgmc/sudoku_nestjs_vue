@@ -13,9 +13,16 @@ export default abstract class MapAction {
         this.actionName = action
     }
 
-    abstract activate(actionPayload: TActionPayload): void
+    abstract activate(
+        actionPayload: TActionPayload,
+        next: (msg: any) => void //action callback
+    ): void
 
     abstract getChatMessage(actionPayload: TActionPayload, cell?: CellEntity): IChatMessage
 
     abstract isActionActive(player: PlayerManager, cell: CellEntity): boolean
+
+    isRobAction(){
+        return this.actionName === 'rob'
+    }
 }

@@ -1,5 +1,5 @@
 import type CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
-import type { IInventoryItem, IItem, IRawItem } from "./ItemsInterfaces"
+import type { IInventory, IItem, IRawItem } from "./ItemsInterfaces"
 
 export type TUserId = number
 
@@ -9,6 +9,8 @@ export type IPlayerRaw = {
     inventory: IRawItem[]
 }
 export interface IPlayer {
+    inventory: IInventory,
+
     playerIcon: string,
     visibilityRange: number,
     moveRange: number,

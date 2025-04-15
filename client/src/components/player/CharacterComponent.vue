@@ -34,7 +34,7 @@ const props = defineProps({
                 @drop.stop="dropItem($event)"
                 @dragenter.prevent=""
                 @dragover.prevent=""
-                @dragstart="dragItem($event, player.equiped[slot.name as keyof IEquiped])"
+                @dragstart="dragItem($event, player.equiped[slot.name as keyof IEquiped], player)"
 
                 v-for="slot in player.equipedSlots"
                 :data-slot_type="slot.name"

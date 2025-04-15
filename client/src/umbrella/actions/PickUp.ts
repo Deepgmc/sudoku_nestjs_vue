@@ -14,13 +14,13 @@ export default class PickUpAction extends MapAction {
         super(action)
     }
 
-    activate(actionPayload: TActionPayload): IChatMessage{
+    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void{
         console.log('%c PickUp actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
 
         if(!actionPayload.clickedCell.cell) throw new Error('Wrong actionPayload, no cell')
 
         actionPayload.player.inventory.transferItemsFrom(actionPayload.clickedCell.cell.inventory)
-        return this.getChatMessage(actionPayload, actionPayload.clickedCell.cell)
+        next(this.getChatMessage(actionPayload, actionPayload.clickedCell.cell))
     }
 
     getChatMessage(payload: TActionPayload, targetCell: CellEntity): IChatMessage {

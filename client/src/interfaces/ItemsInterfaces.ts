@@ -11,6 +11,12 @@ export interface IInventory {
     [key: string]: any,
 }
 
+//any type contains inventory
+export interface TransferObjectWithInventory {
+    inventory: IInventory,
+    [key: string]: any,
+}
+
 export interface IItem {
     //generated
     itemId     : TItemId,

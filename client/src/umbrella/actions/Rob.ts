@@ -14,7 +14,7 @@ export default class RobAction extends MapAction {
         this.feature = feature
     }
 
-    activate(actionPayload: TActionPayload){
+    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void){
         console.log('%c ROB activate (this.feature): ', 'color:rgb(182, 86, 158);', this.feature)
         console.log('%c actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
 
@@ -23,9 +23,9 @@ export default class RobAction extends MapAction {
 
         const chatMessage = this.getChatMessage(actionPayload, actionPayload.clickedCell.cell)
 
-        actionPayload.player.inventory.transferItemsFrom(actionPayload.feature.inventory)
+        //actionPayload.player.inventory.transferItemsFrom(actionPayload.feature.inventory)
 
-        return chatMessage
+        next(chatMessage)
     }
 
     getChatMessage(payload: TActionPayload, cellToRob: CellEntity): IChatMessage {

@@ -25,15 +25,17 @@ const handleInfoActions = (actionPayload: TActionPayload) => {
 
 <template>
     <div class="infoComponent_container">
-        <h5>{{ clickedCell.cell.textName }} ({{ clickedCell.cell.mapCellObjectName }})</h5>
+        <h5>{{ clickedCell.cell.textName }}</h5>
         <hr>
         <div>{{ clickedCell.cell.getInfoDescription() }}</div>
+        <hr>
         <span v-if="props.clickedCell.cell.inventory.items.length">На земле валяется:</span>
         <span v-else>На земле нет ничего примечательного</span>
         <div v-for="item in props.clickedCell.cell.inventory.items">
-            <span class="ground_item_icon" v-html="item.item.icon"></span> {{ item.item.description }}
+            <div class="ground_item_icon" v-html="item.item.icon"></div>
+            <div class="ground_item_description">{{ item.item.description }}</div>
         </div>
-
+        <hr>
 
         <template v-if="props.clickedCell.cell.features.length > 0">
             Features:
@@ -66,6 +68,10 @@ const handleInfoActions = (actionPayload: TActionPayload) => {
 
 
 <style lang="scss">
+.infoComponent_container{
+    display: flex;
+    flex-flow: column nowrap;
+}
 .info_feature-item{
     display: flex;
     flex-flow: column wrap;

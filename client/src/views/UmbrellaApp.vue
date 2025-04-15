@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { inject, onBeforeMount, provide, ref } from 'vue';
+import { inject, onBeforeMount, provide, ref, type Component } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
-import type { TActionPayload } from '@/interfaces/MapInterfaces';
+import type { IChatMessage, TActionPayload } from '@/interfaces/MapInterfaces';
 import AreaManager from '@/umbrella/AreaManager';
 import PlayerManager from '@/umbrella/PlayerManager';
 import Chat from '@/umbrella/ChatManager'
@@ -16,6 +16,8 @@ import AreaComponent from '@/components/map/AreaComponent.vue';
 import CharacterCard from '@/components/player/CharacterCard.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
+import InspectCard from '@/components/InspectCard.vue';
+import type FeatureEntity from '@/umbrella/zoneEntities/FeatureObjects/FeatureEntity';
 
 
 
@@ -33,7 +35,6 @@ const chat: Chat = Chat.getInstance()
 
 provide('areaManager', areaManager)
 provide('player', player)
-//provide('chat', chat)
 
 
 onBeforeMount(() => {
@@ -42,50 +43,50 @@ onBeforeMount(() => {
 })
 
 
-
-
+/**
+ * Запоминаем кликнутую ячейку
+ * @param x - zone X coordinate
+ * @param y - zone Y coordinate
+ * @param cell CellEntity object
+ */
 const handleCellClick = function(x: number, y: number, cell: CellEntity){
     areaManager.store.clickedCell.cell = cell
     areaManager.store.clickedCell.x = x
     areaManager.store.clickedCell.y = y
 }
 
+let thisFeature: FeatureEntity = {} as FeatureEntity
 /**
  * обработка событий игрока, ячейки, юнитов
  * @param actionPayload вся необходимая инфа по действию
  */
 function handleInfoActions(actionPayload: TActionPayload){
     if(!areaManager.store.isCellClicked) return
-    player.handleMapAction(actionPayload, (msg: any) => {
+    player.handleMapAction(actionPayload, (msg: IChatMessage) => {
         chat.addMessage(msg)
+        if(actionPayload.action.isRobAction()){
+            loadModal('InspectCard')
+            if(actionPayload.feature) thisFeature = actionPayload.feature
+        }
     })
 }
 
-let currentDialogComponent: typeof CharacterCard
-const isWindowCardOpen = ref(false)
+let currentDialogComponent: Component
 
+const isWindowCardOpen = ref(false)
 const modalComponents = {
     CharacterCard: {
         component: CharacterCard,
-        // params: {
-        //     player: player
-        // }
     },
-    // Inventory: {
-    //     component: Inventory,
-    //     params: {
-    //         inventory: player.inventory,
-    //         player: player
-    //     }
-    // }
+    InspectCard: {
+        component: InspectCard
+    }
 }
 
 function loadModal(modalName: string): void {
     currentDialogComponent = modalComponents[modalName as keyof typeof modalComponents].component
-    //currentDialogParams = modalComponents[modalName as keyof typeof modalComponents].params
     isWindowCardOpen.value = true
 }
-
 </script>
 
 <template>
@@ -100,21 +101,20 @@ function loadModal(modalName: string): void {
             </AreaComponent>
         </div>
         <div class="umbrella_info_container">
-
-
-
             <div class="umbrella_buttons_block">
                 <div class="q-pa-md q-gutter-md">
                     <q-btn round color="black" icon="person" size="lg" @click="loadModal('CharacterCard')" />
                 </div>
             </div>
 
-
-
             <q-dialog v-model="isWindowCardOpen" backdrop-filter="brightness(80%)">
                 <q-card :dark="true" :bordered="true" style="min-width: 20vw">
                     <q-card-section>
-                        <component :is="currentDialogComponent" :player="player"></component>
+                        <component
+                            :is="currentDialogComponent"
+                            :player="player"
+                            :feature="thisFeature">
+                        </component>
                     </q-card-section>
 
                     <q-separator />

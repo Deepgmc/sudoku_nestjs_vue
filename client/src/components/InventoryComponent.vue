@@ -3,6 +3,7 @@ import type { PropType } from 'vue';
 import ItemTooltip from '@/components/ItemTooltip.vue'
 import type { IInventory } from '@/interfaces/ItemsInterfaces'
 import { dragItem, dropItem } from '@/composables/dnd'
+import type FeatureEntity from '@/umbrella/zoneEntities/FeatureObjects/FeatureEntity';
 
 const props = defineProps({
     inventory: {
@@ -15,7 +16,11 @@ const props = defineProps({
         default: function(){
             return false
         }
-    }
+    },
+    feature: {
+        type: Object as PropType<FeatureEntity>,
+        required: false
+    },
 })
 </script>
 
@@ -33,8 +38,8 @@ const props = defineProps({
                 class="item_ico"
                 draggable="true"
                 data-dnd_entity="inventory_item_ico"
-                :data-isPlayer="isPlayer"
-                @dragstart="dragItem($event, inventory.items[index].item)"
+                :data-is_player="isPlayer"
+                @dragstart="dragItem($event, inventory.items[index].item, feature)"
             >
                 <div class="item_quantity_number">{{ inventory.items[index].quantity }}</div>
                 <div v-html="inventory.items[index].item.icon"></div>
@@ -47,8 +52,11 @@ const props = defineProps({
 <style lang="scss">
 @use '@/assets/globalVariables.scss' as globals;
 .inventory_container{
-    display:flex;
+    display: flex;
     flex-flow: row wrap;
+    border: 1px dashed rgb(54, 54, 54);
+    padding: 5px;
+    margin: 5px 0 5px 0;
     .inventory_item {
         border: 1px solid darkgrey;
         width: 50px;

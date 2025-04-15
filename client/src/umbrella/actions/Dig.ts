@@ -34,7 +34,7 @@ export default class DigAction extends MapAction {
         },
     ]
 
-    activate(actionPayload: TActionPayload): IChatMessage {
+    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void {
         const chatText: string[] = []
 
         this.digChances.forEach(digChance => {
@@ -49,9 +49,9 @@ export default class DigAction extends MapAction {
         })
 
         if(chatText.length > 0){
-            return Chat.getChatMessage('Выкопали: ' + chatText.join (' '))
+            next(Chat.getChatMessage('Выкопали: ' + chatText.join (' ')))
         } else {
-            return Chat.getChatMessage('Не нашлось ничего интересного')
+            next(Chat.getChatMessage('Не нашлось ничего интересного'))
         }
     }
 
