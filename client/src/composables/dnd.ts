@@ -43,23 +43,27 @@ export function dropItem(event: DragEvent): boolean{
 
 
     const player = PlayerManager.getInstance()
-    // если таргет - слот плэера
+    // если таргет - слот плэера, принесли из инвентаря
     if(dndFrom === 'inventory_item_ico' && dndTo === 'equiped'){
         const slotType = eventTarget.dataset.slot_type
-        console.log('%c slotType:', 'color:rgb(182, 86, 158);', slotType)
         if(slotType !== iitem.item.slotType){
             ChatManager.getInstance().addMessage(ChatManager.getChatMessage('Этот предмет нельзя сюда одеть'))
             throw new Error('Нельзя одеть в этот слот')
             return false
         }
-
         console.log('%c Одеваем предмет в слот ' + slotType, 'color:pink;', iitem)
         player.equipItem(iitem, slotType)
         player.inventory.removeItem(iitem.item.itemId)
+    // если таргет - инвентарь, принесли из слота игрока
     } else if(dndFrom === 'equiped' && dndTo === 'inventory'){
         const slotType = event.dataTransfer.getData('slotType')
         player.unequipItem(slotType)
         player.inventory.addItems([iitem])
+    //TODO
+    //!сделать проверку на инвентарь игрока, а не любой
+    // перетаскиваем из инвентаря в корзину, удаляем предмет
+    } else if(dndTo === 'trash' && dndFrom === 'inventory_item_ico'){
+        player.inventory.removeItem(iitem.item.itemId)
     }
 
     return false

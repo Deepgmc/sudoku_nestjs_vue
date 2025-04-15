@@ -10,6 +10,8 @@ import AreaManager from '@/umbrella/AreaManager';
 import PlayerManager from '@/umbrella/PlayerManager';
 import Chat from '@/umbrella/ChatManager'
 
+import { dropItem } from '@/composables/dnd'
+
 import AreaComponent from '@/components/map/AreaComponent.vue';
 import CharacterCard from '@/components/player/CharacterCard.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
@@ -113,29 +115,26 @@ function loadModal(modalName: string): void {
                 <q-card :dark="true" :bordered="true" style="min-width: 20vw">
                     <q-card-section>
                         <component :is="currentDialogComponent" :player="player"></component>
-                        <!-- <Character
-                            :player="player"
-                        ></Character> -->
                     </q-card-section>
-                    <!-- <q-card-section>
-                        <Inventory
-                            :inventory="player.inventory"
-                        ></Inventory>
-                    </q-card-section> -->
 
-                    <!-- <q-separator />
+                    <q-separator />
+
+                    <q-card-actions align="left">
+                        <span class="drop_item_delete"
+                        v-html="'&#128465'"
+                        @drop.stop="dropItem($event)"
+                        @dragenter.prevent=""
+                        @dragover.prevent=""
+                        data-dnd_entity="trash"
+                    ></span>
+                    </q-card-actions>
 
                     <q-card-actions align="right">
                         <q-btn v-close-popup flat color="primary" label="Закрыть" />
-                    </q-card-actions> -->
+                    </q-card-actions>
 
                 </q-card>
             </q-dialog>
-
-
-
-
-
 
 
 
@@ -155,16 +154,6 @@ function loadModal(modalName: string): void {
                 >
                 </InfoComponent>
             </div>
-            <!-- <div class="player_block">
-                <Character
-                    :player="player"
-                    class="block_component"
-                ></Character>
-                <Inventory
-                    :inventory="player.inventory"
-                    class="block_component"
-                ></Inventory>
-            </div> -->
         </div>
     </div>
 </template>
@@ -211,5 +200,8 @@ function loadModal(modalName: string): void {
     display:flex;
     flex-flow: column nowrap;
     width: globals.$info-width;
+}
+.drop_item_delete{
+    font-size: 3em;
 }
 </style>
