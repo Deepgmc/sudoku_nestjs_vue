@@ -4,6 +4,8 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue",
+
+    "vite.config.js"
   ],
   "exclude": [
     "src/**/__tests__/*",

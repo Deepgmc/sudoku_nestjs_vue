@@ -22,10 +22,13 @@ export default defineConfig(({ mode }) => {
                 )
             })
         ],
+        //root: 'src',
         build: {
+            outDir: './dist',
+            emptyOutDir: true,
             rollupOptions: {
                 input: {
-                    app: './umbrella.html',
+                    app: './index.html',
                 },
             },
         },
@@ -39,15 +42,16 @@ export default defineConfig(({ mode }) => {
             open: true,
             //open: '/umbrella.html',
             //port: 5555,
+            //disableHostCheck: true,
             proxy: {
                 '/auth': {
                     target: `http://localhost:/${env.PROXY_DEV_PORT}`,
-                    changeOrigin: true,
+                    changeOrigin: true,//заголовок Origin
                     //rewrite: (path) => path.replace(/^\/api/, ''),
                 },
                 '/api': {
                     target: `http://localhost:${env.PROXY_DEV_PORT}/`,
-                    changeOrigin: true,
+                    changeOrigin: true,//заголовок Origin
                     //rewrite: (path) => path.replace(/^\/api/, ''),
                 },
             }

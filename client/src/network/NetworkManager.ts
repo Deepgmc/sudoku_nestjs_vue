@@ -1,11 +1,15 @@
-import { inject } from 'vue'
 import axios from 'axios'
 import type { /*AxiosInstance,*/ Axios, /*AxiosRequestConfig*/ AxiosResponse } from 'axios'
 import {type jwtTokenType } from '@/interfaces/Auth'
 import { type AuthManager} from '@/auth/AuthManager'
 
+
 export interface INetworkManager {
-    applyNetworkMethod: (type: string, section: string) => ($authManager: AuthManager) => (action: string) => (parameters: any) => Promise<AxiosResponse | {error: any}>
+    applyNetworkMethod: (type: string, section: string) =>
+                        ($authManager: AuthManager) =>
+                        (action: string) =>
+                        (parameters: any) =>
+                        Promise<AxiosResponse | {error: any}>
 }
 export type HttpClientTypes = Axios
 
@@ -23,7 +27,7 @@ export class NetworkManager implements INetworkManager {
         console.log('%c NetworkManager constructor call', 'color:rgb(182, 86, 158);')
         NetworkManager.instance = this
         this.httpClient = axios.create({
-            baseURL: 'http://localhost:5173/api',
+            baseURL: import.meta.env.DEV ? import.meta.env.VITE_API_URL : 'NEED_PROD_URL',
             //baseURL: 'http://localhost:3050/api',
             //headers: {'Authorization': 'Bearer XXXXX'},
             //this.httpClient.defaults.headers.common['Authorization'] = AUTH_TOKEN;

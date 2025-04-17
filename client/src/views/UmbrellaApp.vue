@@ -91,6 +91,7 @@ function loadModal(modalName: string): void {
 
 <template>
     <div class="umbrella-container">
+    <!-- <img src="/nest.png" /> тестовая имгшка, грузится из public -->
         <div class="umbrella_map_container block_component">
             <AreaComponent
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"

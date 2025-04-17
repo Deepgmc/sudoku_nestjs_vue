@@ -9,6 +9,7 @@
     "dev-mode": "vite --mode development",
     "dev-sub-dir": "vite serve some/sub/dir",
     "build-only": "vite build",
+
     "build-dev-mode": "vite build --mode development",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
