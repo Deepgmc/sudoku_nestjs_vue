@@ -35,7 +35,7 @@ export default class LookAction extends MapAction {
         return Chat.getChatMessage(text.join('. '))
     }
 
-    isActionActive(player: IPlayer, cell: CellEntity) {
+    isActionActive(/*player: IPlayer, cell: CellEntity*/) {
         return true
     }
 

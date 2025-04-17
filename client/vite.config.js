@@ -2,7 +2,7 @@ import * as nodeUrl from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueDevTools from 'vite-plugin-vue-devtools';
-import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
+import { quasar, /*transformAssetUrls*/ } from '@quasar/vite-plugin'
 //import legacy from '@vitejs/plugin-legacy'
 
 

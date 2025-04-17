@@ -1,4 +1,4 @@
-import type CellEntity from './CellObjects/CellEntity.ts';
+import CellEntity from './CellObjects/CellEntity.ts';
 import House from './CellObjects/House.ts';
 import HouseDump from './CellObjects/HouseDump.ts';
 import SideStreet from './CellObjects/SideStreet.ts';
@@ -35,7 +35,7 @@ export function CellEntityFactory (
                 break;
         }
     } catch(_e: any) {
-        cellEntity = null
+        throw new Error('Wrong CellEntity creation')
     }
     if(cellEntity === null) throw new Error('Invalid EntityFactory creation ' + cellObject.name)
 

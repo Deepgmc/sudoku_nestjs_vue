@@ -1,4 +1,4 @@
-import type { IRawFeature, TRawActions } from "@/interfaces/MapInterfaces";
+import type { IRawFeature } from "@/interfaces/MapInterfaces";
 import FeatureEntity from "./FeatureEntity";
 
 export class Portal extends FeatureEntity {

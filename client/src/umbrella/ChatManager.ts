@@ -1,9 +1,12 @@
 import type { IChatMessage } from "@/interfaces/MapInterfaces"
 import UmbrellaManager from "./UmbrellaManager"
+import { useChatStore } from '@/stores/chatStore'
 
 export default class ChatManager extends UmbrellaManager {
 
     messages: IChatMessage[]
+
+    store: ReturnType<typeof useChatStore>;
 
     static instance: ChatManager
     static getInstance(){
@@ -14,7 +17,8 @@ export default class ChatManager extends UmbrellaManager {
 
     constructor(){
         super()
-        this.messages = this.store.chatMessages
+        this.store = useChatStore()
+        this.messages = this.store.getChatMessages
     }
 
     addMessage(newMessage?: IChatMessage): ChatManager {

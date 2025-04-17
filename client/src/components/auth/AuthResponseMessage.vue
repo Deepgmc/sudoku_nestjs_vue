@@ -15,7 +15,15 @@ const sym = computed(() => {
 </script>
 
 <template>
-    <span class="auth_caption_message" :class="[isFormValidated ? 'success_text' : 'error_text']" v-for="message of messages"><span v-html="sym"></span> {{ message }}</span>
+    <span
+        class="auth_caption_message"
+        :class="[isFormValidated ? 'success_text' : 'error_text']"
+        v-for="(message, index) of messages"
+        :key="index"
+    >
+        <span v-html="sym"></span>
+        {{ message }}
+    </span>
 </template>
 
 <style lang="scss">

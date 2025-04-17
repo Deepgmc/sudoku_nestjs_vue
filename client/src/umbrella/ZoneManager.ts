@@ -3,6 +3,7 @@ import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import {CellEntityFactory} from '@/umbrella/zoneEntities/CellEntityFactory'
 import type { IZoneHydrated, THydratedZoneCells } from '@/interfaces/MapInterfaces'
 import PlayerManager from '@/umbrella/PlayerManager';
+import { useZoneStore } from '@/stores/zoneStore'
 
 export default class ZoneManager extends UmbrellaManager {
     static instance: ZoneManager
@@ -11,8 +12,12 @@ export default class ZoneManager extends UmbrellaManager {
         ZoneManager.instance = new ZoneManager(zoneRaw)
         return ZoneManager.instance
     }
+
+    store: ReturnType<typeof useZoneStore>;
+
     private constructor(zoneRaw?: IZone) {
         super()
+        this.store = useZoneStore()
         if(zoneRaw) this.zoneRaw = zoneRaw //receiving the zone setting object from the server map
         else this.zoneRaw = {} as IZone
     }
@@ -20,7 +25,7 @@ export default class ZoneManager extends UmbrellaManager {
     public player: PlayerManager = PlayerManager.getInstance()
     private zoneRaw: IZone
 
-    get zoneCells(): THydratedZoneCells{
+    get zoneCells(): THydratedZoneCells {
         return this.store.zone.zoneCells
     }
 
@@ -40,7 +45,7 @@ export default class ZoneManager extends UmbrellaManager {
         this.store.loadZoneToStore(hydratedZone)
     }
 
-    setAndMovePlayer(newCoords: TCoords): void {
+    async setAndMovePlayer(newCoords: TCoords): Promise<void> {
         if(typeof this.zoneCells[newCoords.y][newCoords.x] === 'undefined'){
             throw new Error(`Incorrent zoneCells indexes: ${newCoords.x}, ${newCoords.y}`)
         }
@@ -48,7 +53,7 @@ export default class ZoneManager extends UmbrellaManager {
         if(!targetCell.isMovable()){
             throw new Error('Passability false. Cant move!')
         }
-        this.removePlayerFromMap()
+        await this.removePlayerFromMap()
             .then(res => {
                 this.player.movePlayer(newCoords.x, newCoords.y, targetCell)
                 targetCell.player = this.player

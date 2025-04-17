@@ -1,25 +1,35 @@
 import type { AuthManager } from '@/auth/AuthManager';
 import type { NetworkManager } from '@/network/NetworkManager';
-import { useAreaStore as AreaManagerStore } from '@/stores/areaStore'
-import { usePlayerStore as PlayerManagerStore } from '@/stores/playerStore'
-import { useZoneStore as ZoneManagerStore } from '@/stores/zoneStore'
-import { useChatStore as ChatManagerStore } from '@/stores/chatStore'
+import { defineStore } from 'pinia'
 
-type TAreaStore = ReturnType<typeof AreaManagerStore>;
-type TPlayerStore = ReturnType<typeof PlayerManagerStore>;
-type TZoneStore = ReturnType<typeof ZoneManagerStore>;
-type TChatStore = ReturnType<typeof ChatManagerStore>;
+import { useAreaStore } from '@/stores/areaStore'
+import { usePlayerStore } from '@/stores/playerStore'
+import { useZoneStore } from '@/stores/zoneStore'
+import { useChatStore } from '@/stores/chatStore'
+
+type TAreaStore = ReturnType<typeof useAreaStore>;
+type TPlayerStore = ReturnType<typeof usePlayerStore>;
+type TZoneStore = ReturnType<typeof useZoneStore>;
+type TChatStore = ReturnType<typeof useChatStore>;
+
+// export type PiniaStore<T extends (...args: any) => any> = Omit<ReturnType<T>, keyof ReturnType<typeof defineStore>>;
 
 export default class UmbrellaManager {
 
-    public store: any//TAreaStore | TPlayerStore | TZoneStore
+    // public store: TAreaStore | TPlayerStore | TZoneStore | TChatStore
+    public store: unknown
+
+    // public areaStore: TAreaStore | undefined
+    // public playerStore: TPlayerStore | undefined
+    // public zoneStore: TZoneStore | undefined
+    // public chatStore: TChatStore | undefined
+    //public store: PiniaStore<typeof useAreaStore> | PiniaStore<typeof usePlayerStore> | PiniaStore<typeof useZoneStore> | PiniaStore<typeof useChatStore>;
 
     static $authManager: AuthManager;
     static $networkManager: NetworkManager;
 
-    constructor(){
-        //console.log('%c Creating store:', 'color:rgb(182, 86, 158);', `${this.constructor.name}Store()`)
-        this.store = eval(`${this.constructor.name}Store()`)
+    constructor() {
+
     }
 
     public authManager: AuthManager = UmbrellaManager.$authManager

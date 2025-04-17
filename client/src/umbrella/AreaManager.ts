@@ -1,4 +1,5 @@
 import {type IArea, type IDistrict, type IZone} from '@/interfaces/MapInterfaces'
+import { useAreaStore } from '@/stores/areaStore'
 
 import { RESPONSE_STATUS_CODES } from '@/constants';
 
@@ -16,8 +17,11 @@ export default class AreaManager extends UmbrellaManager {
         return AreaManager.instance
     }
 
+    store: ReturnType<typeof useAreaStore>;
+
     private constructor() {
         super()
+        this.store = useAreaStore()
         this._getData = this.networkManager.applyNetworkMethod('get', 'area')(this.authManager)
         this._postData = this.networkManager.applyNetworkMethod('post', 'area')(this.authManager)
         this.player = PlayerManager.getInstance()
@@ -51,8 +55,8 @@ export default class AreaManager extends UmbrellaManager {
      */
     getPlayerCurrentDistrict(): IDistrict {
         const playerDistrict: IDistrict = this.getDistrictByCoordinates(
-            this.player.districtX as number,
-            this.player.districtY as number
+            this.player.districtX,
+            this.player.districtY
         )
         return playerDistrict
     }
@@ -85,8 +89,8 @@ export default class AreaManager extends UmbrellaManager {
         const playerZone: IZone = this.getZoneByCoordinates(
             playerDistrict.districtPosition.x,
             playerDistrict.districtPosition.y,
-            this.player.zoneX as number,
-            this.player.zoneY as number
+            this.player.zoneX,
+            this.player.zoneY
         )
         const zoneFileData = await this._getData(this.API_METHODS.INIT_GET_ZONE)({
             zone: playerZone.zonePosition,

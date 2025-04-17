@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { IAction, TActionPayload, TClickedCell } from '@/interfaces/MapInterfaces';
-import { computed, inject, type PropType } from 'vue';
+import { computed, inject, defineEmits, type PropType } from 'vue';
 import type FeatureEntity from '../zoneEntities/FeatureObjects/FeatureEntity';
 import type PlayerManager from '../PlayerManager';
+
+const emit = defineEmits(['infoActionsClick'])
 
 const player = inject('player') as PlayerManager
 const props = defineProps({
@@ -37,9 +39,13 @@ const isActionActive = computed(() => {
 
 <template>
     <div v-if="isActionActive" class="info_actionButton" @click="$emit('infoActionsClick', actionPayload)">
-        <div>{{ props.action.textName }}</div>
+        <div>
+            {{ props.action.textName }}
+        </div>
     </div>
-    <div v-else class="info_actionButton_disabled">{{ props.action.textName }}</div>
+    <div v-else class="info_actionButton_disabled">
+        {{ props.action.textName }}
+    </div>
 </template>
 
 <style lang="scss"></style>

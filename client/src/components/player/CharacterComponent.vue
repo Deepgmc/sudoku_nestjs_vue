@@ -37,6 +37,7 @@ const props = defineProps({
                 @dragstart="dragItem($event, player.equiped[slot.name as keyof IEquiped], player)"
 
                 v-for="slot in player.equipedSlots"
+                :key="slot.name"
                 :data-slot_type="slot.name"
             >
                 <div v-if="player.equiped[slot.name as keyof IEquiped]">

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { inject, onBeforeMount, provide, ref, type Component } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
@@ -38,8 +38,8 @@ provide('player', player)
 
 
 onBeforeMount(() => {
-    areaManager.init() //loading map
-    player.init() //loading player data
+    void areaManager.init() //loading map
+    void player.init() //loading player data
 })
 
 
@@ -114,15 +114,14 @@ function loadModal(modalName: string): void {
                         <component
                             :is="currentDialogComponent"
                             :player="player"
-                            :feature="thisFeature">
+                            :feature="thisFeature"
+                        >
                         </component>
                     </q-card-section>
-
                     <q-separator />
-
                     <q-card-actions align="left">
                         <span class="drop_item_delete"
-                        v-html="'&#128465'"
+                        v-html="'&#128465;'"
                         @drop.stop="dropItem($event)"
                         @dragenter.prevent=""
                         @dragover.prevent=""
@@ -133,12 +132,8 @@ function loadModal(modalName: string): void {
                     <q-card-actions align="right">
                         <q-btn v-close-popup flat color="primary" label="Закрыть" />
                     </q-card-actions>
-
                 </q-card>
             </q-dialog>
-
-
-
 
             <div class="umbrella_chat_block block_component">
                 <ChatComponent

@@ -20,7 +20,9 @@ export interface IZone {
     zonePosition: IZonePosition,
     zoneCells: ICell[][]
 }
-export interface IZoneHydrated extends Omit<IZone, 'zoneCells'> {
+export interface IZoneHydrated {
+    zoneName: string,
+    zonePosition: IZonePosition,
     zoneCells: THydratedZoneCells
 }
 export type THydratedZoneCells = CellEntity[][]

@@ -1,4 +1,4 @@
-import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
+import type { IChatMessage, TAction, TActionPayload, TClickedCell } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IPlayer } from "@/interfaces/PlayerInterfaces";
@@ -12,14 +12,14 @@ export default class MoveAction extends MapAction {
         super(action)
     }
 
-    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void {
+    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void {
         //! убрать отсюда clickedCell, ведь перемещение может быть не только к нажатой ячейке
         //! сюда нужно передавать координаты в чистом виде (или ячейку)
-        const clickedCell = this.areaManager.store.clickedCell
+        const clickedCell: TClickedCell = this.areaManager.store.clickedCell
 
         if(!clickedCell.x || !clickedCell.y) {throw new Error('Wrong cell to move')}
         if(!actionPayload.zoneManager) {throw new Error('Wrong actionPayload, no zoneManager')}
-        actionPayload.zoneManager.setAndMovePlayer({x: clickedCell.x, y: clickedCell.y})
+        await actionPayload.zoneManager.setAndMovePlayer({x: clickedCell.x, y: clickedCell.y})
         next(this.getChatMessage(actionPayload, clickedCell.cell))
     }
 

@@ -1,3 +1,33 @@
+<template>
+    <form @submit.prevent="submitLogin" name="login_form" class="form_container">
+        <div class="login_item auth_caption">Login {{ authStore.isLogined ? '(logined)' : '' }}</div>
+        <div class="login_item">
+            <AuthResponseMessage
+                form="login"
+                :messages="infoMessage"
+                :isFormValidated="isFormValidated"
+            ></AuthResponseMessage>
+        </div>
+        <div v-for="item of loginFormValidationFields" class="login_item" :key="item.field">
+            <AuthFormField
+                :inputName="item.caption"
+                :errors="$v[item.field].$errors"
+                :modelField="loginUser[item.field as keyof typeof loginUser]"
+            >
+                <input
+                    v-model="loginUser[item.field as keyof typeof loginUser]"
+                    :type="item.type"
+                    :placeholder="item.placeholder"
+                >
+            </AuthFormField>
+        </div>
+
+        <div class="login_item submit_item">
+            <button type="submit">Login</button>
+        </div>
+    </form>
+</template>
+
 <script setup lang="ts">
 import { computed, inject, reactive, ref, watch, watchEffect } from 'vue';
 import { useAuthStore } from '@/stores/auth'
@@ -72,35 +102,6 @@ function resetMessageField(){
     infoMessage.value = []
 }
 </script>
-
-<template>
-
-    <form @submit.prevent="submitLogin" name="login_form" class="form_container">
-        <div class="login_item auth_caption">Login {{authStore.isLogined ? '(logined)' : ''}}</div>
-        <div class="login_item">
-            <AuthResponseMessage
-                form="login"
-                :messages="infoMessage"
-                :isFormValidated="isFormValidated"
-            ></AuthResponseMessage>
-        </div>
-
-        <div v-for="item of loginFormValidationFields" class="login_item">
-            <AuthFormField
-                :inputName="item.caption"
-                :errors="$v[item.field].$errors"
-                :modelField="loginUser[item.field as keyof typeof loginUser]"
-                >
-                    <input v-model="loginUser[item.field as keyof typeof loginUser]" :type="item.type" :placeholder="item.placeholder">
-            </AuthFormField>
-        </div>
-
-        <div class="login_item submit_item">
-            <button type="submit">Login</button>
-        </div>
-    </form>
-
-</template>
 
 <style lang="scss">
 </style>

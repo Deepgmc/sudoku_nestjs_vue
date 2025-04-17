@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref, type PropType } from 'vue';
 import ZoneManager from '@/umbrella/ZoneManager'
-import Cell from './Cell.vue';
+import ZoneCell from './ZoneCell.vue';
 
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
@@ -33,7 +33,7 @@ zoneManager.hydrateZoneObjects()
 console.log('%c ZoneComponent got raw zone:', 'color:darkgreen;', props.zone)
 console.log('%c ZoneComponent hydrated:', 'color:lightgreen;', zoneManager.store.zone.zoneCells)
 
-zoneManager.setAndMovePlayer({x: player.x, y: player.y})
+void zoneManager.setAndMovePlayer({x: player.x, y: player.y})
 
 function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
     props.handleCellClick(x, y, cell)//обработали клик на уровне зоны, прокидываем его выше
@@ -47,14 +47,14 @@ function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
     <div class="zone-cells-container">
         <div v-for="(cells, lineIndex) in zoneManager.store.zone.zoneCells" :key="lineIndex">
             <div class="zone-cell-line">
-                <Cell v-for="(cell, index) in cells" :key="index"
+                <ZoneCell v-for="(cell, index) in cells" :key="index"
                     :cell="cell"
                     :lineIndex="lineIndex"
                     :cellIndex="index"
                     :clickedCell="props.clickedCell"
                     @cell-click="zoneHandleCellClick"
                 >
-                </Cell>
+                </ZoneCell>
             </div>
         </div>
     </div>

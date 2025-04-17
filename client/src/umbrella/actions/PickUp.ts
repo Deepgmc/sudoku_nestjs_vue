@@ -33,7 +33,7 @@ export default class PickUpAction extends MapAction {
 
     isActionActive(player: PlayerManager, cell: CellEntity) {
         return !cell.inventory.isEmpty() &&
-            ZoneManager.getInstance().getDistanceBetween(PlayerManager.getInstance(), cell) === 0
+            ZoneManager.getInstance().getDistanceBetween(player, cell) === 0
     }
 
 }

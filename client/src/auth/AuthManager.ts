@@ -43,7 +43,7 @@ export class AuthManager implements IAuthManager {
         this.networkManager = NetworkManager.getInstance()
         this._postData = this.networkManager.applyNetworkMethod('post', this._apiSection)
 
-        this.updateAndGetIsLogined()
+        void this.updateAndGetIsLogined()
     }
 
     async registerRequest(registerData: TRegisterForm): Promise<any>{
@@ -84,7 +84,6 @@ export class AuthManager implements IAuthManager {
     }
 
     async updateAndGetIsLogined(): Promise<boolean> {
-        console.log('AuthManager updateAndGetIsLogined() call')
         if(!this._strategy) {
             this.logOut()
             return false

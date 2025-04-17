@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
     <div>
         <div class="chat_top_block">
-            <div v-for="message in chat.messages">
+            <div v-for="(message, index) in chat.messages" :key="index">
                 <div class="chat_message_block">
                     <div class="chat_message_who">
                         <span>&#129399;</span>

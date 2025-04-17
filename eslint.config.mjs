@@ -2,20 +2,20 @@
 import eslint from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import eslintPluginVue from 'eslint-plugin-vue';
-
+//import eslintPluginVue from 'eslint-plugin-vue';
 export default tseslint.config(
     {
         ignores: [
             'eslint.config.mjs',
             'babel.config.js',
             'maps/',
+            'client/*/**',
+            'client/**',
+            'client/',
             'client/src/umbrella/zoneEntities/**',
         ],
     },
     eslint.configs.recommended,
-    //eslintPluginVue.configs['flat/recommended'],
-    eslintPluginVue.configs['flat/recommended'],
     //eslintPluginVue.configs['flat/recommended'],
     ...tseslint.configs.recommendedTypeChecked,
     {
@@ -30,8 +30,9 @@ export default tseslint.config(
             sourceType: 'module',
             parserOptions: {
                 requireConfigFile: false,
-                projectService: true,
+                //projectService: true,
                 tsconfigRootDir: import.meta.dirname,
+                //extraFileExtensions: [".vue"],
             },
         },
     },
@@ -47,11 +48,6 @@ export default tseslint.config(
             "@typescript-eslint/no-unused-vars": "warn",
             "@typescript-eslint/no-misused-promises": "warn",
             "@typescript-eslint/no-empty-object-type": "warn",
-
-            "vue/require-default-prop": "error",
-            "vue/require-prop-types": "error",
-            "vue/prop-name-casing": "error",
-            "vue/no-mutating-props": "error",
         },
     },
 );

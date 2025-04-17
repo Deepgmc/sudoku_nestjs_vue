@@ -25,7 +25,7 @@ export default class TalkAction extends MapAction {
         return Chat.getChatMessage(text.join(' '))
     }
 
-    isActionActive(player: IPlayer, cell: CellEntity) {
+    isActionActive(/*player: IPlayer, cell: CellEntity*/) {
         return true
     }
 

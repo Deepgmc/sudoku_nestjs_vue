@@ -1,3 +1,31 @@
+<template>
+    <form @submit.prevent="submitRegister" name="register_form" class="form_container">
+        <div class="register_item auth_caption">Register</div>
+        <div class="register_item">
+            <AuthResponseMessage
+                form="register"
+                :messages="infoMessage"
+                :isFormValidated="isFormValidated"
+            ></AuthResponseMessage>
+        </div>
+        <div v-for="item of registerFormValidationFields" class="register_item" :key="item.field">
+            <AuthFormField
+                :inputName="item.caption"
+                :errors="$v[item.field].$errors"
+                :modelField="registerUser[item.field as keyof typeof registerUser]"
+            >
+                <input v-model="registerUser[item.field as keyof typeof registerUser]"
+                    :type="item.type"
+                    :placeholder="item.placeholder"
+                >
+            </AuthFormField>
+        </div>
+        <div class="register_item submit_item">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+</template>
+
 <script setup lang="ts">
 import { reactive, ref, computed, inject } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
@@ -57,36 +85,7 @@ function resetMessageField(){
     isFormValidated.value = false
     infoMessage.value = []
 }
-
-
 </script>
-
-<template>
-
-    <form @submit.prevent="submitRegister" name="register_form" class="form_container">
-        <div class="register_item auth_caption">Register</div>
-        <div class="register_item">
-            <AuthResponseMessage
-                form="register"
-                :messages="infoMessage"
-                :isFormValidated="isFormValidated"
-            ></AuthResponseMessage>
-
-        </div>
-
-        <div v-for="item of registerFormValidationFields" class="register_item">
-            <AuthFormField :inputName="item.caption" :errors="$v[item.field].$errors"
-                :modelField="registerUser[item.field as keyof typeof registerUser]">
-                <input v-model="registerUser[item.field as keyof typeof registerUser]" :type="item.type" :placeholder="item.placeholder">
-            </AuthFormField>
-        </div>
-
-        <div class="register_item submit_item">
-            <button type="submit">Register</button>
-        </div>
-    </form>
-
-</template>
 
 <style lang="scss">
 </style>

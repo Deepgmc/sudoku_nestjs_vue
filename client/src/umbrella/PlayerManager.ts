@@ -2,12 +2,13 @@ import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import ZoneManager from './ZoneManager';
 import type CellEntity from './zoneEntities/CellObjects/CellEntity';
 import Inventory from './items/Inventory';
-import Item, { ItemFactory } from './items/Items';
+import Item from './items/Items';
+
+import { usePlayerStore } from '@/stores/playerStore'
 
 import { type IEquiped, type IPlayer, type IPlayerRaw, type IRawEquiped } from '@/interfaces/PlayerInterfaces';
 import { SLOT_TYPES, type TSlotItem, type IInventory, type IInventoryItem, type TItemId, type IItem, ITEM_TYPES } from '@/interfaces/ItemsInterfaces';
 import type { IChatMessage, TActionPayload } from '@/interfaces/MapInterfaces';
-
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -16,7 +17,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         PlayerManager.instance = new PlayerManager()
         return PlayerManager.instance
     }
-
+    store: ReturnType<typeof usePlayerStore>;
     public userName: string = ''
     public playerIcon: string = '&#129399'
     public visibilityRange: number = 2
@@ -31,6 +32,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
 
     private constructor() {
         super()
+        this.store = usePlayerStore()
         this._getData = this.networkManager.applyNetworkMethod('get', this._apiSection)(this.authManager)
     }
     private _getData: (action: string) => any

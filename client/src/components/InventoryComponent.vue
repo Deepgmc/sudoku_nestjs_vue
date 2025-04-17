@@ -32,6 +32,7 @@ const props = defineProps({
             @dragenter.prevent=""
             @dragover.prevent=""
             data-dnd_entity="inventory"
+            :key="index"
         >
             <div
                 v-if="inventory.items[index]"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, type PropType } from 'vue';
+import { computed, defineEmits } from 'vue';
+import type {PropType} from 'vue';
 import PlayerComponent from '../PlayerComponent.vue';
 import HiddenCell from './HiddenCell.vue';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
@@ -17,6 +18,7 @@ const props = defineProps({
         required: true
     }
 })
+const emit = defineEmits(['cellClick'])
 
 const isMeClicked = computed(() => {
     return props.clickedCell.y === props.lineIndex && props.clickedCell.x === props.cellIndex
@@ -47,7 +49,7 @@ const isMeClicked = computed(() => {
                 </q-tooltip>
             </div>
             <div class="cell_item-top_right">
-                <div v-for="infoIcon in props.cell.infoIcons">
+                <div v-for="infoIcon in props.cell.infoIcons" :key="infoIcon.icon">
                     <span v-html="infoIcon.icon" class="icons_list_item"></span>
                     <q-tooltip>
                         {{ infoIcon.description }}
@@ -56,7 +58,7 @@ const isMeClicked = computed(() => {
             </div>
         </div>
         <div class="cell_item-bottom">
-            <div v-for="item in props.cell.inventory.items">
+            <div v-for="item in props.cell.inventory.items" :key="item.item.itemId">
                 <span v-html="item.item.icon" class="icons_list_item"></span>
                 <q-tooltip>
                     {{ item.item.textName }}

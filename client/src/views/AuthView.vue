@@ -1,4 +1,18 @@
-<script setup lang="ts">
+<template>
+    <section class="auth_container">
+        <div class="auth_line" v-if="isLogin">
+            <AuthLogin></AuthLogin>
+        </div>
+        <div class="auth_line" v-else>
+            <AuthRegister></AuthRegister>
+        </div>
+        <div class="auth_line">
+            <span class="auth_switch_btn link" @click="changeForm">{{ authBtnText }}</span>
+        </div>
+    </section>
+</template>
+
+<script lang="ts" setup>
 import { ref } from 'vue'
 
 import AuthLogin from '../components/auth/AuthLogin.vue'
@@ -20,19 +34,6 @@ function changeForm(): void{
 
 </script>
 
-<template>
-    <section class="auth_container">
-        <div class="auth_line" v-if="isLogin">
-            <AuthLogin></AuthLogin>
-        </div>
-        <div class="auth_line" v-else>
-            <AuthRegister></AuthRegister>
-        </div>
-        <div class="auth_line">
-            <span class="auth_switch_btn link" @click="changeForm">{{ authBtnText }}</span>
-        </div>
-    </section>
-</template>
 
 <style lang="scss">
 //@import '@/assets/globalVariables.scss';
