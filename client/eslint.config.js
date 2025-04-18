@@ -58,9 +58,15 @@ export default defineConfig(
             "vue/singleline-html-element-content-newline": "off",
         },
     },
-    [
-        globalIgnores(["dist/**/*"])
-    ],
+    // [
+    //     globalIgnores(["dist/**/*"])
+    // ],
+    {
+        ignores: [
+            'dist/*',
+            'node_modules/*',
+        ],
+    },
     {
         files: ['eslint.config.js'],
         extends: [tseslint.configs.disableTypeChecked],
