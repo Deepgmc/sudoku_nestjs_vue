@@ -1,8 +1,8 @@
-import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
+import type { IActionResult, IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IPlayer } from "@/interfaces/PlayerInterfaces";
+import { loadModal } from "@/composables/modal";
 
 export default class RobAction extends MapAction {
 
@@ -14,7 +14,7 @@ export default class RobAction extends MapAction {
         this.feature = feature
     }
 
-    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void){
+    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): IActionResult{
         console.log('%c ROB activate (this.feature): ', 'color:rgb(182, 86, 158);', this.feature)
         console.log('%c actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
 
@@ -23,9 +23,14 @@ export default class RobAction extends MapAction {
 
         const chatMessage = this.getChatMessage(actionPayload, actionPayload.clickedCell.cell)
 
-        //actionPayload.player.inventory.transferItemsFrom(actionPayload.feature.inventory)
-
         next(chatMessage)
+        return {
+            afterAction: () => {
+                loadModal('InspectCard', {
+                    feature: actionPayload.feature
+                })
+            }
+        }
     }
 
     getChatMessage(payload: TActionPayload, cellToRob: CellEntity): IChatMessage {

@@ -8,7 +8,7 @@ import { usePlayerStore } from '@/stores/playerStore'
 
 import { type IEquiped, type IPlayer, type IPlayerRaw, type IRawEquiped } from '@/interfaces/PlayerInterfaces';
 import { SLOT_TYPES, type TSlotItem, type IInventory, type IInventoryItem, type TItemId, type IItem, ITEM_TYPES } from '@/interfaces/ItemsInterfaces';
-import type { IChatMessage, TActionPayload } from '@/interfaces/MapInterfaces';
+import type { IActionResult, IChatMessage, TActionPayload } from '@/interfaces/MapInterfaces';
 
 export default class PlayerManager extends UmbrellaManager implements IPlayer {
     static instance: PlayerManager
@@ -117,10 +117,13 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.y = y
     }
 
-    handleMapAction(actionPayload: TActionPayload, next: (msg: IChatMessage) => void){
+    handleMapAction(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void{
         actionPayload.zoneManager = ZoneManager.getInstance()
         actionPayload.player = this
-        actionPayload.action.activate(actionPayload, next)
+        actionPayload
+            .action
+            .activate(actionPayload, next)
+            .afterAction()
     }
 
     equipItem(item: IInventoryItem, slotType: SLOT_TYPES): boolean{

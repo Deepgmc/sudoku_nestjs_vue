@@ -64,6 +64,7 @@ export interface IRawFeature {
     items: IRawItem[]
 }
 
+/**ACTIONS */
 export type TRawActions = TRawAction[]
 export type TRawAction = string
 
@@ -85,7 +86,9 @@ export type TActionPayload = {
     zoneManager?: ZoneManager,
 
     [key: string]: any
-
+}
+export interface IActionResult {
+    afterAction: (...params: any) => void
 }
 
 //CHAT

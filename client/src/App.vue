@@ -6,7 +6,7 @@
 */
 import { provide } from 'vue'
 import AuthView from '@/views/AuthView.vue';
-import UmbrellaApp from '@/views/UmbrellaApp.vue';
+import UmbrellaApp from '@/components/UmbrellaApp.vue';
 import AuthLoading from '@/views/AuthLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 
