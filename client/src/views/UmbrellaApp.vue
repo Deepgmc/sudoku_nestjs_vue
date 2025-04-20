@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onBeforeMount, provide, ref, type Component } from 'vue';
+import { inject, onBeforeMount, provide, reactive, ref, type Component } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
@@ -17,6 +17,7 @@ import CharacterCard from '@/components/player/CharacterCard.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import InspectCard from '@/components/InspectCard.vue';
+import testComponent from '@/components/map/testComponent.vue';
 import type FeatureEntity from '@/umbrella/zoneEntities/FeatureObjects/FeatureEntity';
 
 
@@ -42,17 +43,13 @@ onBeforeMount(() => {
     void player.init() //loading player data
 })
 
-
 /**
  * Запоминаем кликнутую ячейку
- * @param x - zone X coordinate
- * @param y - zone Y coordinate
+ * @param coords - ICoords {x: number, y: number}
  * @param cell CellEntity object
  */
 const handleCellClick = function(x: number, y: number, cell: CellEntity){
-    areaManager.store.clickedCell.cell = cell
-    areaManager.store.clickedCell.x = x
-    areaManager.store.clickedCell.y = y
+    areaManager.store.setClickedCell(cell, {x: x, y: y})
 }
 
 let thisFeature: FeatureEntity = {} as FeatureEntity
@@ -87,16 +84,18 @@ function loadModal(modalName: string): void {
     currentDialogComponent = modalComponents[modalName as keyof typeof modalComponents].component
     isWindowCardOpen.value = true
 }
+
 </script>
 
 <template>
     <div class="umbrella-container">
-    <!-- <img src="/nest.png" /> тестовая имгшка, грузится из public -->
+        <!-- <testComponent></testComponent> -->
+        <!-- <img src="/nest.png" /> тестовая имгшка, грузится из public -->
         <div class="umbrella_map_container block_component">
             <AreaComponent
                 v-if="areaManager.store.isStoreLoaded && player.store.isPlayerLoaded"
                 :isCellClicked="areaManager.store.isCellClicked"
-                :clickedCell="areaManager.store.clickedCell"
+                :clickedCell="areaManager.store.getClickedCell()"
                 :handleCellClick="handleCellClick"
             >
             </AreaComponent>
@@ -144,7 +143,7 @@ function loadModal(modalName: string): void {
             <div class="umbrella_info_block">
                 <InfoComponent
                     v-if="areaManager.store.isCellClicked"
-                    :clickedCell="areaManager.store.clickedCell"
+                    :clickedCell="areaManager.store.getClickedCell()"
                     @info-actions-click="handleInfoActions"
                     class="block_component"
                 >

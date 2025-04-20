@@ -34,6 +34,8 @@ export default defineConfig(
             },
         },
         rules: {
+            "no-debugger": "off",
+
             "@typescript-eslint/no-unused-vars": "off",
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/no-unsafe-argument': 'off',

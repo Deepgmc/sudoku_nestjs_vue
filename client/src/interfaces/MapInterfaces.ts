@@ -75,13 +75,10 @@ export interface TClickedCell {
 
 export type TAction = string
 
-//RobAction | DigAction | TalkAction | MoveAction | FightAction | PickUpAction
-export type IAction = MapAction
-
 export type TActionPayload = {
     type       : string,
     clickedCell: TClickedCell,
-    action     : IAction,
+    action     : MapAction,
     player     : PlayerManager
 
     feature?: FeatureEntity,

@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, type PropType } from 'vue'
+import { type PropType } from 'vue'
 import ActionButton from '@/umbrella/actions/ActionButton.vue';
 import type { TActionPayload, TClickedCell } from '@/interfaces/MapInterfaces';
 

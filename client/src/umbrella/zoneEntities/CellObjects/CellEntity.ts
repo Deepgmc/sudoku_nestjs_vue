@@ -1,8 +1,9 @@
-import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, IAction, TRawAction, infoIconsObject } from '@/interfaces/MapInterfaces.ts';
+import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, TRawAction, infoIconsObject } from '@/interfaces/MapInterfaces.ts';
 import type { IPlayer } from '@/interfaces/PlayerInterfaces.ts';
 import { FeatureFactory } from '../FeatureFactory';
 import type FeatureEntity from '../FeatureObjects/FeatureEntity';
 import type { IInventory } from '@/interfaces/ItemsInterfaces';
+import type MapAction from '@/umbrella/actions/MapAction';
 
 export default abstract class CellEntity {
     constructor(
@@ -34,9 +35,9 @@ export default abstract class CellEntity {
     abstract canDig: boolean
     abstract backgroundClass: string
 
-    public generalDefaultActions: TRawAction[] = ['move', 'pickUp', 'look'] as TRawAction[]
     abstract defaultEntityActions: TRawActions
-    public actions: IAction[] = [] as IAction[] //собранные с разных источников действия внутри конкретной одной ячейки
+    public generalDefaultActions: TRawAction[] = ['move', 'pickUp', 'look'] as TRawAction[]
+    public actions: MapAction[] = [] as MapAction[] //собранные с разных источников действия внутри конкретной одной ячейки
 
     public x: number
     public y: number

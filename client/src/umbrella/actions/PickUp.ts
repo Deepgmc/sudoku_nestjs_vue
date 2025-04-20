@@ -19,14 +19,16 @@ export default class PickUpAction extends MapAction {
 
         if(!actionPayload.clickedCell.cell) throw new Error('Wrong actionPayload, no cell')
 
+        next(this.getChatMessage(actionPayload))
         actionPayload.player.inventory.transferItemsFrom(actionPayload.clickedCell.cell.inventory)
-        next(this.getChatMessage(actionPayload, actionPayload.clickedCell.cell))
     }
 
-    getChatMessage(payload: TActionPayload, targetCell: CellEntity): IChatMessage {
-        if(!targetCell || targetCell.inventory.isEmpty()) return {text: 'Wrong pickUp parameters'}
+    getChatMessage(payload: TActionPayload): IChatMessage {
+        if(!payload.clickedCell.cell || payload.clickedCell.cell.inventory.isEmpty()) {
+            return {text: 'Wrong pickUp parameters'}
+        }
         const text: string[] = []
-        text.push(`Вы подбираете предметы: ${targetCell.inventory.getItemsForChat()}`)
+        text.push(`Вы подбираете предметы: ${payload.clickedCell.cell.inventory.getItemsForChat()}`)
 
         return Chat.getChatMessage(text.join(' '))
     }

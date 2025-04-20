@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { IAction, TActionPayload, TClickedCell } from '@/interfaces/MapInterfaces';
-import { computed, inject, defineEmits, type PropType } from 'vue';
+import type { TActionPayload, TClickedCell } from '@/interfaces/MapInterfaces';
+import { computed, inject, type PropType } from 'vue';
 import type FeatureEntity from '../zoneEntities/FeatureObjects/FeatureEntity';
 import type PlayerManager from '../PlayerManager';
+import type MapAction from './MapAction';
 
 const emit = defineEmits(['infoActionsClick'])
 
@@ -13,7 +14,7 @@ const props = defineProps({
         required: true
     },
     action: {
-        type: Object as PropType<IAction>,
+        type: Object as PropType<MapAction>,
         required: true
     },
     clickedCell: {

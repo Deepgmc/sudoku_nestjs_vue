@@ -1,5 +1,6 @@
 import type { IInventory } from "@/interfaces/ItemsInterfaces";
-import type { IAction, infoIconsObject, IRawFeature, TRawAction, TRawActions } from "@/interfaces/MapInterfaces";
+import type { infoIconsObject, IRawFeature, TRawAction, TRawActions } from "@/interfaces/MapInterfaces";
+import type MapAction from "@/umbrella/actions/MapAction";
 
 export default abstract class FeatureEntity {
 
@@ -20,7 +21,7 @@ export default abstract class FeatureEntity {
     public generalDefaultActions: TRawAction[] = [] as TRawAction[]
     abstract defaultEntityActions: TRawActions
 
-    public actions: IAction[] = [] as IAction[] //собранные с разных источников действия для этого конкретного feature
+    public actions: MapAction[] = [] as MapAction[] //собранные с разных источников действия для этого конкретного feature
 
 
     abstract getFeatureInfoIcon(): infoIconsObject

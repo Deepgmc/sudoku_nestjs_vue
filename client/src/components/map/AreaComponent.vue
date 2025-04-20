@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeMount, onMounted, reactive, ref } from 'vue';
-import type { IDistrict } from '@/interfaces/MapInterfaces';
+import { computed, inject, onBeforeMount, reactive, type PropType } from 'vue';
+import type { IDistrict, TClickedCell } from '@/interfaces/MapInterfaces';
 import type AreaManager from '@/umbrella/AreaManager';
 
 import DistrictComponent from './DistrictComponent.vue';
@@ -13,13 +13,19 @@ import DistrictComponent from './DistrictComponent.vue';
 */
 const areaManager = inject ('areaManager') as AreaManager
 
+
+// const props = defineProps<{
+//     clickedCell: TClickedCell,
+//     handleCellClick: (...args: any) => any
+// }>()
+
 const props = defineProps({
     handleCellClick: {
         type: Function,
         required: true
     },
     clickedCell: {
-        type: Object,
+        type: Object as PropType<TClickedCell>,
         required: true
     }
 })
@@ -30,7 +36,6 @@ const isDistrictFound = computed(() => {
 
 onBeforeMount(() => {
     currentDistrict = areaManager.getPlayerCurrentDistrict()
-    //console.log('%c areaComponent found currentDistrict:', 'color:darkgreen;', currentDistrict)
 })
 
 </script>
