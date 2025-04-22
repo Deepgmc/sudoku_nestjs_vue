@@ -20,7 +20,8 @@ export const isWindowCardOpen = ref(false)
 
 export function loadModal(modalName: string, params?: any): void {
     if(modalName === modalComponents.InspectCard.name){
-        dialogFeature.value = params.feature
+        //осматриваем только юнитов, но, возможно, осматривать и инвентарь CellEntity?
+        dialogFeature.value = params.unit
     }
     currentDialogComponent = modalComponents[modalName as keyof typeof modalComponents].component
     isWindowCardOpen.value = true

@@ -1,5 +1,6 @@
 export const zone = {
     level: 1,
+    zoneName: 'Дом',
     zoneCells: [
         [//HOME PORTAL
             {
@@ -7,7 +8,8 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -19,22 +21,24 @@ export const zone = {
                         name: 'portal',
                         actions: []
                     },
+                ],
+                units: [
                     {//!portalGuard
                         name: 'portalGuard',
                         actions: [],
                         level: 10,
                         items: [
-                            {
-                                name: 'lazerBlaster_01',
-                                quantity: 1
-                            },
-                            {
-                                name: 'armorMez_01',
-                                quantity: 1
-                            },
-                        ]
+                            {name: 'armorMez_01', quantity: 1},
+                        ],
+                        equiped: {
+                            head: {name: '', quantity: 0},
+                            body: {name: '', quantity: 0},
+                            legs: {name: '', quantity: 0},
+                            rhand: {name: 'lazerBlaster_01', quantity: 1},
+                            lhand: {name: '', quantity: 0},
+                        }
                     },
-                ],
+                ]
             },
             {
                 obj: {
@@ -43,7 +47,8 @@ export const zone = {
                     floor: 16,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -52,7 +57,8 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -61,7 +67,8 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -70,7 +77,8 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -79,7 +87,8 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [
@@ -88,14 +97,16 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -104,35 +115,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                 name: 'sideStreet',
                 orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [
@@ -141,14 +157,16 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -157,35 +175,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [//! DUMP
@@ -194,7 +217,8 @@ export const zone = {
                     name: 'houseDump',
                     orientation: 's-n',
                 },
-                features: [
+                features: [],
+                units: [
                     {//! homeless
                         name: 'homeless',
                         actions: [],
@@ -203,20 +227,24 @@ export const zone = {
                                 name: 'knife_01',
                                 quantity: 1
                             },
-                            {
-                                name: 'shirt_01',
-                                quantity: 1
-                            },
-                        ]
+                        ],
+                        equiped: {
+                            head: {name: '', quantity: 0},
+                            body: {name: 'shirt_01', quantity: 1},
+                            legs: {name: '', quantity: 0},
+                            rhand: {name: '', quantity: 0},
+                            lhand: {name: '', quantity: 0},
+                        }
                     }
-                ]
+                ],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -225,35 +253,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [
@@ -262,7 +295,8 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {//!umbrella badge
                 obj: {
@@ -275,7 +309,8 @@ export const zone = {
                         },
                     ]
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -284,35 +319,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [
@@ -321,14 +361,16 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -337,35 +379,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [
@@ -374,14 +421,16 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -390,35 +439,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [//!HOME LOCATION (7 in array)
@@ -427,14 +481,16 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {//!HOME ENTRANCE
                 obj: {
@@ -443,7 +499,8 @@ export const zone = {
                     floor: 12,
                     isEntrance: true
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -456,28 +513,32 @@ export const zone = {
                         },
                     ]
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [
@@ -486,14 +547,16 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -502,35 +565,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
         [
@@ -539,14 +607,16 @@ export const zone = {
                     name: 'fence',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
@@ -555,35 +625,40 @@ export const zone = {
                     floor: 12,
                     isEntrance: false
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'sideStreet',
                     orientation: 'e-w',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
             {
                 obj: {
                     name: 'trees',
                     orientation: 's-n',
                 },
-                features: []
+                features: [],
+                units: [],
             },
         ],
     ]

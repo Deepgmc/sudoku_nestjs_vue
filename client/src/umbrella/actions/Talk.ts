@@ -2,21 +2,22 @@ import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInte
 import MapAction from "./MapAction";
 import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 import Chat from "../ChatManager";
+import type Unit from "../zoneEntities/Units/Unit";
 
 export default class TalkAction extends MapAction {
 
     public textName: string = 'Поговорить'
-    public feature: FeatureEntity
+    public feature: FeatureEntity | Unit
 
-    constructor(action: TAction, feature: FeatureEntity){
+    constructor(action: TAction, feature: FeatureEntity | Unit){
         super(action)
         this.feature = feature
     }
 
-    activate(){
+    async activate(): Promise<void>{
         console.log('%c TALK activate:', 'color:rgb(182, 86, 158);', 123)
+        return Promise.resolve()
     }
 
     getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {

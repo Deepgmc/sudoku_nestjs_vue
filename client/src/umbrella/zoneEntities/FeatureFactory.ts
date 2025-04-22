@@ -1,10 +1,10 @@
 import type { IRawFeature, TRawAction } from "@/interfaces/MapInterfaces"
 import { ActionsFactory } from "../actions/ActionsFactory"
-import { Homeless } from "./FeatureObjects/Homeless"
 import { Portal } from "./FeatureObjects/Portal"
-import { PortalGuard } from "./FeatureObjects/PortalGuard"
+
 import Inventory from "../items/Inventory"
 import type FeatureEntity from "./FeatureObjects/FeatureEntity"
+import { reactive } from "vue"
 
 
 export function FeatureFactory (
@@ -12,16 +12,9 @@ export function FeatureFactory (
 ): FeatureEntity {
     let featureEntity: FeatureEntity | null
     try {
-        //featureEntity = eval(`new ${capitalizeFirstLetter(featureRaw.name)}(featureRaw)`)
         switch(featureRaw.name){
-            case 'homeless':
-                featureEntity = new Homeless(featureRaw)
-                break;
             case 'portal':
                 featureEntity = new Portal(featureRaw)
-                break;
-            case 'portalGuard':
-                featureEntity = new PortalGuard(featureRaw)
                 break;
             default:
                 featureEntity = null
@@ -38,7 +31,7 @@ export function FeatureFactory (
         })
 
     //hydrating feature items
-    featureEntity.inventory = new Inventory(featureRaw.items, 5)
+    featureEntity.inventory = reactive(new Inventory(featureRaw.items, 5))
 
     return featureEntity
 }

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type {PropType} from 'vue';
 import PlayerComponent from '../PlayerComponent.vue';
 import HiddenCell from './HiddenCell.vue';
-import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
+import PlayerManager from '@/umbrella/PlayerManager';
 
 
 const props = defineProps({
@@ -14,7 +13,7 @@ const props = defineProps({
         required: true
     },
     cell: {
-        type: Object as PropType<CellEntity>,
+        type: Object,
         required: true
     }
 })
@@ -40,7 +39,7 @@ const isMeClicked = computed(() => {
     >
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
-                <PlayerComponent v-if="props.cell.player" :player="props.cell.player"></PlayerComponent>
+                <PlayerComponent v-if="props.cell.player" :player="PlayerManager.getInstance()"></PlayerComponent>
                 <q-tooltip v-if="props.cell.player">
                     Это вы
                 </q-tooltip>

@@ -23,7 +23,7 @@ export class AreaController {
         try{
             return this.areaService.getZoneFile(districtCoords, zoneCoords)
         } catch(_e: any){
-            throw new TypeError('Invalid parameters')
+            throw new TypeError('Invalid parameters at get_zone_file')
         }
     }
 }

@@ -1,4 +1,4 @@
-import type { ICellObject, TCellRawFeatures, TCoords } from "@/interfaces/MapInterfaces"
+import type { ICellObject, TCellRawFeatures, TCellRawUnits, TCoords } from "@/interfaces/MapInterfaces"
 import CellEntity from "./CellEntity.ts"
 
 export default class Fence extends CellEntity {
@@ -10,8 +10,13 @@ export default class Fence extends CellEntity {
     public textName: string = 'Забор'
     public chatDescription = 'Ограждение металлическое, проржавелое, краска облуплена. Высокое, выглядит прочно, не перебраться'
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
-        super(objectName, mapCellFeatures, coords)
+    constructor(
+        objectName: ICellObject,
+        mapCellFeatures: TCellRawFeatures,
+        mapCellUnits: TCellRawUnits,
+        coords: TCoords
+    ){
+        super(objectName, mapCellFeatures, mapCellUnits, coords)
     }
     generateInfoIcons(){return []}
 

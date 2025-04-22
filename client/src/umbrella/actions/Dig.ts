@@ -3,9 +3,12 @@ import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IChatMessage } from '@/interfaces/MapInterfaces';
 import type PlayerManager from "../PlayerManager";
-import Item, { itemsNeedToDig } from "../items/Items";
 import { SLOT_TYPES } from "@/interfaces/ItemsInterfaces";
+import Item from "../items/Items";
 import Chat from "../ChatManager";
+
+//предметы, необходимые для копания:
+export const enum itemsNeedToDig {SHOVEL = 'shovel'}
 
 function roll(): number {
     return parseInt((Math.random() * 100).toFixed(2))
@@ -34,7 +37,7 @@ export default class DigAction extends MapAction {
         },
     ]
 
-    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void {
+    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): Promise<void> {
         const chatText: string[] = []
 
         this.digChances.forEach(digChance => {
@@ -53,6 +56,7 @@ export default class DigAction extends MapAction {
         } else {
             next(Chat.getChatMessage('Не нашлось ничего интересного'))
         }
+        return Promise.resolve()
     }
 
     getChatMessage(payload: TActionPayload, cellToDig: CellEntity): IChatMessage {

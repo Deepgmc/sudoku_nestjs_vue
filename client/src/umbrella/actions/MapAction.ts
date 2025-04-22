@@ -7,7 +7,6 @@ export default abstract class MapAction {
 
     public actionName: TAction
     public textName: string = ''
-    public areaManager: AreaManager = AreaManager.getInstance()
 
     constructor(action: TAction){
         this.actionName = action
@@ -16,7 +15,7 @@ export default abstract class MapAction {
     abstract activate(
         actionPayload: TActionPayload,
         next: (msg: any) => void //action callback, полученный извне
-    ): IActionResult //action callback, заданный самим действием
+    ): Promise<IActionResult | void>//action callback, заданный самим действием
 
     abstract getChatMessage(actionPayload: TActionPayload, cell?: CellEntity): IChatMessage
 

@@ -1,4 +1,4 @@
-import {type IArea, type IDistrict, type IZone} from '@/interfaces/MapInterfaces'
+import {type IArea, type IDistrict, type IZoneRaw} from '@/interfaces/MapInterfaces'
 import { useAreaStore } from '@/stores/areaStore'
 
 import { RESPONSE_STATUS_CODES } from '@/constants';
@@ -85,8 +85,8 @@ export default class AreaManager extends UmbrellaManager {
        Loads the zone settings file from server
      * @returns Zone settings with Cells: ICells
      */
-    async getPlayerCurrentZone(playerDistrict: IDistrict): Promise<IZone>{
-        const playerZone: IZone = this.getZoneByCoordinates(
+    async getPlayerCurrentZone(playerDistrict: IDistrict): Promise<IZoneRaw>{
+        const playerZone: IZoneRaw = this.getZoneByCoordinates(
             playerDistrict.districtPosition.x,
             playerDistrict.districtPosition.y,
             this.player.zoneX,

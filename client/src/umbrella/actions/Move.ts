@@ -3,6 +3,7 @@ import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 import Chat from "../ChatManager";
+import AreaManager from "../AreaManager";
 
 export default class MoveAction extends MapAction {
 
@@ -12,10 +13,10 @@ export default class MoveAction extends MapAction {
         super(action)
     }
 
-    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void {
+    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): Promise<void> {
         //! убрать отсюда clickedCell, ведь перемещение может быть не только к нажатой ячейке
         //! сюда нужно передавать координаты в чистом виде (или ячейку)
-        const clickedCell: TClickedCell = this.areaManager.store.clickedCell
+        const clickedCell: TClickedCell = AreaManager.getInstance().store.getClickedCell()
 
         if(!clickedCell.x || !clickedCell.y) {throw new Error('Wrong cell to move')}
         if(!actionPayload.zoneManager) {throw new Error('Wrong actionPayload, no zoneManager')}

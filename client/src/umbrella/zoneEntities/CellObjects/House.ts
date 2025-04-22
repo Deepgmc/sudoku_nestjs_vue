@@ -1,4 +1,4 @@
-import type { ICellObject, TCellRawFeatures, TCoords } from "@/interfaces/MapInterfaces"
+import type { ICellObject, TCellRawFeatures, TCellRawUnits, TCoords } from "@/interfaces/MapInterfaces"
 import CellEntity from "./CellEntity.ts"
 
 export default class House extends CellEntity {
@@ -12,8 +12,13 @@ export default class House extends CellEntity {
     public textName: string = 'Жилое здание'
     public chatDescription = 'Высотное здание. Вы можете заглянуть только в окна первого этажа. Там все разбито, покрыто пылью и т.п. Обычно на первых этажах таких зданий нет ничего интересного.'
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
-        super(objectName, mapCellFeatures, coords)
+    constructor(
+        objectName: ICellObject,
+        mapCellFeatures: TCellRawFeatures,
+        mapCellUnits: TCellRawUnits,
+        coords: TCoords
+    ){
+        super(objectName, mapCellFeatures, mapCellUnits, coords)
         this.floors = objectName.floor
         this.isEntrance = objectName.isEntrance
         this.generateInfoIcons()

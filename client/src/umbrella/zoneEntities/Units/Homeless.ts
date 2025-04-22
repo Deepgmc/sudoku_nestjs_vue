@@ -1,15 +1,14 @@
-import type { IRawFeature, TRawActions } from "@/interfaces/MapInterfaces";
-import FeatureEntity from "./FeatureEntity";
+import type { IUnitRaw, TRawActions } from "@/interfaces/MapInterfaces";
+import Unit from "./Unit";
 
-export class Homeless extends FeatureEntity {
+export class Homeless extends Unit {
 
     textName: string = 'Бомж'
     public defaultEntityActions: TRawActions = []
-    public isUnit = true
     public chatDescription = 'На вас смотрит какой-то бомж, грязный, вонючий. Его можно ограбить или поговорить (если он умеет)'
 
-    constructor(featureRaw: IRawFeature){
-        super(featureRaw)
+    constructor(unitRaw: IUnitRaw){
+        super(unitRaw)
     }
 
     defaultActions = ['fight', 'talk', 'rob']

@@ -1,19 +1,21 @@
-import { computed, ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { defineStore  } from 'pinia'
 import type { IZoneHydrated } from '@/interfaces/MapInterfaces'
-import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity'
 
 export const useZoneStore = defineStore('zone', () => {
 
-    const zone = ref<IZoneHydrated>({} as IZoneHydrated)
+    const zone = ref({} as IZoneHydrated)
 
     function loadZoneToStore(newZone: IZoneHydrated){
         zone.value = newZone
     }
 
-    //! возможно удалить потом
-    function setNewItem(x: number, y: number, item: CellEntity){
-        zone.value.zoneCells[y][x] = item
+    function getZone() {
+        return zone.value
+    }
+
+    function getZoneCells(){
+        return zone.value.zoneCells
     }
 
     const isStoreLoaded = computed(() => zone.value.zoneCells.length > 0)
@@ -22,8 +24,8 @@ export const useZoneStore = defineStore('zone', () => {
         zone,
         isStoreLoaded,
         loadZoneToStore,
-
-        setNewItem
+        getZone,
+        getZoneCells,
     }
 })
 

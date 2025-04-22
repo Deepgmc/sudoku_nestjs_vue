@@ -13,10 +13,11 @@ export default class LookAction extends MapAction {
         super(action)
     }
 
-    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void{
+    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): Promise<void>{
         console.log('%c Look actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
 
         next(this.getChatMessage(actionPayload, actionPayload.clickedCell.cell))
+        return Promise.resolve()
     }
 
     getChatMessage(payload: TActionPayload, targetCell: CellEntity): IChatMessage {

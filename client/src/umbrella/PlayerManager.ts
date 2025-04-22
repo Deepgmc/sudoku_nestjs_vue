@@ -1,45 +1,48 @@
+import { reactive, watch } from 'vue';
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
-import ZoneManager from './ZoneManager';
-import type CellEntity from './zoneEntities/CellObjects/CellEntity';
-import Inventory from './items/Inventory';
-import Item from './items/Items';
+import Unit from '@/umbrella/zoneEntities/Units/Unit';
+import ZoneManager from '@/umbrella/ZoneManager';
+import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 
 import { usePlayerStore } from '@/stores/playerStore'
 
-import { type IEquiped, type IPlayer, type IPlayerRaw, type IRawEquiped } from '@/interfaces/PlayerInterfaces';
-import { SLOT_TYPES, type TSlotItem, type IInventory, type IInventoryItem, type TItemId, type IItem, ITEM_TYPES } from '@/interfaces/ItemsInterfaces';
-import type { IActionResult, IChatMessage, TActionPayload } from '@/interfaces/MapInterfaces';
+import { type IPlayer, type IPlayerRaw } from '@/interfaces/PlayerInterfaces';
+import type { IActionResult, IChatMessage, TActionPayload, TRawActions } from '@/interfaces/MapInterfaces';
+import Inventory from './items/Inventory';
 
-export default class PlayerManager extends UmbrellaManager implements IPlayer {
+
+
+export default class PlayerManager extends Unit implements IPlayer {
     static instance: PlayerManager
     static getInstance(){
         if(PlayerManager.instance) return PlayerManager.instance
         PlayerManager.instance = new PlayerManager()
         return PlayerManager.instance
     }
-    store: ReturnType<typeof usePlayerStore>;
+    public store: ReturnType<typeof usePlayerStore>;
     public userName: string = ''
     public playerIcon: string = '&#129399'
     public visibilityRange: number = 2
     public moveRange: number = 1
-    public equipedSlots: TSlotItem[] = [
-        {name: SLOT_TYPES.HEAD, textName: 'Голова'},
-        {name: SLOT_TYPES.BODY, textName: 'Тело'},
-        {name: SLOT_TYPES.LEGS, textName: 'Ноги'},
-        {name: SLOT_TYPES.RHAND, textName: 'Правая рука'},
-        {name: SLOT_TYPES.LHAND, textName: 'Левая рука'},
-    ]
+
+    public textName: string = 'Игрок'
+    public chatDescription: string = 'Игрок'
+    public defaultActions: TRawActions = []
+    public defaultEntityActions: TRawActions = []
+    public getFeatureInfoIcon = () => {
+        return {icon: this.playerIcon, description: this.textName}
+    }
 
     private constructor() {
         super()
         this.store = usePlayerStore()
-        this._getData = this.networkManager.applyNetworkMethod('get', this._apiSection)(this.authManager)
+        this._getData = UmbrellaManager.$networkManager.applyNetworkMethod('get', this._apiSection)(UmbrellaManager.$authManager)
     }
     private _getData: (action: string) => any
     private _apiSection: string = 'player'
 
     API_METHODS = {
-        INIT_PLAYER: 'get_full'
+        INIT_PLAYER: 'get_player_data'
     }
 
     async init(){
@@ -51,51 +54,54 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         this.store.userId = getPlayerResult.data.userId
         this.store.userName = getPlayerResult.data.userName
 
-
         //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
-        if(!this.loadPlayerToStore(getPlayerResult.data.game_settings)){
+        if(!this.initPlayer(getPlayerResult.data.game_settings)){
             throw new Error('Invalid player received raw data')
         }
         return this
     }
 
-    loadPlayerToStore(dataRaw: IPlayerRaw): boolean {
+    initPlayer(dataRaw: IPlayerRaw): boolean {
         if(!dataRaw || !dataRaw.player) return false
 
         this.districtX = dataRaw.player.districtX
         this.districtY = dataRaw.player.districtY
-        this.zoneX = dataRaw.player.zoneX
-        this.zoneY = dataRaw.player.zoneY
-        this.x = dataRaw.player.x
-        this.y = dataRaw.player.y
+        this.zoneX     = dataRaw.player.zoneX
+        this.zoneY     = dataRaw.player.zoneY
+        this.x         = dataRaw.player.x
+        this.y         = dataRaw.player.y;
 
-        this.level = dataRaw.player.level
-        this.experience = dataRaw.player.experience
-        this.health = dataRaw.player.health
-        this.strength = dataRaw.player.strength
-        this.agility = dataRaw.player.agility
-        this.intellect = dataRaw.player.intellect
-
-        //hydrate equiped items
-        {
-            this.equiped = this.equipedSlots.reduce<IEquiped>((acc, slot: TSlotItem) => {
-                acc[slot.name as keyof IRawEquiped] = null
-                return acc
-            }, {} as IEquiped)
-
-            //"одеваем" вещи при инициализации
-            this.equipedSlots.forEach((slot: TSlotItem) => {
-                if(dataRaw.equiped[slot.name as keyof IRawEquiped].quantity > 0){
-                    this.equipItem(
-                        Item.hydrateRawItem(dataRaw.equiped[slot.name as keyof IRawEquiped]),
-                        slot.name
-                    )
-                }
+        {//чтоб данные в сторе были видны, потом можно убрать
+            watch(this.level, (newVal) => {
+                this.store.level = newVal
+            })
+            watch(this.experience, (newVal) => {
+                this.store.experience = newVal
+            })
+            watch(this.health, (newVal) => {
+                this.store.health = newVal
+            })
+            watch(this.strength, (newVal) => {
+                this.store.strength = newVal
+            })
+            watch(this.agility, (newVal) => {
+                this.store.agility = newVal
+            })
+            watch(this.intellect, (newVal) => {
+                this.store.intellect = newVal
             })
         }
 
-        //hydrate inventory
-        this.inventory = new Inventory(dataRaw.inventory)
+        this.level.value      = dataRaw.player.level
+        this.experience.value = dataRaw.player.experience
+        this.health.value     = dataRaw.player.health
+        this.strength.value   = dataRaw.player.strength
+        this.agility.value    = dataRaw.player.agility
+        this.intellect.value  = dataRaw.player.intellect
+
+        this.inventory = reactive(new Inventory(dataRaw.inventory))
+
+        this.equipItems(dataRaw.equiped)
 
         return true
     }
@@ -108,7 +114,7 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
         return this.isHere(cell.x, cell. y)
     }
 
-    movePlayer(x:number, y: number, cell: CellEntity){
+    movePlayer(x:number, y: number){
         this.setXY(x, y)
     }
 
@@ -120,68 +126,13 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
     handleMapAction(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void{
         actionPayload.zoneManager = ZoneManager.getInstance()
         actionPayload.player = this
-        actionPayload
-            .action
-            .activate(actionPayload, next)
-            .afterAction()
-    }
-
-    equipItem(item: IInventoryItem, slotType: SLOT_TYPES): boolean{
-        if(!this.isSlotEmpty(slotType)){
-            return false
-        }
-        this.applyItemStats(item.item, 'add')
-        this.equiped[slotType as keyof IEquiped] = item.item
-        return true
-    }
-
-    unequipItem(slotType: string){
-        const item = this.equiped[slotType as keyof IEquiped]
-        if(item !== null){
-            this.applyItemStats(item, 'remove')
-        }
-
-        this.equiped[slotType as keyof IEquiped] = null
-    }
-
-    isItemEquiped(itemId: TItemId, slotType: SLOT_TYPES){
-        const item = this.equiped[slotType as keyof IEquiped]
-        if(!item) return false
-        return item.itemId === itemId
-    }
-
-    isSlotEmpty(slotType: SLOT_TYPES){
-        return this.equiped[slotType as keyof IEquiped] === null
-    }
-
-    applyItemStats(item: IItem, actionType: string): boolean {
-        const itemType = item.getItemType()
-        if(itemType === ITEM_TYPES.CLOTHES){
-            if(item.intellect) {
-                if(actionType === 'add'){
-                    this.intellect += item.intellect
-                } else {
-                    this.intellect -= item.intellect
-                }
-            }
-            if(item.strength) {
-                if(actionType === 'add'){
-                    this.strength += item.strength
-                } else {
-                    this.strength -= item.strength
-                }
-            }
-            if(item.agility) {
-                if(actionType === 'add'){
-                    this.agility += item.agility
-                } else {
-                    this.agility -= item.agility
-                }
-            }
-        } else {
-            return false
-        }
-        return true
+        actionPayload.action.activate(actionPayload, next).then((res: IActionResult | void) => {
+            res?.afterAction()
+        })
+        .catch(e => {
+            console.log('%c ERRRR:', 'color:red;', e)
+            throw new Error('After action.activate afterAction() error')
+        })
     }
 
     /**
@@ -204,30 +155,6 @@ export default class PlayerManager extends UmbrellaManager implements IPlayer {
     set userId(newId: number){
         this.store.setUserId(newId)
     }
-    get inventory(): IInventory{
-        return this.store.inventory
-    }
-    set inventory(newInventory: IInventory){
-        this.store.inventory = newInventory
-    }
-    get equiped(){
-        return this.store.equiped
-    }
-    set equiped(newEquiped: IEquiped){
-        this.store.equiped = newEquiped
-    }
-    get level(){return this.store.level}
-    set level(newLevel: number){this.store.level = newLevel}
-    get experience(){return this.store.experience}
-    set experience(newExperience: number){this.store.experience = newExperience}
-    get health(){return this.store.health}
-    set health(newHealth: number){this.store.health = newHealth}
-    get strength(){return this.store.strength}
-    set strength(newStrength: number){this.store.strength = newStrength}
-    get agility(){return this.store.agility}
-    set agility(newAgility: number){this.store.agility = newAgility}
-    get intellect(){return this.store.intellect}
-    set intellect(newIntellect: number){this.store.intellect = newIntellect}
 
     get districtX(){return this.store.districtX}
     set districtX(newDistrictX: number){this.store.districtX = newDistrictX}

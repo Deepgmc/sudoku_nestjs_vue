@@ -1,4 +1,4 @@
-import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
+import type { IActionResult, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IChatMessage } from '@/interfaces/MapInterfaces';
@@ -14,13 +14,18 @@ export default class PickUpAction extends MapAction {
         super(action)
     }
 
-    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void{
+    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): Promise<IActionResult>{
         console.log('%c PickUp actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
 
         if(!actionPayload.clickedCell.cell) throw new Error('Wrong actionPayload, no cell')
 
         next(this.getChatMessage(actionPayload))
         actionPayload.player.inventory.transferItemsFrom(actionPayload.clickedCell.cell.inventory)
+        return Promise.resolve({
+            afterAction: () => {
+
+            }
+        })
     }
 
     getChatMessage(payload: TActionPayload): IChatMessage {

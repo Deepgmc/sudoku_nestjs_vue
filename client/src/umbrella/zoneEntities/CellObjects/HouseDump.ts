@@ -1,4 +1,4 @@
-import type { ICellObject, TCellRawFeatures, TCoords, TRawActions } from "@/interfaces/MapInterfaces"
+import type { ICellObject, TCellRawFeatures, TCellRawUnits, TCoords, TRawActions } from "@/interfaces/MapInterfaces"
 import CellEntity from "./CellEntity.ts"
 
 export default class HouseDump extends CellEntity {
@@ -10,8 +10,13 @@ export default class HouseDump extends CellEntity {
     public textName: string = 'Мусорка'
     public chatDescription = 'Придомная мусорка. Всё ценное скорее всего вынесли, но вдруг остались какие-нибудь крысиные лапки?'
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
-        super(objectName, mapCellFeatures, coords)
+    constructor(
+        objectName: ICellObject,
+        mapCellFeatures: TCellRawFeatures,
+        mapCellUnits: TCellRawUnits,
+        coords: TCoords
+    ){
+        super(objectName, mapCellFeatures, mapCellUnits, coords)
     }
     generateInfoIcons(){return []}
 

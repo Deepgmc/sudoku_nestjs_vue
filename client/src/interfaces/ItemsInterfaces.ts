@@ -82,3 +82,20 @@ export type TSlotItem = {
     name: SLOT_TYPES,
     textName: string
 }
+
+
+//EQUIPED
+export interface IEquiped {
+    head: IItem | null,
+    body: IItem | null,
+    legs: IItem | null,
+    rhand: IItem | null,
+    lhand: IItem | null,
+}
+export interface IRawEquiped {
+    head: IRawItem,
+    body: IRawItem,
+    legs: IRawItem,
+    rhand: IRawItem,
+    lhand: IRawItem,
+}

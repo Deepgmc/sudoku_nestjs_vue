@@ -1,9 +1,10 @@
 import type CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
-import type { IRawItem } from "./ItemsInterfaces"
+import type { IRawEquiped, IRawItem } from "./ItemsInterfaces"
 import type FeatureEntity from "@/umbrella/zoneEntities/FeatureObjects/FeatureEntity"
 import type ZoneManager from "@/umbrella/ZoneManager"
 import type PlayerManager from "@/umbrella/PlayerManager"
 import type MapAction from "@/umbrella/actions/MapAction"
+import type Unit from "@/umbrella/zoneEntities/Units/Unit"
 
 export interface IArea {
     areaName: string,
@@ -13,29 +14,27 @@ export interface IArea {
 export interface IDistrict {
     districtName: string,
     districtPosition: TDistrictPosition,
-    zones: IZone[][]
+    zones: IZoneRaw[][]
 }
-export interface IZone {
+export interface IZoneRaw {
     zoneName: string,
-    zonePosition: IZonePosition,
+    zonePosition: TCoords,
+    level: number,
     zoneCells: ICell[][]
 }
 export interface IZoneHydrated {
     zoneName: string,
-    zonePosition: IZonePosition,
-    zoneCells: THydratedZoneCells
+    zonePosition: TCoords,
+    level: number,
+    zoneCells: CellEntity[][]
 }
-export type THydratedZoneCells = CellEntity[][]
 
 export type TDistrictPosition = {
     x: number,
     y: number
 }
-export type IZonePosition = {
-    x: number,
-    y: number
-}
-export interface TObjectWithZonePosition extends IZonePosition {
+
+export interface TObjectWithZonePosition extends TCoords {
     [key: string]: any
 }
 
@@ -48,8 +47,9 @@ ZONE CELLS (FROM MAP)
 */
 export type TCoords = {x: number, y: number}
 export interface ICell {
-    obj: ICellObject,
+    obj     : ICellObject,
     features: TCellRawFeatures,
+    units   : TCellRawUnits,
 }
 
 export interface ICellObject {
@@ -58,10 +58,17 @@ export interface ICellObject {
 }
 /* RAW map features: */
 export type TCellRawFeatures = IRawFeature[]
+export type TCellRawUnits = IUnitRaw[]
 export interface IRawFeature {
     name: string,
     actions: TRawActions,
     items: IRawItem[]
+}
+export interface IUnitRaw {
+    name: string,
+    actions: TRawActions,
+    items: IRawItem[],
+    equiped: IRawEquiped,
 }
 
 /**ACTIONS */
@@ -83,6 +90,7 @@ export type TActionPayload = {
     player     : PlayerManager
 
     feature?: FeatureEntity,
+    unit?: Unit,
     zoneManager?: ZoneManager,
 
     [key: string]: any

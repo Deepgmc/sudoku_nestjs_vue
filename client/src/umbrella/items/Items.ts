@@ -1,9 +1,7 @@
 import { ITEM_TYPES, SLOT_TYPES, type IfactoryItemOptions, type IInventoryItem, type IItem, type IRawItem, type TItemId, type TItemNumber } from "@/interfaces/ItemsInterfaces"
 import {items} from './ItemsList.ts'
 
-//предметы, необходимые для:
-//копания
-export const enum itemsNeedToDig {SHOVEL = 'shovel'}
+
 
 export function ItemFactory(rawItem: IRawItem): IItem {
     const itemId = Item.splitRawName(rawItem.name).itemId
@@ -12,25 +10,6 @@ export function ItemFactory(rawItem: IRawItem): IItem {
     const factoryOptions: IfactoryItemOptions = Object.assign({} as IfactoryItemOptions, items[itemId as keyof typeof items])
     factoryOptions.itemId = itemId
     factoryOptions.itemNumber = itemNumber
-
-    // const factoryOptions: IfactoryItemOptions = {
-    //     itemId     : itemId,
-    //     itemNumber : itemNumber, // это подтип предмета knife_01 knife_02 - ножи, но разные
-    //     description: items[itemId as itemsKey].description,
-    //     icon       : items[itemId as itemsKey].icon,
-    //     textName   : items[itemId as itemsKey].textName,
-    //     slotType   : items[itemId as itemsKey].slotType,
-    //     add_health : items[itemId as itemsKey].add_health,
-    //     intellect  : items[itemId as itemsKey].intellect,
-    //     strength   : items[itemId as itemsKey].strength,
-    //     agility    : items[itemId as itemsKey].agility,
-    //     hp_regen   : items[itemId as itemsKey].hp_regen,
-    //     damage     : items[itemId as itemsKey].damage,
-    // }
-    // factoryOptions.description = items[itemId as itemsKey].description
-    // factoryOptions.icon = items[itemId as itemsKey].icon
-    // factoryOptions.textName = items[itemId as itemsKey].textName
-    // factoryOptions.slotType = items[itemId as itemsKey].slotType
 
     return new Item(factoryOptions)
 }

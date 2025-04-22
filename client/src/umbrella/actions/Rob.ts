@@ -3,49 +3,50 @@ import MapAction from "./MapAction";
 import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import { loadModal } from "@/composables/modal";
+import type Unit from "../zoneEntities/Units/Unit";
 
 export default class RobAction extends MapAction {
 
     public textName: string = 'Ограбить'
-    public feature: FeatureEntity
+    public feature: FeatureEntity | Unit
 
-    constructor(action: TAction, feature: FeatureEntity){
+    constructor(action: TAction, feature: FeatureEntity | Unit){
         super(action)
         this.feature = feature
     }
 
-    activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): IActionResult{
-        console.log('%c ROB activate (this.feature): ', 'color:rgb(182, 86, 158);', this.feature)
+    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): Promise<IActionResult>{
         console.log('%c actionPayload: ', 'color:rgb(182, 86, 158);', actionPayload)
 
         if(!actionPayload.player) {throw new Error('Wrong actionPayload, no player')}
-        if(!actionPayload.feature) {throw new Error('Wrong actionPayload, no feature')}
+        if(!actionPayload.unit) {throw new Error('Wrong actionPayload, no unit')}
 
         const chatMessage = this.getChatMessage(actionPayload, actionPayload.clickedCell.cell)
 
         next(chatMessage)
-        return {
+        return Promise.resolve({
             afterAction: () => {
                 loadModal('InspectCard', {
-                    feature: actionPayload.feature
+                    unit: actionPayload.unit
                 })
             }
-        }
+        })
     }
 
     getChatMessage(payload: TActionPayload, cellToRob: CellEntity): IChatMessage {
         if(!cellToRob) return {text: 'Wrong move parameters'}
         const text: string[] = []
-        const robFeature = cellToRob.features.find(feature => {
-            return feature.actions.find(action => {
+        const robUnit = cellToRob.units.find(unit => {
+            return unit.actions.find(action => {
                 return action.actionName === this.actionName
             })
         })
-        if(!robFeature) {
+        if(!robUnit) {
+            alert('NOT FOUND ROB UNIT!!!!!!')
             return {text: 'Не найден объект кражи'}
         }
-        text.push(`Вы пытаетесь ограбить: ${robFeature.textName}`)
-        text.push(`${robFeature.inventory.getItemsForChat()}`)
+        text.push(`Вы пытаетесь ограбить: ${robUnit.textName}`)
+        text.push(`${robUnit.inventory.getItemsForChat()}`)
 
         return {text: text.join(' ')}
     }

@@ -14,8 +14,7 @@ export default class Inventory implements IInventory {
     }
 
     /**
-     * перемещает в инвентарь все предметы из указанного инвентаря
-        RobAction, PickUpAction etc.
+     * перемещает в инвентарь все предметы из указанного инвентаря. RobAction, PickUpAction etc.
      */
     transferItemsFrom(targetInventory: IInventory): Inventory {
         this.addItems(targetInventory.getItems())

@@ -1,4 +1,4 @@
-import type { ICellObject, TCellRawFeatures, TCoords } from "@/interfaces/MapInterfaces"
+import type { ICellObject, TCellRawFeatures, TCellRawUnits, TCoords } from "@/interfaces/MapInterfaces"
 import CellEntity from "./CellEntity.ts"
 
 export default class SideStreet extends CellEntity {
@@ -11,8 +11,13 @@ export default class SideStreet extends CellEntity {
     public chatDescription = `Обычная асфальтированная придомная территория, правда асфальта остались только отдельные куски.
     Ходить можно, и хватит. Копать не получится. Или нужен инструмент посерьёзнее`
 
-    constructor(objectName: ICellObject, mapCellFeatures: TCellRawFeatures, coords: TCoords){
-        super(objectName, mapCellFeatures, coords)
+    constructor(
+        objectName: ICellObject,
+        mapCellFeatures: TCellRawFeatures,
+        mapCellUnits: TCellRawUnits,
+        coords: TCoords
+    ){
+        super(objectName, mapCellFeatures, mapCellUnits, coords)
     }
     generateInfoIcons(){return []}
 

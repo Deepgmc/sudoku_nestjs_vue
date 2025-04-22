@@ -5,7 +5,7 @@ import ZoneCell from './ZoneCell.vue';
 
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
-import type { IZone } from '@/interfaces/MapInterfaces';
+import type { IZoneRaw } from '@/interfaces/MapInterfaces';
 
 const props = defineProps({
     handleCellClick: {
@@ -13,7 +13,7 @@ const props = defineProps({
         required: true
     },
     zone: {
-        type: Object as PropType<IZone>,
+        type: Object as PropType<IZoneRaw>,
         required: true
     },
     clickedCell: {
@@ -21,8 +21,6 @@ const props = defineProps({
         required: true
     }
 })
-
-
 
 
 const player = inject ('player') as PlayerManager
@@ -42,10 +40,9 @@ function zoneHandleCellClick(x: number, y: number, cell: CellEntity){
 </script>
 
 
-
 <template>
     <div class="zone-cells-container">
-        <div v-for="(cells, lineIndex) in zoneManager.store.zone.zoneCells" :key="lineIndex">
+        <div v-for="(cells, lineIndex) in zoneManager.store.getZoneCells()" :key="lineIndex">
             <div class="zone-cell-line">
                 <ZoneCell v-for="(cell, index) in cells" :key="index"
                     :cell="cell"

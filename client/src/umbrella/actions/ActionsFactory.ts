@@ -9,16 +9,14 @@ import TalkAction from './Talk.ts'
 import DigAction from './Dig.ts'
 import LookAction from './Look.ts'
 import PickUpAction from './PickUp.ts'
-
-
+import type Unit from '../zoneEntities/Units/Unit.ts'
 
 export function ActionsFactory (
     action: TRawAction,
-    feature?: FeatureEntity
+    object?: FeatureEntity | Unit
 ): MapAction {
     let actionEntity: MapAction | null = null
     try {
-        //actionEntity = eval(`new ${capitalizeFirstLetter(action)}Action(action)`)
         switch(action){
             case 'move':
                 actionEntity = new MoveAction(action)
@@ -27,19 +25,19 @@ export function ActionsFactory (
                 actionEntity = new DigAction(action)
                 break;
             case 'rob':
-                if(!feature) throw new Error('No feature')
-                actionEntity = new RobAction(action, feature)
+                if(!object) throw new Error('No feature')
+                actionEntity = new RobAction(action, object)
                 break;
             case 'fight':
-                if(!feature) throw new Error('No feature')
-                actionEntity = new FightAction(action, feature)
+                if(!object) throw new Error('No feature')
+                actionEntity = new FightAction(action, object)
                 break;
             case 'look':
                 actionEntity = new LookAction(action)
                 break;
             case 'talk':
-                if(!feature) throw new Error('No feature')
-                actionEntity = new TalkAction(action, feature)
+                if(!object) throw new Error('No feature')
+                actionEntity = new TalkAction(action, object)
                 break;
             case 'pickUp':
                 actionEntity = new PickUpAction(action)

@@ -6,7 +6,6 @@ export default abstract class FeatureEntity {
 
     public objectName: string = ''
     abstract textName: string
-    abstract isUnit: boolean
     abstract chatDescription: string
 
     public inventory: IInventory = {} as IInventory

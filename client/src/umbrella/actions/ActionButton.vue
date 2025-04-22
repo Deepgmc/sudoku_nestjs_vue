@@ -4,6 +4,7 @@ import { computed, inject, type PropType } from 'vue';
 import type FeatureEntity from '../zoneEntities/FeatureObjects/FeatureEntity';
 import type PlayerManager from '../PlayerManager';
 import type MapAction from './MapAction';
+import type Unit from '../zoneEntities/Units/Unit';
 
 const emit = defineEmits(['infoActionsClick'])
 
@@ -25,12 +26,17 @@ const props = defineProps({
         type: Object as PropType<FeatureEntity>,
         required: false
     },
+    unit: {
+        type: Object as PropType<Unit>,
+        required: false
+    },
 })
 const actionPayload: TActionPayload = {
     type: props.type,
     player: player,
     clickedCell: props.clickedCell,
     feature: props.feature,
+    unit: props.unit,
     action: props.action,
 }
 const isActionActive = computed(() => {

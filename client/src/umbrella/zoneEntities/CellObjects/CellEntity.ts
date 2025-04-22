@@ -1,28 +1,36 @@
-import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, TRawAction, infoIconsObject } from '@/interfaces/MapInterfaces.ts';
-import type { IPlayer } from '@/interfaces/PlayerInterfaces.ts';
 import { FeatureFactory } from '../FeatureFactory';
+
+import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, TRawAction, infoIconsObject, TCellRawUnits, IUnitRaw } from '@/interfaces/MapInterfaces.ts';
 import type FeatureEntity from '../FeatureObjects/FeatureEntity';
 import type { IInventory } from '@/interfaces/ItemsInterfaces';
 import type MapAction from '@/umbrella/actions/MapAction';
+import type Unit from '../Units/Unit';
+import { UnitFactory } from '../Units/UnitFactory';
 
 export default abstract class CellEntity {
     constructor(
         mapCellObject: ICellObject,
         mapCellFeatures: TCellRawFeatures,
+        mapCellUnits: TCellRawUnits,
         coords: {x: number, y: number}
     ){
         this.mapCellObjectName = mapCellObject.name
 
-        this.player = null
+        this.player = false
 
         if(mapCellObject.orientation) this.orientation = mapCellObject.orientation; else this.orientation = '' //some cells do not need orientation
-        this.mapRawFeatures = mapCellFeatures
-        this.features = this.mapRawFeatures.map((featureRaw: IRawFeature) => {
+        this.features = mapCellFeatures.map((featureRaw: IRawFeature) => {
             return FeatureFactory(featureRaw)
+        })
+        this.units = mapCellUnits.map((unitRaw: IUnitRaw) => {
+            return UnitFactory(unitRaw)
         })
 
         this.features.forEach(feature => {
             this.infoIcons.push(feature.getFeatureInfoIcon())
+        })
+        this.units.forEach(unit => {
+            this.infoIcons.push(unit.getFeatureInfoIcon())
         })
 
         this.x = coords.x
@@ -47,18 +55,15 @@ export default abstract class CellEntity {
     public infoIcons: infoIconsObject[] = []
     public isVisibleToplayer: boolean = false //using player visible range
 
-    public player: IPlayer | null
+    public player: boolean
 
-    public inventory: IInventory = {} as IInventory
+    public inventory: IInventory = {} as IInventory //инвентарь ячейки, предметы валяющиеся
 
-
-    public mapRawFeatures: TCellRawFeatures
     public features: FeatureEntity[] //hydratedFeatures
+    public units: Unit[] //hydratedUnits
 
     abstract generateInfoIcons(): void
     abstract getInfoDescription(): string
-
-    //abstract getFeaturesInfo(): string
 
     /**
      * whether player can move through cell or not

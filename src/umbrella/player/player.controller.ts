@@ -11,9 +11,8 @@ export class PlayerController {
         private readonly playerService: PlayerService
     ){}
 
-    @Get('get_full')
+    @Get('get_player_data')
     async getFullPlayer(@Request() req){
-        //console.log('%c getFull in player controller:', 'color:rgb(182, 86, 158);', req.user)
         return await this.playerService.getFullPlayerData(req.user)
     }
 }

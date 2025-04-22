@@ -3,9 +3,10 @@ import type { PropType } from 'vue';
 import ItemTooltip from '@/components/ItemTooltip.vue'
 import { dragItem, dropItem } from '@/composables/dnd';
 
-import type { IEquiped } from '@/interfaces/PlayerInterfaces';
+import type { IEquiped } from '@/interfaces/ItemsInterfaces';
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { IItem } from '@/interfaces/ItemsInterfaces';
+import { equipSlots } from '@/constants';
 
 const props = defineProps({
     player: {
@@ -36,7 +37,7 @@ const props = defineProps({
                 @dragover.prevent=""
                 @dragstart="dragItem($event, player.equiped[slot.name as keyof IEquiped], player)"
 
-                v-for="slot in player.equipedSlots"
+                v-for="slot in equipSlots"
                 :key="slot.name"
                 :data-slot_type="slot.name"
             >
