@@ -1,10 +1,10 @@
-import type { IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
+import type { IActionResult, IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 import Chat from "../ChatManager";
 import type Unit from "../zoneEntities/Units/Unit";
+import { loadModal } from "@/composables/modal";
 
 export default class FightAction extends MapAction {
 
@@ -16,9 +16,18 @@ export default class FightAction extends MapAction {
         this.feature = feature
     }
 
-    async activate(): Promise<void>{
-        console.log('%c FIGHT activate:', 'color:rgb(182, 86, 158);', 123)
-        return Promise.resolve()
+    async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): Promise<IActionResult>{
+        console.log('%c Fight action playload:', 'color:rgb(182, 86, 158);', actionPayload)
+
+        next(this.getChatMessage(actionPayload, actionPayload.clickedCell.cell))
+
+        return Promise.resolve({
+            afterAction: () => {
+                loadModal('Fight', {
+                    unit: actionPayload.unit
+                })
+            }
+        })
     }
 
     getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {

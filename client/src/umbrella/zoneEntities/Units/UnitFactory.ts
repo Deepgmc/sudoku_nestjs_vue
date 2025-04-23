@@ -1,9 +1,10 @@
-import type { IUnitRaw, TRawAction } from "@/interfaces/MapInterfaces";
+import type { TRawAction } from "@/interfaces/MapInterfaces";
 import type Unit from "./Unit";
 import { Homeless } from "./Homeless";
 import { PortalGuard } from "./PortalGuard";
 import { ActionsFactory } from "@/umbrella/actions/ActionsFactory";
 import Inventory from "@/umbrella/items/Inventory";
+import type { IUnitRaw } from "@/interfaces/Unit";
 
 export function UnitFactory (
     unitRaw: IUnitRaw
@@ -32,7 +33,7 @@ export function UnitFactory (
         })
 
     //hydrating unit items
-    unit.inventory = new Inventory(unitRaw.items, 5)
+    unit.inventory = new Inventory(unitRaw.items, false, 5)
     unit.equipItems(unitRaw.equiped)
 
     return unit

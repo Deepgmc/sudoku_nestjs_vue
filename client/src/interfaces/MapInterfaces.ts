@@ -1,10 +1,10 @@
 import type CellEntity from "@/umbrella/zoneEntities/CellObjects/CellEntity"
-import type { IRawEquiped, IRawItem } from "./ItemsInterfaces"
 import type FeatureEntity from "@/umbrella/zoneEntities/FeatureObjects/FeatureEntity"
 import type ZoneManager from "@/umbrella/ZoneManager"
 import type PlayerManager from "@/umbrella/PlayerManager"
 import type MapAction from "@/umbrella/actions/MapAction"
 import type Unit from "@/umbrella/zoneEntities/Units/Unit"
+import type { TCellRawFeatures, TCellRawUnits } from "./Unit"
 
 export interface IArea {
     areaName: string,
@@ -56,20 +56,8 @@ export interface ICellObject {
     name: string,
     [key: string]: any
 }
-/* RAW map features: */
-export type TCellRawFeatures = IRawFeature[]
-export type TCellRawUnits = IUnitRaw[]
-export interface IRawFeature {
-    name: string,
-    actions: TRawActions,
-    items: IRawItem[]
-}
-export interface IUnitRaw {
-    name: string,
-    actions: TRawActions,
-    items: IRawItem[],
-    equiped: IRawEquiped,
-}
+
+
 
 /**ACTIONS */
 export type TRawActions = TRawAction[]

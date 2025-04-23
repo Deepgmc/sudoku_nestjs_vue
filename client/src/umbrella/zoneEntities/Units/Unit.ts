@@ -2,16 +2,18 @@ import { reactive, ref } from "vue";
 import { ITEM_TYPES, type IInventory, type IInventoryItem, type IItem, type SLOT_TYPES, type TItemId, type TSlotItem } from "@/interfaces/ItemsInterfaces";
 import { equipSlots } from '@/constants';
 import type { IEquiped, IRawEquiped } from "@/interfaces/ItemsInterfaces";
-import type { infoIconsObject, IUnitRaw, TRawActions } from "@/interfaces/MapInterfaces";
+import type { infoIconsObject, TRawActions } from "@/interfaces/MapInterfaces";
 import type MapAction from "@/umbrella/actions/MapAction";
 import Item from "@/umbrella/items/Items";
+import type { IUnitRaw, TUnitStats } from "@/interfaces/Unit";
+import ChatManager from "@/umbrella/ChatManager.ts"
 
 
 export default abstract class Unit {
 
     public objectName: string = ''
-    constructor(unitRaw?: IUnitRaw){
-        if(unitRaw){ //создаём юнита на карте, а не игрока
+    constructor(private isPlayer: boolean = false, unitRaw?: IUnitRaw){
+        if(isPlayer && unitRaw){ //создаём юнита на карте, а не игрока
             this.objectName = unitRaw.name
             this.mapUnitActions = unitRaw.actions
         }
@@ -21,6 +23,16 @@ export default abstract class Unit {
             return acc
         }, {} as IEquiped)
         this.equiped = reactive(equipedObject)
+    }
+
+    initUnit(stats: TUnitStats){
+        this.level.value         = stats.level
+        this.experience.value    = stats.experience
+        this.currentHealth.value = stats.currentHealth
+        this.maxHealth.value     = stats.maxHealth
+        this.strength.value      = stats.strength
+        this.agility.value       = stats.agility
+        this.intellect.value     = stats.intellect
     }
 
     abstract textName: string
@@ -37,7 +49,8 @@ export default abstract class Unit {
 
     public level = ref(0)
     public experience = ref(0)
-    public health = ref(0)
+    public currentHealth = ref(0)
+    public maxHealth = ref(0)
     public strength = ref(0)
     public agility = ref(0)
     public intellect = ref(0)
@@ -110,6 +123,25 @@ export default abstract class Unit {
             return false
         }
         return true
+    }
+
+    /**
+     * Восстанавливаем здоровье, не больше максимального запаса
+     * @param addHealth сколько восстанавливается здоровья
+     */
+    heal(addHealth: number): Unit{
+        const chat = ChatManager.getInstance()
+
+        let healedValue = 0
+        if(this.maxHealth.value - this.currentHealth.value <= addHealth){
+            healedValue = this.maxHealth.value - this.currentHealth.value
+            this.currentHealth.value = this.maxHealth.value
+        } else {
+            this.currentHealth.value += addHealth
+            healedValue = addHealth
+        }
+        chat.addMessage(ChatManager.getChatMessage(`Вы восстановили ${healedValue} здоровья`))
+        return this
     }
 
     abstract getFeatureInfoIcon(): infoIconsObject

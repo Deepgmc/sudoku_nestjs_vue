@@ -4,11 +4,14 @@ import Item from "./Items";
 export default class Inventory implements IInventory {
     public maxSlots: number = 16
     public items: IInventoryItem[]
+    public isPlayer: boolean
 
     constructor(
         rawInventory: IRawItem[],
+        isPlayer: boolean,
         maxSlots?: number
     ) {
+        this.isPlayer = isPlayer
         this.items = Item.hydrateRawItemsArray(rawInventory)
         if(maxSlots) this.maxSlots = maxSlots
     }

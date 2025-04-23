@@ -1,10 +1,11 @@
-import type { IRawFeature, TRawAction } from "@/interfaces/MapInterfaces"
+import { reactive } from "vue"
+import type { TRawAction } from "@/interfaces/MapInterfaces"
 import { ActionsFactory } from "../actions/ActionsFactory"
 import { Portal } from "./FeatureObjects/Portal"
 
 import Inventory from "../items/Inventory"
 import type FeatureEntity from "./FeatureObjects/FeatureEntity"
-import { reactive } from "vue"
+import type { IRawFeature } from "@/interfaces/Unit"
 
 
 export function FeatureFactory (
@@ -31,7 +32,7 @@ export function FeatureFactory (
         })
 
     //hydrating feature items
-    featureEntity.inventory = reactive(new Inventory(featureRaw.items, 5))
+    featureEntity.inventory = reactive(new Inventory(featureRaw.items, false, 5))
 
     return featureEntity
 }

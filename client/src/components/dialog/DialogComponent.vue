@@ -5,12 +5,12 @@
                 <component
                     :is="currentDialogComponent"
                     :player="player"
-                    :feature="dialogFeature"
+                    :feature="dialogParams.dialogFeature"
                 >
                 </component>
             </q-card-section>
             <q-separator />
-            <q-card-actions align="left">
+            <q-card-actions v-if="dialogParams.isNeedTrash" align="left">
                 <span class="drop_item_delete"
                 v-html="'&#128465;'"
                 @drop.stop="dropItem($event)"
@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { dropItem } from '@/composables/dnd'
-import {isWindowCardOpen, currentDialogComponent, dialogFeature } from '@/composables/modal';
+import {isWindowCardOpen, currentDialogComponent, dialogParams } from '@/composables/modal';
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
 

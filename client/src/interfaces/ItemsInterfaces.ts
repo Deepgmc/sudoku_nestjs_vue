@@ -1,6 +1,7 @@
 export interface IInventory {
     maxSlots: number,
     items: IInventoryItem[],
+    isPlayer: boolean,
     getItems: () => IInventoryItem[],
     addItems: (items: IInventoryItem[]) => void,
     removeItem: (itemId: TItemId) => boolean,
@@ -41,7 +42,10 @@ export interface IItem {
     //weapon
     damage     : number,
 
-    getItemType: () => ITEM_TYPES
+    getItemType: () => ITEM_TYPES,
+    use: (unit: TransferObjectWithInventory) => any, // запускаем процесс использования предмета
+    isHealing: () => boolean, //можно ли использовать предмет, чтобы восстанавливать здоровье
+    getSlotName: () => string,
 }
 export interface IInventoryItem {
     item: IItem,

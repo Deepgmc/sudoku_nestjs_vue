@@ -5,7 +5,8 @@ export const player = {
     experience: 0,
     cash: 0,
 
-    health: 10,
+    currentHealth: 10,
+    maxHealth: 15,
     strength: 5,
     agility: 5,
     intellect: 5,

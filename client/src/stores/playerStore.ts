@@ -23,7 +23,8 @@ export const usePlayerStore = defineStore('player', () => {
 
     const level = ref(0)
     const experience = ref(0)
-    const health = ref(0)
+    const currentHealth = ref(0)
+    const maxHealth = ref(0)
     const strength = ref(0)
     const agility = ref(0)
     const intellect = ref(0)
@@ -43,7 +44,8 @@ export const usePlayerStore = defineStore('player', () => {
 
         level,
         experience,
-        health,
+        currentHealth,
+        maxHealth,
         strength,
         agility,
         intellect,

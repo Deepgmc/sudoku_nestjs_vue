@@ -28,7 +28,6 @@ const player = inject ('player') as PlayerManager
 const zoneManager = ZoneManager.getInstance(props.zone)
 zoneManager.hydrateZoneObjects()
 
-console.log('%c ZoneComponent got raw zone:', 'color:darkgreen;', props.zone)
 console.log('%c ZoneComponent hydrated:', 'color:lightgreen;', zoneManager.store.zone.zoneCells)
 
 void zoneManager.setAndMovePlayer({x: player.x, y: player.y})

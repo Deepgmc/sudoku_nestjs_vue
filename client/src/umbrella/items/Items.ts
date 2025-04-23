@@ -1,5 +1,16 @@
-import { ITEM_TYPES, SLOT_TYPES, type IfactoryItemOptions, type IInventoryItem, type IItem, type IRawItem, type TItemId, type TItemNumber } from "@/interfaces/ItemsInterfaces"
+import {
+    ITEM_TYPES,
+    SLOT_TYPES,
+    type IfactoryItemOptions,
+    type IInventoryItem,
+    type IItem, type IRawItem,
+    type TItemId,
+    type TItemNumber,
+    type TransferObjectWithInventory
+} from "@/interfaces/ItemsInterfaces"
 import {items} from './ItemsList.ts'
+import ChatManager from "../ChatManager.ts"
+import { equipSlots } from '@/constants'
 
 
 
@@ -63,6 +74,40 @@ export default class Item implements IItem {
         this.damage = factoryOptions.damage
 
         this.item_type = this.getItemType()
+    }
+
+    use(unit: TransferObjectWithInventory){
+        const chat = ChatManager.getInstance()
+        if(this.item_type !== ITEM_TYPES.FOOD){
+            chat.addMessage(
+                ChatManager.getChatMessage(`Вы попытались съесть "${this.textName}", ничего не получилось`)
+            )
+            return false
+        } else {
+            if(this.hp_regen){
+                if(this.hp_regen <= 0){
+                    chat.addMessage(ChatManager.getChatMessage(`Этим нельзя восстановить здоровье`))
+                }
+                else if(unit.currentHealth.value >= unit.maxHealth.value){
+                    chat.addMessage(ChatManager.getChatMessage(`Запас здоровья и так полон`))
+                } else {
+                    unit
+                    .heal(this.hp_regen)
+                    .inventory
+                    .removeItem(this.itemId)
+                }
+            }
+        }
+    }
+
+    getSlotName(): string {
+        const slot = equipSlots.find(slot => slot.name === this.slotType)
+        if(slot) return slot.textName
+        else return ''
+    }
+
+    isHealing(): boolean {
+        return this.hp_regen > 0
     }
 
     getItemType(): ITEM_TYPES{

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import { useItem } from '@/composables/useItem'
 import ItemTooltip from '@/components/ItemTooltip.vue'
 import type { IInventory } from '@/interfaces/ItemsInterfaces'
 import { dragItem, dropItem } from '@/composables/dnd'
 import type FeatureEntity from '@/umbrella/zoneEntities/FeatureObjects/FeatureEntity';
+import PlayerManager from '@/umbrella/PlayerManager';
 
 const props = defineProps({
     inventory: {
@@ -22,6 +24,8 @@ const props = defineProps({
         required: false
     },
 })
+
+
 </script>
 
 <template>
@@ -41,6 +45,7 @@ const props = defineProps({
                 data-dnd_entity="inventory_item_ico"
                 :data-is_player="isPlayer"
                 @dragstart="dragItem($event, inventory.items[index].item, feature)"
+                @dblclick="useItem($event, inventory.items[index].item, inventory.isPlayer ? PlayerManager.getInstance() : feature)"
             >
                 <div class="item_quantity_number">{{ inventory.items[index].quantity }}</div>
                 <div v-html="inventory.items[index].item.icon"></div>

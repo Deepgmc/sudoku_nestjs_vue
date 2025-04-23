@@ -34,7 +34,7 @@ export default class PlayerManager extends Unit implements IPlayer {
     }
 
     private constructor() {
-        super()
+        super(true)
         this.store = usePlayerStore()
         this._getData = UmbrellaManager.$networkManager.applyNetworkMethod('get', this._apiSection)(UmbrellaManager.$authManager)
     }
@@ -54,7 +54,6 @@ export default class PlayerManager extends Unit implements IPlayer {
         this.store.userId = getPlayerResult.data.userId
         this.store.userName = getPlayerResult.data.userName
 
-        //! @ts-expect-error -->> TPlayerStore | TPlayerStore - type is ok
         if(!this.initPlayer(getPlayerResult.data.game_settings)){
             throw new Error('Invalid player received raw data')
         }
@@ -78,8 +77,11 @@ export default class PlayerManager extends Unit implements IPlayer {
             watch(this.experience, (newVal) => {
                 this.store.experience = newVal
             })
-            watch(this.health, (newVal) => {
-                this.store.health = newVal
+            watch(this.currentHealth, (newVal) => {
+                this.store.currentHealth = newVal
+            })
+            watch(this.maxHealth, (newVal) => {
+                this.store.maxHealth = newVal
             })
             watch(this.strength, (newVal) => {
                 this.store.strength = newVal
@@ -92,14 +94,17 @@ export default class PlayerManager extends Unit implements IPlayer {
             })
         }
 
-        this.level.value      = dataRaw.player.level
-        this.experience.value = dataRaw.player.experience
-        this.health.value     = dataRaw.player.health
-        this.strength.value   = dataRaw.player.strength
-        this.agility.value    = dataRaw.player.agility
-        this.intellect.value  = dataRaw.player.intellect
+        this.initUnit({
+            level: dataRaw.player.level,
+            experience: dataRaw.player.experience,
+            currentHealth: dataRaw.player.currentHealth,
+            maxHealth: dataRaw.player.maxHealth,
+            strength: dataRaw.player.strength,
+            agility: dataRaw.player.agility,
+            intellect: dataRaw.player.intellect,
+        })
 
-        this.inventory = reactive(new Inventory(dataRaw.inventory))
+        this.inventory = reactive(new Inventory(dataRaw.inventory, true))
 
         this.equipItems(dataRaw.equiped)
 

@@ -65,6 +65,7 @@ export const items = {
         icon: '&#129714',
         textName: 'Жук',
         slotType: SLOT_TYPES.INV_ONLY,
+        hp_regen: 15,
     },
     berry: {
         description: 'Высохшая, но вроде есть можно',
@@ -72,6 +73,7 @@ export const items = {
         icon: '&#129744',
         textName: 'Ягода',
         slotType: SLOT_TYPES.INV_ONLY,
+        hp_regen: 10,
     },
     acorn: {
         description: 'Съедобно, раз животные едят',
@@ -79,5 +81,6 @@ export const items = {
         icon: '&#129684',
         textName: 'Желудь',
         slotType: SLOT_TYPES.INV_ONLY,
+        hp_regen: 5,
     },
 }

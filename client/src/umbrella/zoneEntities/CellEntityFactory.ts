@@ -4,9 +4,10 @@ import HouseDump from './CellObjects/HouseDump.ts';
 import SideStreet from './CellObjects/SideStreet.ts';
 import Fence from './CellObjects/Fence.ts';
 import Trees from './CellObjects/Trees.ts';
-import type { TCellRawFeatures, ICellObject, TRawAction, TCoords, TCellRawUnits } from '@/interfaces/MapInterfaces.ts';
+import type { ICellObject, TRawAction, TCoords } from '@/interfaces/MapInterfaces.ts';
 import { ActionsFactory } from '../actions/ActionsFactory.ts';
 import Inventory from '../items/Inventory.ts';
+import type { TCellRawFeatures, TCellRawUnits } from '@/interfaces/Unit.ts';
 
 
 export function CellEntityFactory (
@@ -46,7 +47,7 @@ export function CellEntityFactory (
     })
 
     //hydrating items on that map cell
-    cellEntity.inventory = new Inventory(cellObject.items)
+    cellEntity.inventory = new Inventory(cellObject.items, false)
 
     return cellEntity
 }

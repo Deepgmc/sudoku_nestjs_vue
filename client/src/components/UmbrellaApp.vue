@@ -55,8 +55,6 @@ import Chat from '@/umbrella/ChatManager'
 import { loadModal } from '@/composables/modal';
 
 import AreaComponent from '@/components/map/AreaComponent.vue';
-// import CharacterCard from '@/components/player/CharacterCard.vue';
-// import InspectCard from '@/components/InspectCard.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import DialogComponent from './dialog/DialogComponent.vue';

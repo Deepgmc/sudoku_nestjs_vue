@@ -7,7 +7,8 @@ export type IPlayerRaw = {
     player: {
         level: number,
         experience: number,
-        health: number,
+        currentHealth: number,
+        maxHealth: number,
         strength: number,
         agility: number,
         intellect: number,
