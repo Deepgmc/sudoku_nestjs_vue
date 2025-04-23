@@ -60,7 +60,6 @@ export default class DigAction extends MapAction {
     }
 
     getChatMessage(payload: TActionPayload, cellToDig: CellEntity): IChatMessage {
-        if(!cellToDig) return {text: 'Wrong move parameters'}
         const text: string[] = []
         return Chat.getChatMessage(text.join(' '))
     }

@@ -77,19 +77,16 @@ export default class Item implements IItem {
     }
 
     use(unit: TransferObjectWithInventory){
-        const chat = ChatManager.getInstance()
         if(this.item_type !== ITEM_TYPES.FOOD){
-            chat.addMessage(
-                ChatManager.getChatMessage(`Вы попытались съесть "${this.textName}", ничего не получилось`)
-            )
+            ChatManager.addMessageText(`Вы попытались съесть "${this.textName}", ничего не получилось`)
             return false
         } else {
             if(this.hp_regen){
                 if(this.hp_regen <= 0){
-                    chat.addMessage(ChatManager.getChatMessage(`Этим нельзя восстановить здоровье`))
+                    ChatManager.addMessageText(`Этим нельзя восстановить здоровье`)
                 }
                 else if(unit.currentHealth.value >= unit.maxHealth.value){
-                    chat.addMessage(ChatManager.getChatMessage(`Запас здоровья и так полон`))
+                    ChatManager.addMessageText(`Запас здоровья и так полон`)
                 } else {
                     unit
                     .heal(this.hp_regen)

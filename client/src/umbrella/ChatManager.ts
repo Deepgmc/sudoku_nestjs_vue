@@ -21,18 +21,25 @@ export default class ChatManager extends UmbrellaManager {
         this.messages = this.store.getChatMessages
     }
 
-    addMessage(newMessage?: IChatMessage): ChatManager {
+    addMessage(newMessage: IChatMessage): ChatManager {
         if(!newMessage) return this
         this.messages.push(newMessage)
         return this
     }
 
     plainText(text: string): ChatManager {
-        this.messages.push({text: text})
+        this.messages.push({text: text, timestamp: Date.now()})
         return this
     }
 
     static getChatMessage(text: string): IChatMessage {
-        return {text: text}
+        return {text: text, timestamp: Date.now()}
+    }
+
+    static addMessageText(text: string): IChatMessage {
+        const chat = ChatManager.getInstance()
+        const msg = {text: text, timestamp: Date.now()}
+        chat.addMessage(msg)
+        return msg
     }
 }

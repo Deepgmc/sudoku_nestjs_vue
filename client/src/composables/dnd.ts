@@ -47,7 +47,7 @@ export function dropItem(event: DragEvent): boolean {
     if(dndFrom === 'inventory_item_ico' && dndTo === 'equiped'){
         const slotType = eventTarget.dataset.slot_type
         if(slotType !== iitem.item.slotType){
-            ChatManager.getInstance().addMessage(ChatManager.getChatMessage('Этот предмет нельзя сюда одеть'))
+            ChatManager.addMessageText('Этот предмет нельзя сюда одеть')
             throw new Error('Нельзя одеть в этот слот')
             return false
         }

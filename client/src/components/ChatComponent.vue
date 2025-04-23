@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
+import { computed, type PropType } from 'vue';
 import type Chat from '@/umbrella/ChatManager';
+import type { IChatMessage, IChatMessageTransformed } from '@/interfaces/MapInterfaces';
 
 const props = defineProps({
     chat: {
@@ -8,24 +9,37 @@ const props = defineProps({
         required: true
     },
 })
+
+const transformedMessages = computed(() => {
+    return props.chat.messages.map((msg: IChatMessage) => {
+        const msgDate = new Date(msg.timestamp)
+        const transformedMsg: IChatMessageTransformed = {
+            ...msg,
+            timeString: `${msgDate.getMinutes()}:${msgDate.getSeconds()}`
+        }
+        return transformedMsg
+
+    })
+})
 </script>
 
 <template>
     <div>
         <div class="chat_top_block">
-            <div v-for="(message, index) in chat.messages" :key="index">
+            <div v-for="(message, index) in transformedMessages" :key="index">
                 <div class="chat_message_block">
                     <div class="chat_message_who">
                         <span>&#129399;</span>
                     </div>
                     <div class="chat_message_text">
+                        {{ message.timeString }}:
                         <span v-html="message.text"></span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="chat_bottom_block">
-            Bottom block
+            Нижний блок чата
         </div>
     </div>
 </template>

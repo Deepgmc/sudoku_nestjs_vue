@@ -89,5 +89,9 @@ export interface IActionResult {
 
 //CHAT
 export interface IChatMessage {
-    text: string
+    text: string,
+    timestamp: number
+}
+export interface IChatMessageTransformed extends IChatMessage {
+    timeString: string
 }
