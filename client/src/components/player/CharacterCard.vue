@@ -2,7 +2,7 @@
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
 import InventoryComponent from '@/components/InventoryComponent.vue';
-import CharacterComponent from '@/components/player/CharacterComponent.vue';
+import CharacterComponent from '@/components/unit/UnitInfoComponent.vue';
 
 const props = defineProps({
     player: {
@@ -15,7 +15,7 @@ const props = defineProps({
 
 <template>
     <div>
-        <CharacterComponent :player="player"></CharacterComponent>
+        <CharacterComponent :unit="player"></CharacterComponent>
         <q-separator class="q-my-md" />
         <InventoryComponent :inventory="player.inventory" :isPlayer="true"></InventoryComponent>
     </div>

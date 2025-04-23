@@ -21,7 +21,7 @@ export default class PlayerManager extends Unit implements IPlayer {
     }
     public store: ReturnType<typeof usePlayerStore>;
     public userName: string = ''
-    public playerIcon: string = '&#129399'
+    public icon: string = '&#129399'
     public visibilityRange: number = 2
     public moveRange: number = 1
 
@@ -30,7 +30,7 @@ export default class PlayerManager extends Unit implements IPlayer {
     public defaultActions: TRawActions = []
     public defaultEntityActions: TRawActions = []
     public getFeatureInfoIcon = () => {
-        return {icon: this.playerIcon, description: this.textName}
+        return {icon: this.icon, description: this.textName}
     }
 
     private constructor() {

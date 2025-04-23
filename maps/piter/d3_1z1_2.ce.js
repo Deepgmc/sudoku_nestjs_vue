@@ -448,7 +448,25 @@ export const zone = {
                     orientation: 's-n',
                 },
                 features: [],
-                units: [],
+                units: [
+                    {//! homeless 2
+                        name: 'homeless',
+                        actions: [],
+                        items: [
+                            {
+                                name: 'knife_01',
+                                quantity: 1
+                            },
+                        ],
+                        equiped: {
+                            head: {name: '', quantity: 0},
+                            body: {name: 'shirt_01', quantity: 1},
+                            legs: {name: '', quantity: 0},
+                            rhand: {name: '', quantity: 0},
+                            lhand: {name: '', quantity: 0},
+                        }
+                    }
+                ],
             },
             {
                 obj: {

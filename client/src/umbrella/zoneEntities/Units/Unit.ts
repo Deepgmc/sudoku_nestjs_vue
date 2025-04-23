@@ -12,6 +12,7 @@ import ChatManager from "@/umbrella/ChatManager.ts"
 export default abstract class Unit {
 
     public objectName: string = ''
+    abstract icon: string
     constructor(private isPlayer: boolean = false, unitRaw?: IUnitRaw){
         if(isPlayer && unitRaw){ //создаём юнита на карте, а не игрока
             this.objectName = unitRaw.name

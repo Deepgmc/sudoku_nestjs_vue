@@ -5,6 +5,7 @@ import type { IUnitRaw, TUnitStats } from "@/interfaces/Unit";
 export class PortalGuard extends Unit {
 
     textName: string = 'Охранник портала'
+    public icon = '&#x1F93A;'
     public defaultEntityActions: TRawActions = []
     public chatDescription = 'Прямо по центру дороги стоит довольно высокое человекоподобное существо, одетое в одежду похожую на средневековую кольчугу. В руках ружьё, или автомат. Выглядит оно, в общем, опасно. Но оно стоит на пути к порталу'
 
@@ -26,6 +27,6 @@ export class PortalGuard extends Unit {
     defaultActions = ['fight', 'talk', 'rob']
 
     getFeatureInfoIcon(){
-        return {icon: '&#x1F93A;', description: this.textName}
+        return {icon: this.icon, description: this.textName}
     }
 }

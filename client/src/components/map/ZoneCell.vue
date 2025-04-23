@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import PlayerComponent from '../PlayerComponent.vue';
+import PlayerZoneComponent from '../PlayerZoneComponent.vue';
 import HiddenCell from './HiddenCell.vue';
 import PlayerManager from '@/umbrella/PlayerManager';
 
@@ -39,7 +39,7 @@ const isMeClicked = computed(() => {
     >
         <div class="cell_item-top">
             <div class="cell_item-top_left" :class="props.cell.backgroundClass">
-                <PlayerComponent v-if="props.cell.player" :player="PlayerManager.getInstance()"></PlayerComponent>
+                <PlayerZoneComponent v-if="props.cell.player" :player="PlayerManager.getInstance()"></PlayerZoneComponent>
                 <q-tooltip v-if="props.cell.player">
                     Это вы
                 </q-tooltip>

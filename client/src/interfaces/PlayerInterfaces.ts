@@ -26,7 +26,6 @@ export type IPlayerRaw = {
 export interface IPlayer {
     inventory: IInventory,
 
-    playerIcon: string,
     visibilityRange: number,
     moveRange: number,
 

@@ -40,6 +40,7 @@
     </div>
 </template>
 
+
 <script lang="ts" setup>
 import { inject, onBeforeMount, provide, reactive, ref, type Component } from 'vue';
 
@@ -58,8 +59,6 @@ import AreaComponent from '@/components/map/AreaComponent.vue';
 import InfoComponent from '@/components/InfoComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import DialogComponent from './dialog/DialogComponent.vue';
-
-
 
 
 const $networkManager = inject('$networkManager') as NetworkManager

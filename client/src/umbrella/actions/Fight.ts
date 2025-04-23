@@ -17,7 +17,7 @@ export default class FightAction extends MapAction {
     }
 
     async activate(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): Promise<IActionResult>{
-        console.log('%c Fight action playload:', 'color:rgb(182, 86, 158);', actionPayload)
+        console.log('%c FightAction playload:', 'color:rgb(182, 86, 158);', actionPayload)
 
         next(this.getChatMessage(actionPayload, actionPayload.clickedCell.cell))
 
@@ -33,6 +33,11 @@ export default class FightAction extends MapAction {
     getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
         if(!cellToMove) throw new Error('Wrong fight parameters')
         const text: string[] = []
+        if(payload.unit){
+            text.push(`Вы напали на ${payload.unit?.textName}`)
+        } else {
+            throw new Error(`Неверный юнит для нападения`)
+        }
         return Chat.getChatMessage(text.join(' '))
     }
 

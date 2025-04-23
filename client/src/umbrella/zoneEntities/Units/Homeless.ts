@@ -5,8 +5,10 @@ import type { IUnitRaw, TUnitStats } from "@/interfaces/Unit";
 export class Homeless extends Unit {
 
     textName: string = 'Бомж'
+    public icon = '&#x1F6B6;'
     public defaultEntityActions: TRawActions = []
     public chatDescription = 'На вас смотрит какой-то бомж, грязный, вонючий. Его можно ограбить или поговорить (если он умеет)'
+
 
     private defautStats: TUnitStats = {
         level: 1,
@@ -26,6 +28,6 @@ export class Homeless extends Unit {
     defaultActions = ['fight', 'talk', 'rob']
 
     getFeatureInfoIcon(){
-        return {icon: '&#x1F6B6;', description: this.textName}
+        return {icon: this.icon, description: this.textName}
     }
 }

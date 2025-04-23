@@ -1,4 +1,4 @@
-import type { IRawEquiped, IRawItem } from "./ItemsInterfaces"
+import type { IRawEquiped, IRawItem, SLOT_TYPES } from "./ItemsInterfaces"
 import type { TRawActions } from "./MapInterfaces"
 
 export type TCellRawFeatures = IRawFeature[]
@@ -23,4 +23,11 @@ export type TUnitStats = {
     strength: number,
     agility: number,
     intellect: number,
+}
+
+/**FIGHT */
+export interface IRound {
+    u1StrikeTarget: SLOT_TYPES | undefined,
+    u2StrikeTarget: SLOT_TYPES | undefined,
+    isFinished: boolean
 }
