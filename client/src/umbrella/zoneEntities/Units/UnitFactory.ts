@@ -4,7 +4,7 @@ import { Homeless } from "./Homeless";
 import { PortalGuard } from "./PortalGuard";
 import { ActionsFactory } from "@/umbrella/actions/ActionsFactory";
 import Inventory from "@/umbrella/items/Inventory";
-import type { IUnitRaw } from "@/interfaces/Unit";
+import type { IUnitRaw } from "@/interfaces/UnitInterfaces";
 
 export function UnitFactory (
     unitRaw: IUnitRaw

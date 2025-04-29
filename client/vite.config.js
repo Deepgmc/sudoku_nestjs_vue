@@ -43,6 +43,9 @@ export default defineConfig(({ mode }) => {
             //open: '/umbrella.html',
             //port: 5555,
             //disableHostCheck: true,
+            watch: {
+                usePolling: true
+            },
             proxy: {
                 '/auth': {
                     target: `http://localhost:/${env.PROXY_DEV_PORT}`,

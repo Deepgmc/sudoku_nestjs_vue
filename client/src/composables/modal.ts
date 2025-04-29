@@ -1,5 +1,5 @@
 import {type Component, reactive, ref} from 'vue'
-import FightActionComponent from '@/components/FightActionComponent.vue';
+import FightActionComponent from '@/components/fight/FightActionComponent.vue';
 import InspectCard from '@/components/InspectCard.vue';
 import CharacterCard from '@/components/player/CharacterCard.vue';
 import type FeatureEntity from '@/umbrella/zoneEntities/FeatureObjects/FeatureEntity';

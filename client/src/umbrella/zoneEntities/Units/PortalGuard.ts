@@ -1,6 +1,6 @@
 import Unit from "./Unit";
 import type { TRawActions } from "@/interfaces/MapInterfaces";
-import type { IUnitRaw, TUnitStats } from "@/interfaces/Unit";
+import type { IUnitRaw, TUnitStats } from "@/interfaces/UnitInterfaces";
 
 export class PortalGuard extends Unit {
 

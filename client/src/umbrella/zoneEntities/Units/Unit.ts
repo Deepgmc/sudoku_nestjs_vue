@@ -5,7 +5,7 @@ import type { IEquiped, IRawEquiped } from "@/interfaces/ItemsInterfaces";
 import type { infoIconsObject, TRawActions } from "@/interfaces/MapInterfaces";
 import type MapAction from "@/umbrella/actions/MapAction";
 import Item from "@/umbrella/items/Items";
-import type { IUnitRaw, TUnitStats } from "@/interfaces/Unit";
+import type { IUnitRaw, TUnitStats } from "@/interfaces/UnitInterfaces";
 import ChatManager from "@/umbrella/ChatManager.ts"
 
 

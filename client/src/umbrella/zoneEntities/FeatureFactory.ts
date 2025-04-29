@@ -5,7 +5,7 @@ import { Portal } from "./FeatureObjects/Portal"
 
 import Inventory from "../items/Inventory"
 import type FeatureEntity from "./FeatureObjects/FeatureEntity"
-import type { IRawFeature } from "@/interfaces/Unit"
+import type { IRawFeature } from "@/interfaces/UnitInterfaces"
 
 
 export function FeatureFactory (

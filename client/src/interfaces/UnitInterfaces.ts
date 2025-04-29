@@ -28,6 +28,15 @@ export type TUnitStats = {
 /**FIGHT */
 export interface IRound {
     u1StrikeTarget: SLOT_TYPES | undefined,
+    u1BlockTarget: SLOT_TYPES | undefined,
     u2StrikeTarget: SLOT_TYPES | undefined,
+    u2BlockTarget: SLOT_TYPES | undefined,
     isFinished: boolean
+}
+
+export interface IBodyPart {
+    value: string,
+    label: string,
+    icon: string,
+    color: string
 }

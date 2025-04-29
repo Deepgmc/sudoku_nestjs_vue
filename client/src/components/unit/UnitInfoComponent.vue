@@ -2,6 +2,7 @@
 import type { PropType } from 'vue';
 import UnitEquipedComponent from './UnitEquipedComponent.vue';
 import UnitStatsList from './UnitStatsList.vue';
+import UnitIcon from './UnitIcon.vue';
 import type Unit from '@/umbrella/zoneEntities/Units/Unit';
 
 
@@ -22,7 +23,7 @@ const props = defineProps({
 <template>
     <div class="unit-info-component_container">
         <div class="unit_stats">
-            <span class="unit_icon" v-html="unit.icon"></span>
+            <unit-icon size="7em" :icon="unit.icon"></unit-icon>
             <unit-stats-list :unit="unit"></unit-stats-list>
         </div>
         <div class="unit_equiped">
@@ -52,7 +53,7 @@ const props = defineProps({
     .unit_equiped{
         width:70%;
         .equiped_item{
-            border: 1px solid red;
+            border: 1px solid rgb(88, 74, 33);
             width: 70px;
             height: 70px;
             margin: 2px;
@@ -62,12 +63,12 @@ const props = defineProps({
                 cursor: pointer;
             }
             .equiped_item_icon_empty{
-                border: 1px solid green;
+                font-size: 0.9em;
             }
         }
     }
     .unit_icon{
-        font-size: 3em
+        font-size: 7em
     }
 }
 </style>

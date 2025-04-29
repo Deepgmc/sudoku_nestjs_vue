@@ -4,7 +4,7 @@ import type ZoneManager from "@/umbrella/ZoneManager"
 import type PlayerManager from "@/umbrella/PlayerManager"
 import type MapAction from "@/umbrella/actions/MapAction"
 import type Unit from "@/umbrella/zoneEntities/Units/Unit"
-import type { TCellRawFeatures, TCellRawUnits } from "./Unit"
+import type { TCellRawFeatures, TCellRawUnits } from "./UnitInterfaces"
 
 export interface IArea {
     areaName: string,

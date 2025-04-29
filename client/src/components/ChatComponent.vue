@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
+import UnitIcon from './unit/UnitIcon.vue';
 import type Chat from '@/umbrella/ChatManager';
 import type { IChatMessage, IChatMessageTransformed } from '@/interfaces/MapInterfaces';
 
@@ -28,9 +29,7 @@ const transformedMessages = computed(() => {
         <div class="chat_top_block">
             <div v-for="(message, index) in transformedMessages" :key="index">
                 <div class="chat_message_block">
-                    <div class="chat_message_who">
-                        <span>&#129399;</span>
-                    </div>
+                    <unit-icon class="chat_message_who" size="1em" icon="&#129399;"></unit-icon>
                     <div class="chat_message_text">
                         {{ message.timeString }}:
                         <span v-html="message.text"></span>

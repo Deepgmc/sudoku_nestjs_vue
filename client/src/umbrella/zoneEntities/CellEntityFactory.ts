@@ -7,7 +7,7 @@ import Trees from './CellObjects/Trees.ts';
 import type { ICellObject, TRawAction, TCoords } from '@/interfaces/MapInterfaces.ts';
 import { ActionsFactory } from '../actions/ActionsFactory.ts';
 import Inventory from '../items/Inventory.ts';
-import type { TCellRawFeatures, TCellRawUnits } from '@/interfaces/Unit.ts';
+import type { TCellRawFeatures, TCellRawUnits } from '@/interfaces/UnitInterfaces.ts';
 
 
 export function CellEntityFactory (

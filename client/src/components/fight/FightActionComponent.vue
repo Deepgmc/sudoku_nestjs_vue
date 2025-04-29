@@ -16,16 +16,28 @@
             </div>
         </div>
 
+        <hr>
+
         <button v-if="!F.isStarted.value" @click="F.startFight()">Начать бой</button>
         <div v-else class="fight-actions-container">
             <div class="left-side">
                 <div class="fight-actions">
-                    ACTIONS LEFT {{ F.unitLeft.textName }}
+                    <h5>Поставить блок</h5>
+                    <q-option-group
+                        :options="F.getHitParts('block')"
+                        type="radio"
+                        v-model="F.u1SelectedBlock.value"
+                    />
                 </div>
             </div>
             <div class="right-side">
                 <div class="fight-actions">
-                    ACTIONS RIGHT {{ F.unitRight.textName }}
+                    <h5>Ударить</h5>
+                    <q-option-group
+                        :options="F.getHitParts('strike')"
+                        type="radio"
+                        v-model="F.u1selectedHitPart.value"
+                    />
                 </div>
             </div>
         </div>
@@ -48,8 +60,8 @@ const props = defineProps({
 })
 const player = PlayerManager.getInstance()
 
+// "Main object Fight. Includes fight and rounds"
 const F = new Fight(player, props.feature)
-
 
 </script>
 
@@ -70,7 +82,6 @@ const F = new Fight(player, props.feature)
     .fight-actions-container{
         display:flex;
         flex-flow: row nowrap;
-        border: 1px solid blue;
         width:100%;
         height:100%;
     }
