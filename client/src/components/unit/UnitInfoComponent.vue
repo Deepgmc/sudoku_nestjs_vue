@@ -42,12 +42,13 @@ const props = defineProps({
     flex-flow: row nowrap;
     justify-content: space-between;
     .unit_stats, .unit_equiped{
-        border: 1px solid darkgrey;
+        border-left: 1px solid rgb(82, 82, 82);
         display: flex;
-        padding: 2px;
+        padding: 7px;
     }
     .unit_stats{
         width:30%;
+
         flex-flow: column nowrap;
     }
     .unit_equiped{

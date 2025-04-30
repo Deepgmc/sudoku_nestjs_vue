@@ -1,3 +1,4 @@
+import type { FightParticipants } from "@/constants"
 import type { IRawEquiped, IRawItem, SLOT_TYPES } from "./ItemsInterfaces"
 import type { TRawActions } from "./MapInterfaces"
 
@@ -26,6 +27,7 @@ export type TUnitStats = {
 }
 
 /**FIGHT */
+
 export interface IRound {
     u1StrikeTarget: SLOT_TYPES | undefined,
     u1BlockTarget: SLOT_TYPES | undefined,
@@ -39,4 +41,8 @@ export interface IBodyPart {
     label: string,
     icon: string,
     color: string
+}
+export interface IFightMessage {
+    text: string,
+    who: FightParticipants
 }

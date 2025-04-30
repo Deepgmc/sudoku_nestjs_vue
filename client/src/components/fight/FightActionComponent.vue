@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <hr>
+        <q-separator style="margin: 20px 0 20px 0" color="orange" />
 
         <button v-if="!F.isStarted.value" @click="F.startFight()">Начать бой</button>
         <div v-else class="fight-actions-container">
@@ -40,6 +40,17 @@
                     />
                 </div>
             </div>
+            <div class="combat-log-block">
+                <div class="cl-left-side">
+                    <button @click="F.roundFight()">Следующий раунд</button>
+                </div>
+                <div class="cl-right-side combat-log">
+                    <div class="combat-message-body" v-for="(message, index) in F.fightLogList" :key="index">
+                        <span class="combat-message-who">{{ message.who }}</span>
+                        <span class="combat-message-text">{{ message.text }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -47,10 +58,10 @@
 
 <script lang="ts" setup>
 import { ref, type PropType } from 'vue';
+import Fight from '@/umbrella/Fight'
 import UnitInfoComponent from '@/components/unit/UnitInfoComponent.vue';
 import PlayerManager from '@/umbrella/PlayerManager';
 import type Unit from '@/umbrella/zoneEntities/Units/Unit';
-import Fight from '@/umbrella/Fight'
 
 const props = defineProps({
     feature: {
@@ -71,19 +82,46 @@ const F = new Fight(player, props.feature)
     display: flex;
     width: 900px;
     flex-flow: column nowrap;
-    .left-side, .right-side{
-        width: 50%;
-        margin: 2px;
-    }
     .units-info{
         display: flex;
         flex-flow: row nowrap;
     }
     .fight-actions-container{
         display:flex;
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
         width:100%;
         height:100%;
+        .left-side, .right-side{
+            width: 50%;
+            border: 1px dashed darkmagenta;
+            padding: 5px;
+        }
+        .combat-log-block{
+            width:100%;
+            display:flex;
+            flex-flow: row nowrap;
+            margin: 10px 0 0 0;
+            .cl-left-side{
+                width:30%;
+            }
+            .cl-right-side{
+                width:70%;
+            }
+            .combat-log{
+                display: flex;
+                flex-flow: column nowrap;
+                height: 200px;
+                overflow-y: scroll;
+                .combat-message-body {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    .combat-message-who{
+                        margin-right: 5px;
+                        color:darkgreen;
+                    }
+                }
+            }
+        }
     }
 }
 </style>

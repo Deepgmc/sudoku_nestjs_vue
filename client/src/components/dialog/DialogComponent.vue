@@ -1,6 +1,6 @@
 <template>
-    <q-dialog v-model="isWindowCardOpen" backdrop-filter="brightness(80%)">
-        <q-card :dark="true" :bordered="true" style="min-width: 1000px">
+    <q-dialog v-model="isWindowCardOpen" backdrop-filter="brightness(50%)">
+        <q-card :dark="true" :bordered="true" style="min-width: 1100px">
             <q-card-section>
                 <component
                     :is="currentDialogComponent"
@@ -9,7 +9,6 @@
                 >
                 </component>
             </q-card-section>
-            <q-separator />
             <q-card-actions v-if="dialogParams.isNeedTrash" align="left">
                 <span class="drop_item_delete"
                 v-html="'&#128465;'"

@@ -1,11 +1,15 @@
 import { SLOT_TYPES, type TSlotItem } from '@/interfaces/ItemsInterfaces';
 export const equipSlots: TSlotItem[] = [
-        {name: SLOT_TYPES.HEAD, textName: 'Голова'},
-        {name: SLOT_TYPES.BODY, textName: 'Тело'},
-        {name: SLOT_TYPES.LEGS, textName: 'Ноги'},
-        {name: SLOT_TYPES.RHAND, textName: 'П рука'},
-        {name: SLOT_TYPES.LHAND, textName: 'Л рука'},
-    ]
+    {name: SLOT_TYPES.HEAD, textName: 'Голова'},
+    {name: SLOT_TYPES.BODY, textName: 'Тело'},
+    {name: SLOT_TYPES.LEGS, textName: 'Ноги'},
+    {name: SLOT_TYPES.RHAND, textName: 'П рука'},
+    {name: SLOT_TYPES.LHAND, textName: 'Л рука'},
+]
+export enum FightParticipants {
+    U1 = 'u1',
+    U2 = 'u2'
+}
 
 export enum RESPONSE_STATUS_CODES {
     SUCCESS      = 200,

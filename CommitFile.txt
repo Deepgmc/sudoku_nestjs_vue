@@ -1,2 +1,2 @@
-Added UnitIcon component (to chat and CharacterComponent)
-Fight radio buttons with models
+roundFight starts
+combatLog

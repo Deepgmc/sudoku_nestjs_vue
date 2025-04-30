@@ -1,6 +1,7 @@
-import { computed, ref } from 'vue'
-import type { IRound, IBodyPart } from "@/interfaces/UnitInterfaces";
+import { computed, reactive, ref } from 'vue'
+import type { IRound, IBodyPart, IFightMessage } from "@/interfaces/UnitInterfaces";
 import type Unit from "@/umbrella/zoneEntities/Units/Unit";
+import { FightParticipants } from '@/constants';
 
 export default class Fight {
 
@@ -8,6 +9,7 @@ export default class Fight {
     private u2: Unit
 
     private rounds: IRound[] = []
+    private fightLog: IFightMessage[] = reactive([])
 
     public isStarted = ref<boolean>()
 
@@ -37,12 +39,29 @@ export default class Fight {
         this.rounds.push(newRound)
     }
 
-    roundFight(){
-
+    roundFight(): boolean | Fight {
+        let isError = false
+        let who: FightParticipants = FightParticipants.U1
+        if(!this.u1SelectedBlock.value || !this.u1selectedHitPart.value){
+            isError = true
+            who = FightParticipants.U1
+        } else if(!this.u2SelectedBlock.value || !this.u2SelectedHitPart.value){
+            isError = true
+            who = FightParticipants.U2
+        }
+        if(isError){
+            this.fightLog.push({who: who, text: 'Не выбрана цель атаки или блока'})
+            return false
+        }
+        return this
     }
 
     nextRound(){
 
+    }
+
+    get fightLogList(){
+        return this.fightLog
     }
 
     public u1SelectedBlock = ref<string>()
