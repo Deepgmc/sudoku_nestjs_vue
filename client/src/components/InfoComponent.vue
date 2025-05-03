@@ -33,9 +33,10 @@
 
         Units:
         <div class="info_feature-item" v-for="unit in props.clickedCell.cell.units" :key="unit.objectName">
-            <span class="info_feature-item_icon" v-html="unit.getFeatureInfoIcon().icon"></span>
             {{ unit.textName }}
-            Feature actions:
+            <span class="info_feature-item_icon" v-html="unit.icon"></span>
+            <span>{{ unit.chatDescription }}</span>
+            Unit actions:
             <ActionButton
                 v-for="action in unit.actions"
                 :key="action.actionName"
@@ -47,6 +48,7 @@
             ></ActionButton>
         </div>
 
+        <hr>
 
         Cell entity actions:
         <ActionButton

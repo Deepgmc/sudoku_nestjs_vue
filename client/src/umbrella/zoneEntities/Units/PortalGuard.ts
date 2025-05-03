@@ -26,8 +26,4 @@ export class PortalGuard extends Unit {
     }
 
     defaultActions = ['fight', 'talk', 'rob']
-
-    getFeatureInfoIcon(){
-        return {icon: this.icon, description: this.textName}
-    }
 }

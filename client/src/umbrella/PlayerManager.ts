@@ -27,9 +27,6 @@ export default class PlayerManager extends Unit implements IPlayer {
     public chatDescription: string = 'Игрок'
     public defaultActions: TRawActions = []
     public defaultEntityActions: TRawActions = []
-    public getFeatureInfoIcon = () => {
-        return {icon: this.icon, description: this.textName}
-    }
 
     private constructor() {
         super(true)

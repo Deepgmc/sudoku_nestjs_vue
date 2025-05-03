@@ -223,10 +223,4 @@ export default abstract class Unit {
         //исцеляет моба "магически" после боя с игроком
         this.currentHealth.value = this.maxHealth.value
     }
-
-
-
-
-
-    abstract getFeatureInfoIcon(): infoIconsObject
 }

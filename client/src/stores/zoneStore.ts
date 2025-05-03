@@ -19,7 +19,7 @@ export const useZoneStore = defineStore('zone', () => {
         return zone.value.zoneCells
     }
 
-    function removeUnit(unitType: string, coords: TCoords): boolean{
+    function removeUnit(unitType: string, coords: TCoords): boolean {
         const unitIndex: number = zone.value.zoneCells[coords.y][coords.x].units.findIndex(unit => {
             return unit.coords.x === coords.x && unit.coords.y === coords.y && unit.objectName === unitType
         })

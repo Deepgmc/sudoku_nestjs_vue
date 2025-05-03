@@ -32,9 +32,6 @@ export default abstract class CellEntity {
         this.features.forEach(feature => {
             this.infoIcons.push(feature.getFeatureInfoIcon())
         })
-        this.units.forEach(unit => {
-            this.infoIcons.push(unit.getFeatureInfoIcon())
-        })
     }
 
     abstract textName: string

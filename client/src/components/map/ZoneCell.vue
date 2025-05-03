@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type PropType } from 'vue';
 import PlayerZoneComponent from '../PlayerZoneComponent.vue';
 import HiddenCell from './HiddenCell.vue';
 import PlayerManager from '@/umbrella/PlayerManager';
+import CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
+import type { TClickedCell } from '@/interfaces/MapInterfaces';
 
 
 const props = defineProps({
     cellIndex: {type: Number, required: true},
     lineIndex: {type: Number, required: true},
     clickedCell: {
-        type: Object,
+        type: Object as PropType<TClickedCell>,
         required: true
     },
     cell: {
-        type: Object,
+        type: Object as PropType<CellEntity>,
         required: true
     }
 })
@@ -52,6 +54,13 @@ const isMeClicked = computed(() => {
                     <span v-html="infoIcon.icon" class="icons_list_item"></span>
                     <q-tooltip>
                         {{ infoIcon.description }}
+                    </q-tooltip>
+                </div>
+
+                <div v-for="unit in props.cell.units" :key="unit.objectName">
+                    <span v-html="unit.icon" class="icons_list_item"></span>
+                    <q-tooltip>
+                        {{ `${unit.chatDescription}` }}
                     </q-tooltip>
                 </div>
             </div>

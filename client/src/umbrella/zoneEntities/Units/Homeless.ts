@@ -27,8 +27,4 @@ export class Homeless extends Unit {
     }
 
     defaultActions = ['fight', 'talk', 'rob']
-
-    getFeatureInfoIcon() {
-        return {icon: this.icon, description: this.textName}
-    }
 }
