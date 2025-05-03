@@ -19,45 +19,47 @@
         <q-separator style="margin: 20px 0 20px 0" color="orange" />
 
         <button v-if="!F.isStarted.value" @click="F.startFight()">Начать бой</button>
-        <div v-else class="fight-actions-container">
-            <div class="left-side">
-                <div class="fight-actions">
-                    <h5>Поставить блок</h5>
-                    <q-option-group
-                        :options="F.getHitParts('block')"
-                        type="radio"
-                        v-model="F.u1SelectedBlock.value"
-                    />
+        <template v-else>
+            <div class="fight-actions-container">
+                <div class="left-side">
+                    <div class="fight-actions">
+                        <h5>Поставить блок</h5>
+                        <q-option-group
+                            :options="F.getHitParts('block')"
+                            type="radio"
+                            v-model="F.blockTargetu1.value"
+                        />
+                    </div>
                 </div>
-            </div>
-            <div class="right-side">
-                <div class="fight-actions">
-                    <h5>Ударить</h5>
-                    <q-option-group
-                        :options="F.getHitParts('strike')"
-                        type="radio"
-                        v-model="F.u1selectedHitPart.value"
-                    />
+                <div class="right-side">
+                    <div class="fight-actions">
+                        <h5>Ударить</h5>
+                        <q-option-group
+                            :options="F.getHitParts('strike')"
+                            type="radio"
+                            v-model="F.strikeTargetu1.value"
+                        />
+                    </div>
                 </div>
             </div>
             <div class="combat-log-block">
-                <div class="cl-left-side">
+                <div class="left-side">
                     <button @click="F.roundFight()">Следующий раунд</button>
                 </div>
-                <div class="cl-right-side combat-log">
+                <div class="right-side combat-log">
                     <div class="combat-message-body" v-for="(message, index) in F.fightLogList" :key="index">
                         <span class="combat-message-who">{{ message.who }}</span>
                         <span class="combat-message-text">{{ message.text }}</span>
                     </div>
                 </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
 
 <script lang="ts" setup>
-import { ref, type PropType } from 'vue';
+import { type PropType } from 'vue';
 import Fight from '@/umbrella/Fight'
 import UnitInfoComponent from '@/components/unit/UnitInfoComponent.vue';
 import PlayerManager from '@/umbrella/PlayerManager';
@@ -72,7 +74,7 @@ const props = defineProps({
 const player = PlayerManager.getInstance()
 
 // "Main object Fight. Includes fight and rounds"
-const F = new Fight(player, props.feature)
+const F = new Fight(player, props.feature, true)
 
 </script>
 
@@ -96,29 +98,29 @@ const F = new Fight(player, props.feature)
             border: 1px dashed darkmagenta;
             padding: 5px;
         }
-        .combat-log-block{
-            width:100%;
-            display:flex;
-            flex-flow: row nowrap;
-            margin: 10px 0 0 0;
-            .cl-left-side{
-                width:30%;
-            }
-            .cl-right-side{
-                width:70%;
-            }
-            .combat-log{
+    }
+    .combat-log-block{
+        width:100%;
+        display:flex;
+        flex-flow: row nowrap;
+        margin: 10px 0 0 0;
+        .left-side{
+            width:30%;
+        }
+        .right-side{
+            width:70%;
+        }
+        .combat-log{
+            display: flex;
+            flex-flow: column nowrap;
+            height: 200px;
+            overflow-y: scroll;
+            .combat-message-body {
                 display: flex;
-                flex-flow: column nowrap;
-                height: 200px;
-                overflow-y: scroll;
-                .combat-message-body {
-                    display: flex;
-                    flex-flow: row nowrap;
-                    .combat-message-who{
-                        margin-right: 5px;
-                        color:darkgreen;
-                    }
+                flex-flow: row nowrap;
+                .combat-message-who{
+                    margin-right: 5px;
+                    color:darkgreen;
                 }
             }
         }

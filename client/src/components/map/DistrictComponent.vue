@@ -3,7 +3,7 @@ import { computed, inject, onBeforeMount, ref, type PropType } from 'vue';
 import type AreaManager from '@/umbrella/AreaManager';
 
 import ZoneComponent from './ZoneComponent.vue';
-import type { IDistrict, IZone } from '@/interfaces/MapInterfaces';
+import type { IDistrict, IZoneRaw } from '@/interfaces/MapInterfaces';
 
 
 const props = defineProps({
@@ -24,7 +24,7 @@ console.log('%c DistrictComponent got district:', 'color:darkgreen;', props.dist
 
 const areaManager = inject ('areaManager') as AreaManager
 
-let currentZone = ref<IZone>({} as IZone)
+let currentZone = ref<IZoneRaw>({} as IZoneRaw)
 
 let isZoneFound = computed(() => {
     return currentZone.value.zoneCells && currentZone.value.zoneCells.length > 0

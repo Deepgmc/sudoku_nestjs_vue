@@ -46,11 +46,12 @@ export default class ZoneManager extends UmbrellaManager {
 
         hydratedZone.level = this.zoneRaw.level
         hydratedZone.zoneName = this.zoneRaw.zoneName
+        hydratedZone.baseCoordinates = this.zoneRaw.baseCoordinates
 
         this.store.loadZoneToStore(hydratedZone)
     }
 
-    async setAndMovePlayer(newCoords: TCoords): Promise<void> {
+    async setAndMovePlayer(newCoords: TCoords): Promise<boolean> {
         if(typeof this.getZoneCells()[newCoords.y][newCoords.x] === 'undefined'){
             throw new Error(`Incorrent zoneCells indexes: ${newCoords.x}, ${newCoords.y}`)
         }
@@ -58,12 +59,13 @@ export default class ZoneManager extends UmbrellaManager {
         if(!targetCell.isMovable()){
             throw new Error('Passability false. Cant move!')
         }
-        await this.removePlayerFromMap()
+        return await this.removePlayerFromMap()
             .then(_res => {
                 this.player.movePlayer(newCoords.x, newCoords.y)
                 targetCell.player = true
                 this.setPlayerVisibility(this.player)
                 console.log(`%c Player moving to: x${newCoords.x} y${newCoords.y}`, 'color:rgb(182, 86, 158);', this.player)
+                return true
             })
     }
 
@@ -80,7 +82,13 @@ export default class ZoneManager extends UmbrellaManager {
             })
             resolve(true)
         })
+    }
 
+    /**
+     * Удаляет юнита из zoneCells
+     */
+    removeUnit(unitType: string, coords: TCoords){
+        this.store.removeUnit(unitType, coords)
     }
 
     /**

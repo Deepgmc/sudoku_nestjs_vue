@@ -14,10 +14,6 @@ import DistrictComponent from './DistrictComponent.vue';
 const areaManager = inject ('areaManager') as AreaManager
 
 
-// const props = defineProps<{
-//     clickedCell: TClickedCell,
-//     handleCellClick: (...args: any) => any
-// }>()
 
 const props = defineProps({
     handleCellClick: {

@@ -49,6 +49,7 @@ export const items = {
         icon: '&#129679',
         textName: 'Лопата',
         slotType: SLOT_TYPES.RHAND,
+        damage: 2,
     },
 
     //food

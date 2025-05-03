@@ -1,9 +1,10 @@
 import Unit from "./Unit";
-import type { TRawActions } from "@/interfaces/MapInterfaces";
+import type { TCoords, TRawActions } from "@/interfaces/MapInterfaces";
 import type { IUnitRaw, TUnitStats } from "@/interfaces/UnitInterfaces";
 
 export class PortalGuard extends Unit {
 
+    objectName: string = 'portalGuard'
     textName: string = 'Охранник портала'
     public icon = '&#x1F93A;'
     public defaultEntityActions: TRawActions = []
@@ -19,9 +20,9 @@ export class PortalGuard extends Unit {
         intellect: 10,
     }
 
-    constructor(unitRaw: IUnitRaw){
-        super(true, unitRaw)
-        this.initUnit(this.defautStats)
+    constructor(unitRaw: IUnitRaw, coords: TCoords){
+        super(false, unitRaw)
+        this.initUnit(this.defautStats, coords)
     }
 
     defaultActions = ['fight', 'talk', 'rob']

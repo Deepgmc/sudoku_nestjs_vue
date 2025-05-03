@@ -19,7 +19,6 @@ const transformedMessages = computed(() => {
             timeString: `${msgDate.getMinutes()}:${msgDate.getSeconds()}`
         }
         return transformedMsg
-
     })
 })
 </script>

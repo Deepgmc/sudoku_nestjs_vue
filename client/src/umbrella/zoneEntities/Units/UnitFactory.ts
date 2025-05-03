@@ -1,4 +1,4 @@
-import type { TRawAction } from "@/interfaces/MapInterfaces";
+import type { TCoords, TRawAction } from "@/interfaces/MapInterfaces";
 import type Unit from "./Unit";
 import { Homeless } from "./Homeless";
 import { PortalGuard } from "./PortalGuard";
@@ -7,16 +7,17 @@ import Inventory from "@/umbrella/items/Inventory";
 import type { IUnitRaw } from "@/interfaces/UnitInterfaces";
 
 export function UnitFactory (
-    unitRaw: IUnitRaw
+    unitRaw: IUnitRaw,
+    coords: TCoords
 ): Unit {
     let unit: Unit | null
     try {
         switch(unitRaw.name){
             case 'homeless':
-                unit = new Homeless(unitRaw)
+                unit = new Homeless(unitRaw, coords)
                 break;
             case 'portalGuard':
-                unit = new PortalGuard(unitRaw)
+                unit = new PortalGuard(unitRaw, coords)
                 break;
             default:
                 unit = null

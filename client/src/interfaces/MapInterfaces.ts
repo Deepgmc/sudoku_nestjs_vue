@@ -16,16 +16,20 @@ export interface IDistrict {
     districtPosition: TDistrictPosition,
     zones: IZoneRaw[][]
 }
+
 export interface IZoneRaw {
     zoneName: string,
     zonePosition: TCoords,
     level: number,
+    baseCoordinates: TCoords,
     zoneCells: ICell[][]
 }
+
 export interface IZoneHydrated {
     zoneName: string,
     zonePosition: TCoords,
     level: number,
+    baseCoordinates: TCoords,
     zoneCells: CellEntity[][]
 }
 
@@ -45,7 +49,10 @@ export type infoIconsObject = {
 /**
 ZONE CELLS (FROM MAP)
 */
-export type TCoords = {x: number, y: number}
+export type TCoords = {
+    x: number,
+    y: number
+}
 export interface ICell {
     obj     : ICellObject,
     features: TCellRawFeatures,

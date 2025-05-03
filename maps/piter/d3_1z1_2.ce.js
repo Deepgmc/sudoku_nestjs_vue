@@ -1,6 +1,7 @@
 export const zone = {
     level: 1,
     zoneName: 'Дом',
+    baseCoordinates: {x: 1, y: 5},
     zoneCells: [
         [//HOME PORTAL
             {
@@ -449,13 +450,17 @@ export const zone = {
                 },
                 features: [],
                 units: [
-                    {//! homeless 2
+                    {//! homeless 2 (near knife)
                         name: 'homeless',
                         actions: [],
                         items: [
                             {
                                 name: 'knife_01',
                                 quantity: 1
+                            },
+                            {
+                                name: 'shirt_01',
+                                quantity: 2
                             },
                         ],
                         equiped: {

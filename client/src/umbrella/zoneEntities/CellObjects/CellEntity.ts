@@ -1,11 +1,12 @@
 import { FeatureFactory } from '../FeatureFactory';
 
-import type { TRawActions, TCellRawFeatures, IRawFeature, ICellObject, TRawAction, infoIconsObject, TCellRawUnits, IUnitRaw } from '@/interfaces/MapInterfaces.ts';
+import type { TRawActions, ICellObject, TRawAction, infoIconsObject } from '@/interfaces/MapInterfaces.ts';
 import type FeatureEntity from '../FeatureObjects/FeatureEntity';
 import type { IInventory } from '@/interfaces/ItemsInterfaces';
 import type MapAction from '@/umbrella/actions/MapAction';
-import type Unit from '../Units/Unit';
+import type Unit from '@/umbrella/zoneEntities/Units/Unit'
 import { UnitFactory } from '../Units/UnitFactory';
+import type { IRawFeature, IUnitRaw, TCellRawFeatures, TCellRawUnits } from '@/interfaces/UnitInterfaces';
 
 export default abstract class CellEntity {
     constructor(
@@ -17,13 +18,15 @@ export default abstract class CellEntity {
         this.mapCellObjectName = mapCellObject.name
 
         this.player = false
+        this.x = coords.x
+        this.y = coords.y
 
         if(mapCellObject.orientation) this.orientation = mapCellObject.orientation; else this.orientation = '' //some cells do not need orientation
         this.features = mapCellFeatures.map((featureRaw: IRawFeature) => {
             return FeatureFactory(featureRaw)
         })
         this.units = mapCellUnits.map((unitRaw: IUnitRaw) => {
-            return UnitFactory(unitRaw)
+            return UnitFactory(unitRaw, coords)
         })
 
         this.features.forEach(feature => {
@@ -32,11 +35,8 @@ export default abstract class CellEntity {
         this.units.forEach(unit => {
             this.infoIcons.push(unit.getFeatureInfoIcon())
         })
-
-        this.x = coords.x
-        this.y = coords.y
-
     }
+
     abstract textName: string
     abstract chatDescription: string
     abstract passability: boolean

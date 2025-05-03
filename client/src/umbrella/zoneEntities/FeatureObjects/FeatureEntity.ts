@@ -1,5 +1,6 @@
 import type { IInventory } from "@/interfaces/ItemsInterfaces";
-import type { infoIconsObject, IRawFeature, TRawAction, TRawActions } from "@/interfaces/MapInterfaces";
+import type { infoIconsObject, TRawAction, TRawActions } from "@/interfaces/MapInterfaces";
+import type { IRawFeature } from "@/interfaces/UnitInterfaces";
 import type MapAction from "@/umbrella/actions/MapAction";
 
 export default abstract class FeatureEntity {

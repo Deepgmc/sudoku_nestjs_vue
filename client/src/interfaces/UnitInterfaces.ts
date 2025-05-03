@@ -1,6 +1,7 @@
-import type { FightParticipants } from "@/constants"
+import type { Ref } from "vue"
 import type { IRawEquiped, IRawItem, SLOT_TYPES } from "./ItemsInterfaces"
 import type { TRawActions } from "./MapInterfaces"
+import type Unit from "@/umbrella/zoneEntities/Units/Unit"
 
 export type TCellRawFeatures = IRawFeature[]
 export type TCellRawUnits = IUnitRaw[]
@@ -29,20 +30,23 @@ export type TUnitStats = {
 /**FIGHT */
 
 export interface IRound {
-    u1StrikeTarget: SLOT_TYPES | undefined,
-    u1BlockTarget: SLOT_TYPES | undefined,
-    u2StrikeTarget: SLOT_TYPES | undefined,
-    u2BlockTarget: SLOT_TYPES | undefined,
-    isFinished: boolean
+    unit1      : IFightUnit,
+    unit2      : IFightUnit,
+    isFinished : boolean,
+}
+export interface IFightUnit {
+    unit: Unit,
+    strikeTarget: Ref<SLOT_TYPES | undefined>,
+    blockTarget: Ref<SLOT_TYPES | undefined>,
 }
 
 export interface IBodyPart {
-    value: string,
+    value: SLOT_TYPES,
     label: string,
     icon: string,
     color: string
 }
 export interface IFightMessage {
     text: string,
-    who: FightParticipants
+    who: string
 }

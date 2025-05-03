@@ -1,11 +1,9 @@
 import { reactive, watch } from 'vue';
+import { usePlayerStore } from '@/stores/playerStore'
 import UmbrellaManager from '@/umbrella/UmbrellaManager';
 import Unit from '@/umbrella/zoneEntities/Units/Unit';
 import ZoneManager from '@/umbrella/ZoneManager';
 import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
-
-import { usePlayerStore } from '@/stores/playerStore'
-
 import { type IPlayer, type IPlayerRaw } from '@/interfaces/PlayerInterfaces';
 import type { IActionResult, IChatMessage, TActionPayload, TRawActions } from '@/interfaces/MapInterfaces';
 import Inventory from './items/Inventory';
@@ -95,13 +93,13 @@ export default class PlayerManager extends Unit implements IPlayer {
         }
 
         this.initUnit({
-            level: dataRaw.player.level,
-            experience: dataRaw.player.experience,
+            level        : dataRaw.player.level,
+            experience   : dataRaw.player.experience,
             currentHealth: dataRaw.player.currentHealth,
-            maxHealth: dataRaw.player.maxHealth,
-            strength: dataRaw.player.strength,
-            agility: dataRaw.player.agility,
-            intellect: dataRaw.player.intellect,
+            maxHealth    : dataRaw.player.maxHealth,
+            strength     : dataRaw.player.strength,
+            agility      : dataRaw.player.agility,
+            intellect    : dataRaw.player.intellect,
         })
 
         this.inventory = reactive(new Inventory(dataRaw.inventory, true))
@@ -111,7 +109,7 @@ export default class PlayerManager extends Unit implements IPlayer {
         return true
     }
 
-    isHere(x: number, y:number): boolean{
+    isHere(x: number, y:number): boolean {
         return this.x === x && this.y === y
     }
 
@@ -119,13 +117,23 @@ export default class PlayerManager extends Unit implements IPlayer {
         return this.isHere(cell.x, cell. y)
     }
 
-    movePlayer(x:number, y: number){
-        this.setXY(x, y)
+    movePlayer(x:number, y: number): boolean {
+        //не вызывать напрямую, использовать ZoneManager setAndMovePlayer()
+        return this.setXY(x, y)
     }
 
-    setXY(x:number, y: number){
+    setXY(x:number, y: number): boolean {
         this.x = x
         this.y = y
+        return true
+    }
+
+    async rebornPlayer(): Promise<boolean> {
+        const zone = ZoneManager.getInstance().store.getZone()
+        return await ZoneManager.getInstance().setAndMovePlayer(zone.baseCoordinates)
+        /**
+        TODO убрать выделение клетки при смерти игрока
+        */
     }
 
     handleMapAction(actionPayload: TActionPayload, next: (msg: IChatMessage) => void): void{

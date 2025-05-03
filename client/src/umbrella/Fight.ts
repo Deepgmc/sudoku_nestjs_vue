@@ -1,7 +1,11 @@
-import { computed, reactive, ref } from 'vue'
-import type { IRound, IBodyPart, IFightMessage } from "@/interfaces/UnitInterfaces";
+import { isProxy, reactive, ref, toRaw } from 'vue'
+import type { IRound, IBodyPart, IFightMessage, IFightUnit } from "@/interfaces/UnitInterfaces";
 import type Unit from "@/umbrella/zoneEntities/Units/Unit";
-import { FightParticipants } from '@/constants';
+import { SLOT_TYPES } from '@/interfaces/ItemsInterfaces';
+
+function getRandomWithin(min: number, max: number){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 export default class Fight {
 
@@ -9,85 +13,192 @@ export default class Fight {
     private u2: Unit
 
     private rounds: IRound[] = []
+    public currentRound !: IRound
     private fightLog: IFightMessage[] = reactive([])
 
     public isStarted = ref<boolean>()
 
-    constructor(u1: Unit, u2: Unit){
-        this.u1 = u1
-        this.u2 = u2
-        this.isStarted.value = false
-    }
+    constructor(u1: Unit, u2: Unit, private readonly isPlayerFight = false) {
+        //объекты берутся из пропсов вью, надо вернуть их обратно из прокси
+        this.u1 = isProxy(u1) ? toRaw(u1) : u1
+        this.u2 = isProxy(u2) ? toRaw(u2) : u2
 
-    get unitLeft(){
-        return this.u1
-    }
-    get unitRight(){
-        return this.u2
+        this.currentRound = this.newRound
+
+        this.isStarted.value = false
     }
 
     startFight(){
         this.isStarted.value = true
-        const newRound = {
-            u1BlockTarget: undefined,
-            u1StrikeTarget: undefined,
-            u2BlockTarget: undefined,
-            u2StrikeTarget: undefined,
-            isFinished: false
-        }
-
-        this.rounds.push(newRound)
     }
 
-    roundFight(): boolean | Fight {
-        let isError = false
-        let who: FightParticipants = FightParticipants.U1
-        if(!this.u1SelectedBlock.value || !this.u1selectedHitPart.value){
-            isError = true
-            who = FightParticipants.U1
-        } else if(!this.u2SelectedBlock.value || !this.u2SelectedHitPart.value){
-            isError = true
-            who = FightParticipants.U2
+    public strikeTargetu1 = ref<SLOT_TYPES | undefined>()
+    public blockTargetu1 = ref<SLOT_TYPES | undefined>()
+    public strikeTargetu2 = ref<SLOT_TYPES | undefined>()
+    public blockTargetu2 = ref<SLOT_TYPES | undefined>()
+
+    private nextRound(){
+        this.rounds.push(this.currentRound)
+        this.currentRound = this.newRound
+        this.resetStrikesAndBlocks()
+    }
+
+    async roundFight(): Promise<boolean | Fight> {
+        this.currentRound.unit1.strikeTarget.value = this.strikeTargetu1.value
+        this.currentRound.unit1.blockTarget.value = this.blockTargetu1.value
+        if(this.isPlayerFight){
+            //если бой ведёт сам игрок (а не автоматический бой) то нужно автоматически атаковать и ставить блок
+            this.currentRound.unit2.blockTarget.value = this.getRandomHitPartTarget().value
+            this.currentRound.unit2.strikeTarget.value = this.getRandomHitPartTarget().value
         }
-        if(isError){
-            this.fightLog.push({who: who, text: 'Не выбрана цель атаки или блока'})
+
+        if(this.checkSelectedHitBlockParts()){
+            this.addFightMessage('Не выбрана цель атаки или блока')
             return false
         }
+
+        //##################################################
+        //кто ударяет первым
+        //удар по очереди
+        //проверка на конец боя после каждого удара
+        //конец боя или следующий раунд
+
+        //кто ударяет первым
+        this.makeAttackUnitsOrder()
+        this.addFightMessage(`attacker: ${this.currentRound.unit1.unit.textName}, target: ${this.currentRound.unit2.unit.textName}`)
+
+        //проводим удары (внутри - смотрим блокирование)
+        await this.makeAttack()
+
+        this.nextRound()
+
         return this
     }
 
-    nextRound(){
+    /**
+     * Атака одного юнита другим, проверяется выбранный блок. Сама атака производится самим юнитом
+     * @param attacker атакующий юнит
+     * @param target обороняющийся юнит
+     */
+    private async makeAttack() {
+        //первая атака за раунд
+        let attacker = this.currentRound.unit1
+        let target = this.currentRound.unit2
+        await this.strike(attacker, target)
 
+        //ПРОВЕРКА НЕ УМЕР ЛИ
+
+        //ответная атака, наоборот
+        attacker = this.currentRound.unit2
+        target = this.currentRound.unit1
+        await this.strike(attacker, target)
+
+        //ПРОВЕРКА НЕ УМЕР ЛИ
     }
 
-    get fightLogList(){
-        return this.fightLog
+    private async strike(attacker: IFightUnit, target: IFightUnit) {
+        if(!this.isBlocking(attacker, target)){
+            // блок не прошел, атакуем
+            const hitResult = await attacker.unit.hit(target.unit)
+            this.addFightMessage(hitResult.message)
+        } else {
+            this.addFightMessage(this.getBlockMessage(attacker, target))
+        }
     }
 
-    public u1SelectedBlock = ref<string>()
-    public u1selectedHitPart = ref<string>()
+    isBlocking(attacker: IFightUnit, target: IFightUnit): boolean {
+        return attacker.strikeTarget.value === target.blockTarget.value
+    }
 
-    public u2SelectedBlock = ref<string>()
-    public u2SelectedHitPart = ref<string>()
+    getBlockMessage(attacker: IFightUnit, blocker: IFightUnit): string {
+        if(typeof blocker.blockTarget.value !== 'undefined'){
+            const bodyPart = this.getHitPartByValue(blocker.blockTarget.value)?.label
+            if(bodyPart === '') return ''
+            return `${blocker.unit.textName} заблокировал атаку в ${bodyPart}`
+        }
+        return ''
+    }
+
+    get newRound(){
+        return {
+            unit1: {
+                unit: this.u1,
+                strikeTarget: ref<SLOT_TYPES | undefined>(),
+                blockTarget: ref<SLOT_TYPES | undefined>(),
+            },
+            unit2: {
+                unit: this.u2,
+                strikeTarget: ref<SLOT_TYPES | undefined>(),
+                blockTarget: ref<SLOT_TYPES | undefined>(),
+            },
+            isFinished: false
+        }
+    }
+
+    /**
+     * Определяем кто начинает раунд первым на основе суммы статов - у кого больше тот и первый
+        переделывать бой больше чем на 2 игрока не планируется даже в теории, поэтому вычисляется так "в лоб"
+     * @returns unit1 - всегда атакующий, unit2 обороняющийся
+     */
+    makeAttackUnitsOrder(): void {
+        const tmpu1 = this.currentRound.unit1
+        const tmpu2 = this.currentRound.unit2
+        if(
+            tmpu1.unit.strength.value + tmpu1.unit.agility.value + tmpu1.unit.intellect.value >=
+            tmpu2.unit.strength.value + tmpu2.unit.agility.value + tmpu2.unit.intellect.value
+        ){
+            this.currentRound.unit1 = tmpu1
+            this.currentRound.unit2 = tmpu2
+        } else {
+            this.currentRound.unit1 = tmpu2
+            this.currentRound.unit2 = tmpu1
+        }
+    }
+
+    /**
+     * Выбраны ли все части для атаки и блока
+     * @returns да/нет
+     */
+    checkSelectedHitBlockParts(): boolean {
+        if(
+            (!this.currentRound.unit1.blockTarget.value || !this.currentRound.unit1.strikeTarget.value) ||
+            (!this.currentRound.unit2.blockTarget.value || !this.currentRound.unit2.strikeTarget.value)
+        ){
+            return true
+        }
+        return false
+    }
+
+    private resetStrikesAndBlocks(){
+        this.strikeTargetu1.value = undefined
+        this.blockTargetu1.value = undefined
+        this.strikeTargetu2.value = undefined
+        this.blockTargetu2.value = undefined
+    }
+
+    private getRandomHitPartTarget(): IBodyPart{
+        const hitParts = this.getHitParts()
+        return hitParts[getRandomWithin(0, hitParts.length - 1)]
+    }
 
     //части тела, которые можно атаковать и блокировать
     getHitParts(type?: 'block' | 'strike'): IBodyPart[] {
         const color = type === 'strike' ? 'red' : 'green'
         return [
             {
-                value: 'head',
+                value: SLOT_TYPES.HEAD,
                 label: 'Голова',
                 icon: '128100',
                 color: color,
             },
             {
-                value: 'body',
+                value: SLOT_TYPES.BODY,
                 label: 'Тело',
                 icon: '128085',
                 color: color,
             },
             {
-                value: 'legs',
+                value: SLOT_TYPES.LEGS,
                 label: 'Ноги',
                 icon: '128086',
                 color: color,
@@ -95,7 +206,17 @@ export default class Fight {
         ]
     }
 
-    getHitPartByValue(value: string){
+    get fightLogList(){
+        return this.fightLog
+    }
+
+    addFightMessage(text: string){
+        if(text && text.length > 0){
+            this.fightLog.push({who: 'arbiter', text})
+        }
+    }
+
+    getHitPartByValue(value: SLOT_TYPES){
         return this.getHitParts().find(item => item.value === value)
     }
 }

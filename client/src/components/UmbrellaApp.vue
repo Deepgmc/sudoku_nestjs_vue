@@ -42,7 +42,7 @@
 
 
 <script lang="ts" setup>
-import { inject, onBeforeMount, provide, reactive, ref, type Component } from 'vue';
+import { inject, onBeforeMount, provide } from 'vue';
 
 import type { NetworkManager } from '@/network/NetworkManager';
 import type { AuthManager } from '@/auth/AuthManager';
