@@ -1,5 +1,4 @@
 import type { IActionResult, IChatMessage, TAction, TActionPayload } from "@/interfaces/MapInterfaces"
-import AreaManager from "../AreaManager"
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity"
 import type PlayerManager from "../PlayerManager"
 
@@ -15,7 +14,7 @@ export default abstract class MapAction {
     abstract activate(
         actionPayload: TActionPayload,
         next: (msg: any) => void //action callback, полученный извне
-    ): Promise<IActionResult | void>//action callback, заданный самим действием
+    ): Promise<IActionResult | void> //action callback, заданный самим действием
 
     abstract getChatMessage(actionPayload: TActionPayload, cell?: CellEntity): IChatMessage
 

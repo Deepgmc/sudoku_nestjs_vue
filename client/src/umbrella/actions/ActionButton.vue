@@ -10,10 +10,6 @@ const emit = defineEmits(['infoActionsClick'])
 
 const player = inject('player') as PlayerManager
 const props = defineProps({
-    type: {
-        type: String,
-        required: true
-    },
     action: {
         type: Object as PropType<MapAction>,
         required: true
@@ -32,8 +28,6 @@ const props = defineProps({
     },
 })
 const actionPayload: TActionPayload = {
-    type: props.type,
-    player: player,
     clickedCell: props.clickedCell,
     feature: props.feature,
     unit: props.unit,

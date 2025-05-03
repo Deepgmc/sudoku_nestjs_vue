@@ -4,6 +4,7 @@ import type FeatureEntity from "../zoneEntities/FeatureObjects/FeatureEntity";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import { loadModal } from "@/composables/modal";
 import type Unit from "../zoneEntities/Units/Unit";
+import Chat from '@/umbrella/ChatManager'
 
 export default class RobAction extends MapAction {
 
@@ -34,7 +35,7 @@ export default class RobAction extends MapAction {
     }
 
     getChatMessage(payload: TActionPayload, cellToRob: CellEntity): IChatMessage {
-        if(!cellToRob) return {text: 'Wrong move parameters'}
+        if(!cellToRob) Chat.getChatMessage('Wrong move parameters')
         const text: string[] = []
         const robUnit = cellToRob.units.find(unit => {
             return unit.actions.find(action => {
@@ -43,12 +44,12 @@ export default class RobAction extends MapAction {
         })
         if(!robUnit) {
             alert('NOT FOUND ROB UNIT!!!!!!')
-            return {text: 'Не найден объект кражи'}
+            throw new Error('Не найден объект кражи')
         }
         text.push(`Вы пытаетесь ограбить: ${robUnit.textName}`)
         text.push(`${robUnit.inventory.getItemsForChat()}`)
 
-        return {text: text.join(' ')}
+        return Chat.getChatMessage(text.join(' '))
     }
 
     isActionActive(/*player: IPlayer, cell: CellEntity*/) {

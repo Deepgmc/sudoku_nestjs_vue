@@ -1,5 +1,7 @@
-Fight development
-Осталось:
-нормальное удаление юнита при его убийстве
-вывести абстрактный инвентарь с добычей
-добавление экспы
+fix: ActionPayload, ChatMessage, MoveAction, Unit counterattack, ItemsTrash
+
+Action payload removed extra data
+Chat message object IChatMessage - new format
+Move action to same cell - unreachable
+Unit do not counterattack after dead
+Trash for items - standalone component

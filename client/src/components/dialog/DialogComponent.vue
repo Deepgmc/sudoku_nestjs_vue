@@ -10,13 +10,10 @@
                 </component>
             </q-card-section>
             <q-card-actions v-if="dialogParams.isNeedTrash" align="left">
-                <span class="drop_item_delete"
-                v-html="'&#128465;'"
-                @drop.stop="dropItem($event)"
-                @dragenter.prevent=""
-                @dragover.prevent=""
-                data-dnd_entity="trash"
-            ></span>
+                <items-trash
+                    class="drop_item_delete"
+                >
+                </items-trash>
             </q-card-actions>
 
             <q-card-actions align="right">
@@ -27,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { dropItem } from '@/composables/dnd'
+import ItemsTrash from '../inventory/ItemsTrash.vue';
 import {isWindowCardOpen, currentDialogComponent, dialogParams } from '@/composables/modal';
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';

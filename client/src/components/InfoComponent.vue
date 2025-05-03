@@ -56,7 +56,6 @@
             :key="action.actionName"
             :action="action"
             :clickedCell="clickedCell"
-            type="mapAction"
             @info-actions-click="handleInfoActions"
         ></ActionButton>
     </div>

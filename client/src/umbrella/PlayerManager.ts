@@ -148,6 +148,7 @@ export default class PlayerManager extends Unit implements IPlayer {
     /**
      * Перемещаться можно только на 1 клетку по оси X или Y
      * По диагонали нельзя, следовательно, смещение по одной из координат должно быть 0, а по второй - не больше шага персонажа
+       нельзя переместиться в эту же клетку
      * @param cell ячейка, куда хотим переместиться
      * @returns можно или нет
      */
@@ -156,7 +157,8 @@ export default class PlayerManager extends Unit implements IPlayer {
         const distanceY = Math.abs(this.y - cell.y)
         return distanceX <= this.moveRange &&
             distanceY <= this.moveRange &&
-            (distanceX === 0 || distanceY === 0)
+            (distanceX === 0 || distanceY === 0) &&
+            !(distanceX === 0 && distanceY == 0)
     }
 
     get userId(){

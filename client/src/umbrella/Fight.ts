@@ -80,29 +80,40 @@ export default class Fight {
      * @param attacker атакующий юнит
      * @param target обороняющийся юнит
      */
-    private async makeAttack() {
+    private async makeAttack(): Promise<void> {
         //первая атака за раунд
         let attacker = this.currentRound.unit1
         let target = this.currentRound.unit2
-        await this.strike(attacker, target)
+        let isDead = false
+        isDead = await this.strike(attacker, target)
 
-        //ПРОВЕРКА НЕ УМЕР ЛИ
+        if(isDead){
+            return
+        }
 
         //ответная атака, наоборот
         attacker = this.currentRound.unit2
         target = this.currentRound.unit1
-        await this.strike(attacker, target)
+        isDead = await this.strike(attacker, target)
 
-        //ПРОВЕРКА НЕ УМЕР ЛИ
+        if(isDead){
+            return
+        }
+
+        this.addFightMessage('<<< Следующий раунд >>>')
+
+
     }
 
-    private async strike(attacker: IFightUnit, target: IFightUnit) {
+    private async strike(attacker: IFightUnit, target: IFightUnit): Promise<boolean> {
         if(!this.isBlocking(attacker, target)){
             // блок не прошел, атакуем
             const hitResult = await attacker.unit.hit(target.unit)
             this.addFightMessage(hitResult.message)
+            return hitResult.isDead
         } else {
             this.addFightMessage(this.getBlockMessage(attacker, target))
+            return false
         }
     }
 

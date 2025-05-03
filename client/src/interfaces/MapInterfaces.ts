@@ -79,11 +79,7 @@ export interface TClickedCell {
 export type TAction = string
 
 export type TActionPayload = {
-    type       : string,
-    clickedCell: TClickedCell,
-    action     : MapAction,
-    player     : PlayerManager
-
+    action: MapAction,
     feature?: FeatureEntity,
     unit?: Unit,
     zoneManager?: ZoneManager,

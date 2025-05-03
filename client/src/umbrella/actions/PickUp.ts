@@ -30,7 +30,7 @@ export default class PickUpAction extends MapAction {
 
     getChatMessage(payload: TActionPayload): IChatMessage {
         if(!payload.clickedCell.cell || payload.clickedCell.cell.inventory.isEmpty()) {
-            return {text: 'Wrong pickUp parameters'}
+            return Chat.getChatMessage('Wrong pickUp parameters')
         }
         const text: string[] = []
         text.push(`Вы подбираете предметы: ${payload.clickedCell.cell.inventory.getItemsForChat()}`)
