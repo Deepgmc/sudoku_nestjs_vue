@@ -1,7 +1,7 @@
-fix: ActionPayload, ChatMessage, MoveAction, Unit counterattack, ItemsTrash
+fix: Items Armor, FightAction, Modal reactive()
 
-Action payload removed extra data
-Chat message object IChatMessage - new format
-Move action to same cell - unreachable
-Unit do not counterattack after dead
-Trash for items - standalone component
+УБРАНА РЕАКТИВНОСТЬ С МОДАЛКИ!!
+Дистанция атаки - текущая клетка
+У шмоток-одежды есть все статы
+Введена броня одежды
+ItemTypes function removed

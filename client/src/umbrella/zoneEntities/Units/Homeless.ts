@@ -12,13 +12,13 @@ export class Homeless extends Unit {
 
 
     private defautStats: TUnitStats = {
-        level: 1,
-        experience: 0,
-        currentHealth: 4,
-        maxHealth: 4,
-        strength: 5,
-        agility: 5,
-        intellect: 5,
+        level        : 1,
+        experience   : 0,
+        currentHealth: 22,
+        maxHealth    : 22,
+        strength     : 5,
+        agility      : 5,
+        intellect    : 5,
     }
 
     constructor(unitRaw: IUnitRaw, coords: TCoords) {

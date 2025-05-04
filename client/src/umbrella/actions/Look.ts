@@ -2,8 +2,8 @@ import type { TAction, TActionPayload } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
 import type { IChatMessage } from '@/interfaces/MapInterfaces'
-import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 import Chat from "../ChatManager";
+
 
 export default class LookAction extends MapAction {
 
@@ -36,7 +36,7 @@ export default class LookAction extends MapAction {
         return Chat.getChatMessage(text.join('. '))
     }
 
-    isActionActive(/*player: IPlayer, cell: CellEntity*/) {
+    isActionActive(/*player: PlayerManager, cell: CellEntity*/) {
         return true
     }
 

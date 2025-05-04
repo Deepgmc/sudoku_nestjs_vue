@@ -18,13 +18,13 @@ export interface IUnitRaw {
 }
 
 export type TUnitStats = {
-    level: number,
-    experience: number,
+    level        : number,
+    experience   : number,
     currentHealth: number,
-    maxHealth: number,
-    strength: number,
-    agility: number,
-    intellect: number,
+    maxHealth    : number,
+    strength     : number,
+    agility      : number,
+    intellect    : number,
 }
 
 /**FIGHT */

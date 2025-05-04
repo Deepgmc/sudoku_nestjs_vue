@@ -38,6 +38,7 @@ export default class Fight {
     public blockTargetu2 = ref<SLOT_TYPES | undefined>()
 
     private nextRound(){
+        this.addFightMessage('<<< Следующий раунд >>>')
         this.rounds.push(this.currentRound)
         this.currentRound = this.newRound
         this.resetStrikesAndBlocks()
@@ -57,20 +58,18 @@ export default class Fight {
             return false
         }
 
-        //##################################################
-        //кто ударяет первым
-        //удар по очереди
-        //проверка на конец боя после каждого удара
-        //конец боя или следующий раунд
-
         //кто ударяет первым
         this.makeAttackUnitsOrder()
         this.addFightMessage(`attacker: ${this.currentRound.unit1.unit.textName}, target: ${this.currentRound.unit2.unit.textName}`)
 
         //проводим удары (внутри - смотрим блокирование)
-        await this.makeAttack()
+        this.currentRound.isFinished = await this.makeAttack()
 
-        this.nextRound()
+        if(this.currentRound.isFinished){
+            this.addFightMessage('!! Fight end')
+        } else {
+            this.nextRound()
+        }
 
         return this
     }
@@ -80,7 +79,7 @@ export default class Fight {
      * @param attacker атакующий юнит
      * @param target обороняющийся юнит
      */
-    private async makeAttack(): Promise<void> {
+    private async makeAttack(): Promise<boolean> {
         //первая атака за раунд
         let attacker = this.currentRound.unit1
         let target = this.currentRound.unit2
@@ -88,7 +87,7 @@ export default class Fight {
         isDead = await this.strike(attacker, target)
 
         if(isDead){
-            return
+            return true
         }
 
         //ответная атака, наоборот
@@ -97,12 +96,9 @@ export default class Fight {
         isDead = await this.strike(attacker, target)
 
         if(isDead){
-            return
+            return true
         }
-
-        this.addFightMessage('<<< Следующий раунд >>>')
-
-
+        return false
     }
 
     private async strike(attacker: IFightUnit, target: IFightUnit): Promise<boolean> {

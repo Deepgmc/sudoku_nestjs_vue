@@ -2,7 +2,7 @@ import {type Component, reactive, ref} from 'vue'
 import FightActionComponent from '@/components/fight/FightActionComponent.vue';
 import InspectCard from '@/components/InspectCard.vue';
 import CharacterCard from '@/components/player/CharacterCard.vue';
-import type FeatureEntity from '@/umbrella/zoneEntities/FeatureObjects/FeatureEntity';
+import type Unit from '@/umbrella/zoneEntities/Units/Unit';
 
 const modalComponents = {
     CharacterCard: {
@@ -19,10 +19,11 @@ const modalComponents = {
     }
 }
 
-export const dialogParams = reactive({
-    dialogFeature: {} as FeatureEntity,
+//ТУТ Убрана реактивность - поэтому были проблемы с вычислением статов в Unit
+export const dialogParams = {
+    dialogFeature: {} as Unit,
     isNeedTrash: false
-})
+}
 export let currentDialogComponent: Component
 export const isWindowCardOpen = ref(false)
 

@@ -30,7 +30,7 @@ export default class Item implements IItem {
     //generated
     public itemId     : TItemId
     public itemNumber : string
-    public item_type  : ITEM_TYPES
+    public type       : ITEM_TYPES
 
     //default from itemsList.ts
     public icon       : string = '&#10067'              //'&#x2753;'         //default icon
@@ -43,6 +43,7 @@ export default class Item implements IItem {
     public strength   : number
     public agility    : number
     public add_health : number
+    public armor      : number
 
     //food
     public hp_regen   : number
@@ -66,6 +67,7 @@ export default class Item implements IItem {
         this.strength   = factoryOptions.strength
         this.agility    = factoryOptions.agility
         this.add_health = factoryOptions.add_health
+        this.armor      = factoryOptions.armor
 
         //food
         this.hp_regen = factoryOptions.hp_regen
@@ -73,11 +75,11 @@ export default class Item implements IItem {
         //weapon
         this.damage = factoryOptions.damage
 
-        this.item_type = this.getItemType()
+        this.type = factoryOptions.type
     }
 
     use(unit: TransferObjectWithInventory){
-        if(this.item_type !== ITEM_TYPES.FOOD){
+        if(this.type !== ITEM_TYPES.FOOD){
             ChatManager.addMessageText(`Вы попытались съесть "${this.textName}", ничего не получилось`)
             return false
         } else {
@@ -105,12 +107,6 @@ export default class Item implements IItem {
 
     isHealing(): boolean {
         return this.hp_regen > 0
-    }
-
-    getItemType(): ITEM_TYPES{
-        if(this.intellect || this.strength || this.agility || this.add_health) return ITEM_TYPES.CLOTHES
-        else if(this.hp_regen) return ITEM_TYPES.FOOD
-        else return ITEM_TYPES.WEAPON
     }
 
     static generateInventoryItem(itemId: TItemId, itemNumber: TItemNumber): IInventoryItem | null{

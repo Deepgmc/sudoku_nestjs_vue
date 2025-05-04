@@ -1,16 +1,16 @@
-import { reactive, ref, type Ref } from "vue";
+import { reactive, ref, type Ref, type SlotsType } from "vue";
 import {
     ITEM_TYPES,
+    SLOT_TYPES,
     type IInventory,
     type IInventoryItem,
     type IItem,
-    type SLOT_TYPES,
     type TItemId,
     type TSlotItem
 } from "@/interfaces/ItemsInterfaces";
 import { equipSlots } from '@/constants';
 import type { IEquiped, IRawEquiped } from "@/interfaces/ItemsInterfaces";
-import type { infoIconsObject, TCoords, TRawActions } from "@/interfaces/MapInterfaces";
+import type { TCoords, TRawActions } from "@/interfaces/MapInterfaces";
 import type MapAction from "@/umbrella/actions/MapAction";
 import Item from "@/umbrella/items/Items";
 import type { IUnitRaw, TUnitStats } from "@/interfaces/UnitInterfaces";
@@ -72,7 +72,25 @@ export default abstract class Unit {
 
     coords !: TCoords
 
-    equipItems(equipedRaw: IRawEquiped): void{
+    getArmor(): number {
+        let totalArmor = 0
+        if(this.equiped[SLOT_TYPES.HEAD] !== null) {
+            totalArmor += this.equiped[SLOT_TYPES.HEAD].armor
+        }
+        if(this.equiped[SLOT_TYPES.BODY] !== null) {
+            totalArmor += this.equiped[SLOT_TYPES.BODY].armor
+        }
+        if(this.equiped[SLOT_TYPES.LEGS] !== null) {
+            totalArmor += this.equiped[SLOT_TYPES.LEGS].armor
+        }
+        return totalArmor
+    }
+
+    isSlotEmpty(slotType: SLOT_TYPES): boolean {
+        return this.equiped[slotType as keyof IEquiped] === null
+    }
+
+    equipItems(equipedRaw: IRawEquiped): void {
         //"одеваем" вещи при инициализации
         equipSlots.forEach((slot: TSlotItem) => {
             if(equipedRaw[slot.name as keyof IRawEquiped].quantity > 0){
@@ -82,6 +100,12 @@ export default abstract class Unit {
                 )
             }
         })
+    }
+
+    isItemEquiped(itemId: TItemId, slotType: SLOT_TYPES){
+        const item = this.getItemInSlot(slotType as keyof IEquiped)
+        if(!item) return false
+        return item.itemId === itemId
     }
 
     equipItem(item: IInventoryItem, slotType: SLOT_TYPES): boolean{
@@ -101,38 +125,37 @@ export default abstract class Unit {
         this.equiped[slotType as keyof IEquiped] = null
     }
 
-    isItemEquiped(itemId: TItemId, slotType: SLOT_TYPES){
-        const item = this.getItemInSlot(slotType as keyof IEquiped)
-        if(!item) return false
-        return item.itemId === itemId
-    }
-
-    isSlotEmpty(slotType: SLOT_TYPES){
-        return this.equiped[slotType as keyof IEquiped] === null
-    }
-
     applyItemStats(item: IItem, actionType: string): boolean {
-        const itemType = item.getItemType()
-        if(itemType === ITEM_TYPES.CLOTHES){
+        if(item.type === ITEM_TYPES.CLOTHES) {
             if(item.intellect) {
-                if(actionType === 'add'){
+                if(actionType === 'add') {
                     this.intellect.value += item.intellect
+
                 } else {
                     this.intellect.value -= item.intellect
                 }
             }
             if(item.strength) {
-                if(actionType === 'add'){
+                if(actionType === 'add') {
                     this.strength.value += item.strength
                 } else {
                     this.strength.value -= item.strength
                 }
             }
             if(item.agility) {
-                if(actionType === 'add'){
+                if(actionType === 'add') {
                     this.agility.value += item.agility
                 } else {
                     this.agility.value -= item.agility
+                }
+            }
+            if(item.add_health) {
+                if(actionType === 'add') {
+                    this.maxHealth.value += item.add_health
+                    this.currentHealth.value += item.add_health
+                } else {
+                    this.maxHealth.value -= item.add_health
+                    this.currentHealth.value -= item.add_health
                 }
             }
         } else {
@@ -170,19 +193,21 @@ export default abstract class Unit {
      * @param target юнит, которого атакуем
      */
     async hit(target: Unit): Promise<{isDead: boolean, message: string}> {
-        const attackerDamage = this.getDamage()
         let isDead = false
         let message = ''
-        if(target.currentHealth.value > attackerDamage) {
+        const attackerDamage = this.getDamage()
+        let incomeDamage = attackerDamage - target.getArmor()
+        if(incomeDamage <= 0) incomeDamage = 0
+        if(target.currentHealth.value > incomeDamage) {
             //цель атаки получает несмертельный урон
-            target.currentHealth.value -= attackerDamage
-            message = `${target.textName} теряет ${attackerDamage} здоровья`
+            target.currentHealth.value -= incomeDamage
+            message = `${target.textName} теряет ${incomeDamage} здоровья`
         } else {
             //цель атаки умирает (может быть и игрок и юнит)
             target.currentHealth.value = 0
             if(await target.die(this)) {
                 isDead = true
-                message = `${target.textName} умирает`
+                message = `${target.textName} теряет ${incomeDamage} здоровья и умирает`
             } else {
                 throw new Error('Ошибка убийства юнита')
             }

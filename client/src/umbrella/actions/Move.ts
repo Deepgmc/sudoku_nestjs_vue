@@ -1,9 +1,9 @@
 import type { IChatMessage, TAction, TActionPayload, TClickedCell } from "@/interfaces/MapInterfaces";
 import MapAction from "./MapAction";
 import type CellEntity from "../zoneEntities/CellObjects/CellEntity";
-import type { IPlayer } from "@/interfaces/PlayerInterfaces";
 import Chat from "../ChatManager";
 import AreaManager from "../AreaManager";
+import type PlayerManager from "@/umbrella/PlayerManager";
 
 export default class MoveAction extends MapAction {
 
@@ -45,7 +45,7 @@ export default class MoveAction extends MapAction {
      * @param cell
      * @returns
      */
-    isActionActive(player: IPlayer, cell: CellEntity) {
+    isActionActive(player: PlayerManager, cell: CellEntity) {
         return cell.isMovable() && player.canMoveToCell(cell)
     }
 

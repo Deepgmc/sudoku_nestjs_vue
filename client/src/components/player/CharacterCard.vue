@@ -6,6 +6,7 @@ import CharacterComponent from '@/components/unit/UnitInfoComponent.vue';
 
 const props = defineProps({
     player: {
+
         type: Object as PropType<PlayerManager>,
         required: true
     }

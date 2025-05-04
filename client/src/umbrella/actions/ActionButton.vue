@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TActionPayload, TClickedCell } from '@/interfaces/MapInterfaces';
-import { computed, inject, type PropType } from 'vue';
+import { computed, inject, isProxy, toRaw, type PropType } from 'vue';
 import type FeatureEntity from '../zoneEntities/FeatureObjects/FeatureEntity';
 import type PlayerManager from '../PlayerManager';
 import type MapAction from './MapAction';
@@ -27,12 +27,16 @@ const props = defineProps({
         required: false
     },
 })
+
+
+//ФОРМИРОВАНИЕ ACTION PAYLOAD
 const actionPayload: TActionPayload = {
     clickedCell: props.clickedCell,
     feature: props.feature,
-    unit: props.unit,
+    unit: isProxy(props.unit) ? toRaw(props.unit) : props.unit,
     action: props.action,
 }
+
 const isActionActive = computed(() => {
     return props.action.isActionActive(player, props.clickedCell.cell)
 })

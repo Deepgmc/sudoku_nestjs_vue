@@ -22,12 +22,12 @@ export interface IItem {
     //generated
     itemId     : TItemId,
     itemNumber : string,
-    item_type  : ITEM_TYPES,
 
     //default from itemsList.ts
     icon       : string,
     description: string,
     textName   : string
+    type       : ITEM_TYPES,
     slotType   : SLOT_TYPES
 
     //clothes
@@ -35,6 +35,7 @@ export interface IItem {
     strength   : number,
     agility    : number,
     add_health : number,
+    armor      : number,
 
     //food
     hp_regen   : number,
@@ -42,7 +43,6 @@ export interface IItem {
     //weapon
     damage     : number,
 
-    getItemType: () => ITEM_TYPES,
     use: (unit: TransferObjectWithInventory) => any, // запускаем процесс использования предмета
     isHealing: () => boolean, //можно ли использовать предмет, чтобы восстанавливать здоровье
     getSlotName: () => string,
@@ -52,9 +52,7 @@ export interface IInventoryItem {
     quantity: number
 }
 //transmission from itemFactory to Item
-export interface IfactoryItemOptions extends IItem{
-
-}
+export interface IfactoryItemOptions extends IItem {}
 
 export const enum SLOT_TYPES {
     HEAD  = 'head',
@@ -69,6 +67,7 @@ export enum ITEM_TYPES {
     CLOTHES = 'clothes',
     WEAPON  = 'weapon',
     FOOD    = 'food',
+    MISC    = 'miscellaneous'
 }
 
 export type TItemId = string

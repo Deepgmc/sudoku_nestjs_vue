@@ -3,6 +3,8 @@
         <div class="unit_stat_line">Уровень: {{ unit.level }}</div>
         <div class="unit_stat_line">Опыт: {{ unit.experience }}</div>
         <div class="unit_stat_line">Здоровье: {{ unit.currentHealth }}/{{ unit.maxHealth }}</div>
+        <div class="unit_stat_line">Урон: {{ unit.getDamage() }}</div>
+        <div class="unit_stat_line">Броня: {{ unit.getArmor() }}</div>
         <div class="unit_stat_line">Интеллект: {{ unit.intellect }}</div>
         <div class="unit_stat_line">Сила: {{ unit.strength }}</div>
         <div class="unit_stat_line">Ловкость: {{ unit.agility }}</div>
