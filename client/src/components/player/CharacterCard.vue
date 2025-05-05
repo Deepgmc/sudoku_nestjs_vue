@@ -2,11 +2,10 @@
 import type PlayerManager from '@/umbrella/PlayerManager';
 import type { PropType } from 'vue';
 import InventoryComponent from '@/components/InventoryComponent.vue';
-import CharacterComponent from '@/components/unit/UnitInfoComponent.vue';
+import UnitInfoComponent from '@/components/unit/UnitInfoComponent.vue';
 
 const props = defineProps({
     player: {
-
         type: Object as PropType<PlayerManager>,
         required: true
     }
@@ -16,9 +15,13 @@ const props = defineProps({
 
 <template>
     <div>
-        <CharacterComponent :unit="player"></CharacterComponent>
+        <unit-info-component
+            :unit="player"
+            :isDndAllowed="true"
+            :isPlayer="true"
+            :isInventoryVisible="true"
+        ></unit-info-component>
         <q-separator class="q-my-md" />
-        <InventoryComponent :inventory="player.inventory" :isPlayer="true"></InventoryComponent>
     </div>
 </template>
 

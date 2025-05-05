@@ -13,7 +13,6 @@ import ChatManager from "../ChatManager.ts"
 import { equipSlots } from '@/constants'
 
 
-
 export function ItemFactory(rawItem: IRawItem): IItem {
     const itemId = Item.splitRawName(rawItem.name).itemId
     const itemNumber = Item.splitRawName(rawItem.name).itemNumber

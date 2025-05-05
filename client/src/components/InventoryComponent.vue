@@ -44,7 +44,7 @@ const props = defineProps({
                 draggable="true"
                 data-dnd_entity="inventory_item_ico"
                 :data-is_player="isPlayer"
-                @dragstart="dragItem($event, inventory.items[index].item, feature)"
+                @dragstart="dragItem($event, inventory.items[index].item, feature, inventory)"
                 @dblclick="useItem($event, inventory.items[index].item, inventory.isPlayer ? PlayerManager.getInstance() : feature)"
             >
                 <div class="item_quantity_number">{{ inventory.items[index].quantity }}</div>
@@ -60,7 +60,7 @@ const props = defineProps({
 .inventory_container{
     display: flex;
     flex-flow: row wrap;
-    border: 1px dashed rgb(54, 54, 54);
+    border: 1px dashed orange;
     padding: 5px;
     margin: 5px 0 5px 0;
     .inventory_item {

@@ -14,8 +14,8 @@ export class Homeless extends Unit {
     private defautStats: TUnitStats = {
         level        : 1,
         experience   : 0,
-        currentHealth: 22,
-        maxHealth    : 22,
+        currentHealth: 1,
+        maxHealth    : 5,
         strength     : 5,
         agility      : 5,
         intellect    : 5,

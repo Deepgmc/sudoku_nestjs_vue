@@ -1,7 +1,7 @@
 import { isProxy, reactive, ref, toRaw } from 'vue'
 import type { IRound, IBodyPart, IFightMessage, IFightUnit } from "@/interfaces/UnitInterfaces";
 import type Unit from "@/umbrella/zoneEntities/Units/Unit";
-import { SLOT_TYPES } from '@/interfaces/ItemsInterfaces';
+import { SLOT_TYPES, type IInventory, type IInventoryItem } from '@/interfaces/ItemsInterfaces';
 
 function getRandomWithin(min: number, max: number){
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -17,8 +17,14 @@ export default class Fight {
     private fightLog: IFightMessage[] = reactive([])
 
     public isStarted = ref<boolean>()
+    public isEnded = ref<boolean>()
 
-    constructor(u1: Unit, u2: Unit, private readonly isPlayerFight = false) {
+    constructor(
+        u1: Unit,
+        u2: Unit,
+        private readonly isPlayerFight = false,
+        private readonly fightCallback?: () => any
+    ) {
         //объекты берутся из пропсов вью, надо вернуть их обратно из прокси
         this.u1 = isProxy(u1) ? toRaw(u1) : u1
         this.u2 = isProxy(u2) ? toRaw(u2) : u2
@@ -26,6 +32,7 @@ export default class Fight {
         this.currentRound = this.newRound
 
         this.isStarted.value = false
+        this.isEnded.value = false
     }
 
     startFight(){
@@ -44,7 +51,7 @@ export default class Fight {
         this.resetStrikesAndBlocks()
     }
 
-    async roundFight(): Promise<boolean | Fight> {
+    async roundFight(): Promise<boolean> {
         this.currentRound.unit1.strikeTarget.value = this.strikeTargetu1.value
         this.currentRound.unit1.blockTarget.value = this.blockTargetu1.value
         if(this.isPlayerFight){
@@ -66,12 +73,37 @@ export default class Fight {
         this.currentRound.isFinished = await this.makeAttack()
 
         if(this.currentRound.isFinished){
-            this.addFightMessage('!! Fight end')
+            this.isEnded.value = true
+            this.addFightMessage('Бой закончился')
+            this.fightEnd()
         } else {
             this.nextRound()
         }
+        return true
+    }
 
-        return this
+    fightEnd() {
+        if(this.isPlayerFight && typeof this.fightCallback === 'function') {
+            this.getLoot(this.fightCallback())
+        }
+    }
+
+    getLoot(lootInventory: IInventory) {
+        const items: IInventoryItem[] = []
+
+        if(this.u2.equiped.head){
+            items.push({item: this.u2.equiped.head, quantity: 1})
+            this.u2.unequipItem(SLOT_TYPES.HEAD)
+        }
+        if(this.u2.equiped.body){
+            items.push({item: this.u2.equiped.body, quantity: 1})
+            this.u2.unequipItem(SLOT_TYPES.BODY)
+        }
+        if(this.u2.equiped.legs){
+            items.push({item: this.u2.equiped.legs, quantity: 1})
+            this.u2.unequipItem(SLOT_TYPES.LEGS)
+        }
+        lootInventory.addItems(items)
     }
 
     /**

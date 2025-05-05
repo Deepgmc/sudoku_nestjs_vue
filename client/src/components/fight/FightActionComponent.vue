@@ -2,17 +2,22 @@
     <div class="fight-container">
         <div class="units-info">
             <div class="left-side">
-                <UnitInfoComponent
+                <unit-info-component
                     :unit="player"
                     :isDndAllowed="false"
-                ></UnitInfoComponent>
+                    :isPlayer="true"
+                    :isInventoryVisible="true"
+                ></unit-info-component>
             </div>
             <div class="right-side">
-                <UnitInfoComponent
+                <unit-info-component
                     :unit="feature"
                     :isDndAllowed="false"
+                    :isPlayer="false"
+                    :isInventoryVisible="isInventoryVisible"
+                    :lootInventory="lootInventory"
                 >
-                </UnitInfoComponent>
+                </unit-info-component>
             </div>
         </div>
 
@@ -44,7 +49,7 @@
             </div>
             <div class="combat-log-block">
                 <div class="left-side">
-                    <button @click="F.roundFight()">Следующий раунд</button>
+                    <button @click="F.roundFight()">&#129354;</button>
                 </div>
                 <div class="right-side combat-log">
                     <div class="combat-message-body" v-for="(message, index) in F.fightLogList" :key="index">
@@ -59,11 +64,13 @@
 
 
 <script lang="ts" setup>
-import { type PropType } from 'vue';
+import { ref, type PropType } from 'vue';
 import Fight from '@/umbrella/Fight'
 import UnitInfoComponent from '@/components/unit/UnitInfoComponent.vue';
 import PlayerManager from '@/umbrella/PlayerManager';
 import type Unit from '@/umbrella/zoneEntities/Units/Unit';
+import type { IInventory } from '@/interfaces/ItemsInterfaces';
+import { useLootInventory } from '@/composables/lootInventory';
 
 const props = defineProps({
     feature: {
@@ -74,7 +81,18 @@ const props = defineProps({
 const player = PlayerManager.getInstance()
 
 // "Main object Fight. Includes fight and rounds"
-const F = new Fight(player, props.feature, true)
+const F = new Fight(player, props.feature, true, fightCallback)
+
+const isInventoryVisible = ref<boolean>(false)
+
+
+
+const lootInventory: IInventory = useLootInventory(4)
+
+function fightCallback(): any {
+    isInventoryVisible.value = true
+    return lootInventory
+}
 
 </script>
 
@@ -82,11 +100,14 @@ const F = new Fight(player, props.feature, true)
 <style lang="scss">
 .fight-container {
     display: flex;
-    width: 900px;
     flex-flow: column nowrap;
     .units-info{
         display: flex;
         flex-flow: row nowrap;
+        .left-side, .right-side {
+            width: 50%;
+            margin-right:5px;
+        }
     }
     .fight-actions-container{
         display:flex;
@@ -95,7 +116,7 @@ const F = new Fight(player, props.feature, true)
         height:100%;
         .left-side, .right-side{
             width: 50%;
-            border: 1px dashed darkmagenta;
+            border: 1px dashed grey;
             padding: 5px;
         }
     }
@@ -105,10 +126,10 @@ const F = new Fight(player, props.feature, true)
         flex-flow: row nowrap;
         margin: 10px 0 0 0;
         .left-side{
-            width:30%;
+            width:10%;
         }
         .right-side{
-            width:70%;
+            width:90%;
         }
         .combat-log{
             display: flex;

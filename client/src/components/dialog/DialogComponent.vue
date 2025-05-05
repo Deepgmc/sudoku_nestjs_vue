@@ -1,6 +1,6 @@
 <template>
     <q-dialog v-model="isWindowCardOpen" backdrop-filter="brightness(50%)">
-        <q-card :dark="true" :bordered="true" style="min-width: 1100px">
+        <q-card :dark="true" :bordered="true" style="min-width: 1400px;">
             <q-card-section>
                 <component
                     :is="currentDialogComponent"

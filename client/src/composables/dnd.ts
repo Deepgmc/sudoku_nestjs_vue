@@ -1,17 +1,27 @@
 import { ref } from "vue"
-import type { IInventoryItem, TransferObjectWithInventory, IItem } from "@/interfaces/ItemsInterfaces"
+import type { IInventoryItem, TransferObjectWithInventory, IItem, IInventory } from "@/interfaces/ItemsInterfaces"
 import ChatManager from "@/umbrella/ChatManager"
 import Item, { ItemFactory } from "@/umbrella/items/Items"
 import PlayerManager from "@/umbrella/PlayerManager"
 
 //remember the drag object-owner of inventory
 const dragObjectFrom = ref<TransferObjectWithInventory | null>(null)
+const dragInventoryFrom = ref<IInventory | null>(null)
 
-export function dragItem(event: DragEvent, item: IItem | null, dragObjectOwner: TransferObjectWithInventory | undefined){
+export function dragItem(
+    event: DragEvent,
+    item: IItem | null,
+    dragObjectOwner: TransferObjectWithInventory | undefined,
+    dragInventoryOwner: IInventory | null
+){
     if(!event.dataTransfer || item === null) return false
     if(dragObjectOwner !== undefined){
         dragObjectFrom.value = dragObjectOwner
     }
+    if(dragInventoryOwner !== undefined){
+        dragInventoryFrom.value = dragInventoryOwner
+    }
+
     event.dataTransfer.effectAllowed = 'move'
     event.dataTransfer.dropEffect = 'move'
     event.dataTransfer.setData('itemId', item.itemId)
@@ -65,6 +75,9 @@ export function dropItem(event: DragEvent): boolean {
             player.inventory.addItems([iitem])
             if(dragObjectFrom.value !== null){
                 dragObjectFrom.value.inventory.removeItem(itemId)
+            }
+            if(dragInventoryFrom.value !== null){
+                dragInventoryFrom.value.removeItem(itemId)
             }
         }
     }
