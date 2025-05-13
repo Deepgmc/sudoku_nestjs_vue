@@ -94,8 +94,8 @@ const isInventoryVisible = ref<boolean>(false)
 
 const lootInventory: IInventory = useLootInventory(4)
 
-function fightCallback(): any {
-    isInventoryVisible.value = true
+function fightCallback(showInventory: boolean): any {
+    isInventoryVisible.value = showInventory
     return lootInventory
 }
 

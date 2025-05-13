@@ -43,7 +43,7 @@ export default class FightAction extends MapAction {
     }
 
     isActionActive(player: PlayerManager, cell: CellEntity) {
-        return player.standsIn(cell)
+        return player.canMoveToCell(cell) || player.standsIn(cell)
     }
 
 }

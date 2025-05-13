@@ -24,7 +24,7 @@ export default class Fight {
         u1: Unit | PlayerManager,
         u2: Unit,
         private readonly isPlayerFight = false,
-        private readonly fightCallback?: () => any
+        private readonly fightCallback?: (showInventory: boolean) => any
     ) {
         //объекты берутся из пропсов вью, надо вернуть их обратно из прокси
         this.u1 = isProxy(u1) ? toRaw(u1) : u1
@@ -80,8 +80,12 @@ export default class Fight {
 
         if(this.currentRound.isFinished){
             this.isEnded.value = true
-            this.addSuccessMessage('Бой закончился, вы можете забрать предметы противника')
             if(strikeResult.deadUnit){
+                if(strikeResult.deadUnit.unit.isPlayer){
+                    this.addErrorMessage('Вы проиграли. Возрождение на стартовой позиции.')
+                } else {
+                    this.addSuccessMessage('Бой закончился. Вы можете забрать предметы противника')
+                }
                 await this.fightEnd(strikeResult.deadUnit)
             }
         } else {
@@ -92,7 +96,7 @@ export default class Fight {
 
     async fightEnd(deadUnit: IFightUnit) {
         if(this.isPlayerFight && typeof this.fightCallback === 'function') {
-            this.getLoot(this.fightCallback())
+            this.getLoot(this.fightCallback(!deadUnit.unit.isPlayer))
             if(this.u1 instanceof PlayerManager){
                 this.u1.setExperience(deadUnit.unit)
             }

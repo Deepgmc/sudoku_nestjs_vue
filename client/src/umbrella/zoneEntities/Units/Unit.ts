@@ -215,8 +215,8 @@ export default abstract class Unit {
     }
 
     async die(attacker ?: Unit): Promise<boolean> {
-        if(this.isPlayer && attacker){
-            attacker.fullHeal()
+        if(this.isPlayer){
+            if(attacker) attacker.fullHeal()
             return PlayerManager.getInstance().rebornPlayer()
         }
         //если это не игрок - убиваем юнита
