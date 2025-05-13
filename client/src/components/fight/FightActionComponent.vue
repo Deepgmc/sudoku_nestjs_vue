@@ -53,8 +53,13 @@
                 </div>
                 <div class="right-side combat-log">
                     <div class="combat-message-body" v-for="(message, index) in F.fightLogList" :key="index">
-                        <span class="combat-message-who">{{ message.who }}</span>
-                        <span class="combat-message-text">{{ message.text }}</span>
+                        <!-- <span class="combat-message-who">{{ message.who }}</span> -->
+                        <span class="combat-message-text" :class="{
+                            red: message.color === 'red',
+                            green: message.color === 'green',
+                            black: message.color === 'black',
+                        }"
+                        >{{ message.text }}</span>
                     </div>
                 </div>
             </div>
@@ -145,6 +150,15 @@ function fightCallback(): any {
                 }
             }
         }
+    }
+    .black{
+        color: $primary;
+    }
+    .green{
+        color: $positive;
+    }
+    .red{
+        color: $negative;
     }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="unit_stat_line">Уровень: {{ unit.level }}</div>
-        <div class="unit_stat_line">Опыт: {{ unit.experience }}</div>
+        <div class="unit_stat_line">Опыт: {{ unit.experience }}/{{ unit.getUnitLevelExp(unit.level.value) }}</div>
         <div class="unit_stat_line">Здоровье: {{ unit.currentHealth }}/{{ unit.maxHealth }}</div>
         <div class="unit_stat_line">Урон: {{ unit.getDamage() }}</div>
         <div class="unit_stat_line">Броня: {{ unit.getArmor() }}</div>

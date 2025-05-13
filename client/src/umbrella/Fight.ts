@@ -1,7 +1,8 @@
 import { isProxy, reactive, ref, toRaw } from 'vue'
-import type { IRound, IBodyPart, IFightMessage, IFightUnit } from "@/interfaces/UnitInterfaces";
+import type { IRound, IBodyPart, IFightMessage, IFightUnit, TStrikeResult } from "@/interfaces/UnitInterfaces";
 import type Unit from "@/umbrella/zoneEntities/Units/Unit";
 import { SLOT_TYPES, type IInventory, type IInventoryItem } from '@/interfaces/ItemsInterfaces';
+import PlayerManager from './PlayerManager';
 
 function getRandomWithin(min: number, max: number){
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -9,7 +10,7 @@ function getRandomWithin(min: number, max: number){
 
 export default class Fight {
 
-    private u1: Unit
+    private u1: Unit | PlayerManager
     private u2: Unit
 
     private rounds: IRound[] = []
@@ -20,7 +21,7 @@ export default class Fight {
     public isEnded = ref<boolean>()
 
     constructor(
-        u1: Unit,
+        u1: Unit | PlayerManager,
         u2: Unit,
         private readonly isPlayerFight = false,
         private readonly fightCallback?: () => any
@@ -44,8 +45,12 @@ export default class Fight {
     public strikeTargetu2 = ref<SLOT_TYPES | undefined>()
     public blockTargetu2 = ref<SLOT_TYPES | undefined>()
 
+    private addNormalMessage = this.addFightMessage('black')
+    private addSuccessMessage = this.addFightMessage('green')
+    private addErrorMessage = this.addFightMessage('red')
+
     private nextRound(){
-        this.addFightMessage('<<< Следующий раунд >>>')
+        this.addNormalMessage('<<< Следующий раунд >>>')
         this.rounds.push(this.currentRound)
         this.currentRound = this.newRound
         this.resetStrikesAndBlocks()
@@ -61,33 +66,92 @@ export default class Fight {
         }
 
         if(this.checkSelectedHitBlockParts()){
-            this.addFightMessage('Не выбрана цель атаки или блока')
+            this.addErrorMessage('Не выбрана цель атаки или блока')
             return false
         }
 
         //кто ударяет первым
         this.makeAttackUnitsOrder()
-        this.addFightMessage(`attacker: ${this.currentRound.unit1.unit.textName}, target: ${this.currentRound.unit2.unit.textName}`)
+        this.addNormalMessage(`attacker: ${this.currentRound.unit1.unit.textName}, target: ${this.currentRound.unit2.unit.textName}`)
 
         //проводим удары (внутри - смотрим блокирование)
-        this.currentRound.isFinished = await this.makeAttack()
+        const strikeResult = this.makeAttack()
+        this.currentRound.isFinished = strikeResult.isDead
 
         if(this.currentRound.isFinished){
             this.isEnded.value = true
-            this.addFightMessage('Бой закончился')
-            this.fightEnd()
+            this.addSuccessMessage('Бой закончился, вы можете забрать предметы противника')
+            if(strikeResult.deadUnit){
+                await this.fightEnd(strikeResult.deadUnit)
+            }
         } else {
             this.nextRound()
         }
         return true
     }
 
-    fightEnd() {
+    async fightEnd(deadUnit: IFightUnit) {
         if(this.isPlayerFight && typeof this.fightCallback === 'function') {
             this.getLoot(this.fightCallback())
+            if(this.u1 instanceof PlayerManager){
+                this.u1.setExperience(deadUnit.unit)
+            }
+            await deadUnit.unit.die()
         }
     }
 
+    /**
+     * Атака одного юнита другим, проверяется выбранный блок. Сама атака производится самим юнитом
+     * @param attacker атакующий юнит
+     * @param target обороняющийся юнит
+     */
+    private makeAttack(): TStrikeResult {
+        //первая атака за раунд
+        let attacker = this.currentRound.unit1
+        let target = this.currentRound.unit2
+        let strikeResult = this.strike(attacker, target)
+
+        if(strikeResult.isDead){
+            return strikeResult
+        }
+
+        //ответная атака, наоборот
+        attacker = this.currentRound.unit2
+        target = this.currentRound.unit1
+        strikeResult = this.strike(attacker, target)
+
+        return strikeResult
+    }
+
+    private strike(attacker: IFightUnit, target: IFightUnit): TStrikeResult {
+        if(!this.isBlocking(attacker, target)){
+            // блок не прошел, атакуем
+            const hitResult = attacker.unit.hit(target.unit)
+            this.addNormalMessage(hitResult.message)
+            return {isDead: hitResult.isDead, deadUnit: target}
+        } else {
+            this.addNormalMessage(this.getBlockMessage(attacker, target))
+            return {isDead: false, deadUnit: null}
+        }
+    }
+
+    isBlocking(attacker: IFightUnit, target: IFightUnit): boolean {
+        return attacker.strikeTarget.value === target.blockTarget.value
+    }
+
+    getBlockMessage(attacker: IFightUnit, blocker: IFightUnit): string {
+        if(typeof blocker.blockTarget.value !== 'undefined'){
+            const bodyPart = this.getHitPartByValue(blocker.blockTarget.value)?.label
+            if(bodyPart === '') return ''
+            return `${blocker.unit.textName} заблокировал атаку в ${bodyPart}`
+        }
+        return ''
+    }
+
+    /**
+     * Грабим побежденного юнита
+     * @param lootInventory Созданный виртуальный инвентарь, куда скинуты все предметы побежденного юнита
+     */
     getLoot(lootInventory: IInventory) {
         const items: IInventoryItem[] = []
 
@@ -104,58 +168,6 @@ export default class Fight {
             this.u2.unequipItem(SLOT_TYPES.LEGS)
         }
         lootInventory.addItems(items)
-    }
-
-    /**
-     * Атака одного юнита другим, проверяется выбранный блок. Сама атака производится самим юнитом
-     * @param attacker атакующий юнит
-     * @param target обороняющийся юнит
-     */
-    private async makeAttack(): Promise<boolean> {
-        //первая атака за раунд
-        let attacker = this.currentRound.unit1
-        let target = this.currentRound.unit2
-        let isDead = false
-        isDead = await this.strike(attacker, target)
-
-        if(isDead){
-            return true
-        }
-
-        //ответная атака, наоборот
-        attacker = this.currentRound.unit2
-        target = this.currentRound.unit1
-        isDead = await this.strike(attacker, target)
-
-        if(isDead){
-            return true
-        }
-        return false
-    }
-
-    private async strike(attacker: IFightUnit, target: IFightUnit): Promise<boolean> {
-        if(!this.isBlocking(attacker, target)){
-            // блок не прошел, атакуем
-            const hitResult = await attacker.unit.hit(target.unit)
-            this.addFightMessage(hitResult.message)
-            return hitResult.isDead
-        } else {
-            this.addFightMessage(this.getBlockMessage(attacker, target))
-            return false
-        }
-    }
-
-    isBlocking(attacker: IFightUnit, target: IFightUnit): boolean {
-        return attacker.strikeTarget.value === target.blockTarget.value
-    }
-
-    getBlockMessage(attacker: IFightUnit, blocker: IFightUnit): string {
-        if(typeof blocker.blockTarget.value !== 'undefined'){
-            const bodyPart = this.getHitPartByValue(blocker.blockTarget.value)?.label
-            if(bodyPart === '') return ''
-            return `${blocker.unit.textName} заблокировал атаку в ${bodyPart}`
-        }
-        return ''
     }
 
     get newRound(){
@@ -249,9 +261,11 @@ export default class Fight {
         return this.fightLog
     }
 
-    addFightMessage(text: string){
-        if(text && text.length > 0){
-            this.fightLog.push({who: 'arbiter', text})
+    addFightMessage(color: string) {
+        return (text: string) => {
+            if(text && text.length > 0){
+                this.fightLog.push({who: 'arbiter', text, color: color})
+            }
         }
     }
 

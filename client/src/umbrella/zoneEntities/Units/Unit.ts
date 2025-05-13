@@ -192,7 +192,7 @@ export default abstract class Unit {
        Блок уже должен быть вычислен в классе Fight, если добрались сюда, значит точно ударяем
      * @param target юнит, которого атакуем
      */
-    async hit(target: Unit): Promise<{isDead: boolean, message: string}> {
+    hit(target: Unit): {isDead: boolean, message: string} {
         let isDead = false
         let message = ''
         const attackerDamage = this.getDamage()
@@ -205,12 +205,8 @@ export default abstract class Unit {
         } else {
             //цель атаки умирает (может быть и игрок и юнит)
             target.currentHealth.value = 0
-            if(await target.die(this)) {
-                isDead = true
-                message = `${target.textName} теряет ${incomeDamage} здоровья и умирает`
-            } else {
-                throw new Error('Ошибка убийства юнита')
-            }
+            isDead = true
+            message = `${target.textName} теряет ${incomeDamage} здоровья и умирает`
         }
 
         return {
@@ -218,8 +214,8 @@ export default abstract class Unit {
         }
     }
 
-    async die(attacker: Unit): Promise<boolean> {
-        if(this.isPlayer){
+    async die(attacker ?: Unit): Promise<boolean> {
+        if(this.isPlayer && attacker){
             attacker.fullHeal()
             return PlayerManager.getInstance().rebornPlayer()
         }
@@ -238,6 +234,33 @@ export default abstract class Unit {
 
     public calculateWeaponDamage(weapon: IItem) {
         return Math.floor(weapon.damage + (this.strength.value / 10 * weapon.damage))
+    }
+
+    /**
+    * на основе текущего опыта проверяет нужно ли повышать уровень, добавляет опыт и уровень если надо
+    */
+    setExperience(killedUnit: Unit): void {
+        const needExpNextLvl = this.getUnitLevelExp(this.level.value)
+        const unitGainExp = this.getUnitLevelExp(killedUnit.level.value) / 5
+        const expOverflow = unitGainExp - (needExpNextLvl - this.experience.value)
+        if(expOverflow >= 0){
+            this.experience.value = expOverflow
+            this.level.value++
+        } else {
+            this.experience.value += unitGainExp
+        }
+    }
+
+    /**
+    * Вычисляет кол-во опыта, необходимого на данном уровне
+    * @param level уровень для расчета
+    * @returns кол-во опыта
+    */
+    public getUnitLevelExp(level: number): number{
+        const decreaseRatio = 0.5
+        const prevLvl = (level - 1) || 1
+
+        return level * 100 * prevLvl * decreaseRatio
     }
 
     public getUnurmoredDamage(): number {

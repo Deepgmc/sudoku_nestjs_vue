@@ -40,6 +40,11 @@ export interface IFightUnit {
     blockTarget: Ref<SLOT_TYPES | undefined>,
 }
 
+export type TStrikeResult = {
+    isDead: boolean,
+    deadUnit: IFightUnit | null
+}
+
 export interface IBodyPart {
     value: SLOT_TYPES,
     label: string,
@@ -48,5 +53,6 @@ export interface IBodyPart {
 }
 export interface IFightMessage {
     text: string,
-    who: string
+    who: string,
+    color: string
 }
