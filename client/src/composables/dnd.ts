@@ -8,11 +8,20 @@ import PlayerManager from "@/umbrella/PlayerManager"
 const dragObjectFrom = ref<TransferObjectWithInventory | null>(null)
 const dragInventoryFrom = ref<IInventory | null>(null)
 
+/**
+ * Перенос предмета между разными инвенторями или одетыми слотами
+   Возможен перенос из инвентаря, за которым нет юнита
+ * @param event Событие dragAndDrop
+ * @param item предмет, который переносим
+ * @param dragObjectOwner от кого переносим объект
+ * @param dragInventoryOwner инвенторик от кого переносим (он может быть отдельно, нет юнита)
+ * @returns
+ */
 export function dragItem(
-    event: DragEvent,
-    item: IItem | null,
-    dragObjectOwner: TransferObjectWithInventory | undefined,
-    dragInventoryOwner: IInventory | null
+    event              : DragEvent,
+    item               : IItem | null,
+    dragObjectOwner    : TransferObjectWithInventory | undefined,
+    dragInventoryOwner ?: IInventory | null
 ){
     if(!event.dataTransfer || item === null) return false
     if(dragObjectOwner !== undefined){
@@ -51,6 +60,7 @@ export function dropItem(event: DragEvent): boolean {
     console.log('%c dndFrom - dndTo:', 'color:rgb(182, 86, 158);', dndFrom, dndTo)
 
     const player = PlayerManager.getInstance()
+
     // если таргет - слот плэера, принесли из инвентаря
     if(dndFrom === 'inventory_item_ico' && dndTo === 'equiped'){
         const slotType = eventTarget.dataset.slot_type
@@ -61,13 +71,16 @@ export function dropItem(event: DragEvent): boolean {
         console.log('%c Одеваем предмет в слот ' + slotType, 'color:pink;', iitem)
         player.equipItem(iitem, slotType)
         player.inventory.removeItem(iitem.item.itemId)
+
     // если таргет - инвентарь, принесли из слота игрока
     } else if(dndFrom === 'equiped' && dndTo === 'inventory'){
         player.unequipItem(event.dataTransfer.getData('slotType'))
         player.inventory.addItems([iitem])
+
     // перетаскиваем из инвентаря в корзину, удаляем предмет
     } else if(dndTo === 'trash' && dndFrom === 'inventory_item_ico'){
         player.inventory.removeItem(iitem.item.itemId)
+
     // переносим между двух инвентарей
     } else if(dndFrom === 'inventory_item_ico' && dndTo === 'inventory'){
         if(!isPlayerFrom){
@@ -75,8 +88,7 @@ export function dropItem(event: DragEvent): boolean {
             player.inventory.addItems([iitem])
             if(dragObjectFrom.value !== null){
                 dragObjectFrom.value.inventory.removeItem(itemId)
-            }
-            if(dragInventoryFrom.value !== null){
+            } else if(dragInventoryFrom.value !== null){
                 dragInventoryFrom.value.removeItem(itemId)
             }
         }

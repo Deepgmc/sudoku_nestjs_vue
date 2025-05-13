@@ -8,6 +8,7 @@ import type { ICellObject, TRawAction, TCoords } from '@/interfaces/MapInterface
 import { ActionsFactory } from '../actions/ActionsFactory.ts';
 import Inventory from '../items/Inventory.ts';
 import type { TCellRawFeatures, TCellRawUnits } from '@/interfaces/UnitInterfaces.ts';
+import { reactive } from 'vue';
 
 
 export function CellEntityFactory (
@@ -47,7 +48,7 @@ export function CellEntityFactory (
     })
 
     //hydrating items on that map cell
-    cellEntity.inventory = new Inventory(cellObject.items, false)
+    cellEntity.inventory = reactive(new Inventory(cellObject.items, false))
 
     return cellEntity
 }

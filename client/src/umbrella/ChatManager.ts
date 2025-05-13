@@ -23,12 +23,12 @@ export default class ChatManager extends UmbrellaManager {
 
     addMessage(newMessage: IChatMessage): ChatManager {
         if(!newMessage) return this
-        this.messages.push(newMessage)
+        this.messages.unshift(newMessage)
         return this
     }
 
     plainText(text: string): ChatManager {
-        this.messages.push({text: text, timestamp: Date.now()})
+        this.messages.unshift({text: text, timestamp: Date.now()})
         return this
     }
 

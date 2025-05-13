@@ -20,8 +20,8 @@ export default class MoveAction extends MapAction {
 
         if(!clickedCell.x || !clickedCell.y) {throw new Error('Wrong cell to move')}
         if(!actionPayload.zoneManager) {throw new Error('Wrong actionPayload, no zoneManager')}
-        await actionPayload.zoneManager.setAndMovePlayer({x: clickedCell.x, y: clickedCell.y})
         next(this.getChatMessage(actionPayload, clickedCell.cell))
+        await actionPayload.zoneManager.setAndMovePlayer({x: clickedCell.x, y: clickedCell.y})
     }
 
     getChatMessage(payload: TActionPayload, cellToMove: CellEntity): IChatMessage {
@@ -52,10 +52,13 @@ export default class MoveAction extends MapAction {
     /** в какую сторону перемещаемся (просто текст) */
     getDirection(fromX: number, fromY: number, toX: number, toY: number): string{
         let text = ''
-        if(fromX < toX) text = 'восток'
-        else if(fromX > toX) text = 'запад'
-        else if(fromY < toY) text = 'юг'
-        else text = 'север'
+        if(fromX < toX){
+            text = 'восток'
+        } else if(fromX > toX) {
+            text = 'запад'
+        } else if(fromY < toY) {
+            text = 'юг'
+        } else text = 'север'
         return text
     }
 
