@@ -32,14 +32,13 @@ export class NetworkManager implements INetworkManager {
             //headers: {'Authorization': 'Bearer XXXXX'},
             //this.httpClient.defaults.headers.common['Authorization'] = AUTH_TOKEN;
             timeout: 1000,
-
         })
     };
 
     /**
      * @returns каррирован, чтобы мочь поэтапно наполнять запрос
      */
-    applyNetworkMethod(type: string, section: string){
+    applyNetworkMethod(type: string, section: string) {
 
         return ($authManager: AuthManager) => {
 

@@ -9,13 +9,6 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest()
     const status = exception.getStatus()
 
-    // response
-    //   .status(status)
-    //   .json({
-    //     FROM: 'NotFoundExceptionFilter',
-    //     statusCode: status,
-    //     path: request.url,
-    //   });
     response.sendFile(resolve(__dirname, '../src/err.html'))
   }
 }

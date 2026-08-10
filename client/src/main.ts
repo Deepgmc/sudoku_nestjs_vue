@@ -6,6 +6,7 @@ import '@quasar/extras/material-icons/material-icons.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { Quasar } from 'quasar'
+import langRu from 'quasar/lang/ru'
 
 import App from '@/App.vue'
 
@@ -22,6 +23,7 @@ app.use(createPinia())
 
 app.use(Quasar, {
     plugins: {},
+    lang: langRu
 })
 
 app.mount('#umbrella_root_container')

@@ -7,7 +7,7 @@ export type TAuthData = {
     access_token: jwtTokenType
 }
 
-export type TStrategies = jwtStrategy | null //     | anotherStrategy | thirdStrategy
+export type TStrategies = jwtStrategy | null
 
 export enum availableStrategies {
     'jwt'

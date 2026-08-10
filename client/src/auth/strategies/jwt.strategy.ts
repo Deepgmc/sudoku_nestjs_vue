@@ -1,4 +1,3 @@
-import { inject } from 'vue'
 import {type jwtTokenType } from '@/interfaces/Auth'
 
 import { Strategy } from './Strategy';
