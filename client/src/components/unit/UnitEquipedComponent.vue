@@ -25,7 +25,7 @@ import type { PropType } from 'vue';
 import ItemTooltip from '@/components/ItemTooltip.vue'
 import type Unit from '@/umbrella/zoneEntities/Units/Unit';
 import { dragItem, dropItem } from '@/composables/dnd';
-import { equipSlots } from '@/constants';
+import { equipSlots } from '@/interfaces/ItemsInterfaces';
 import type { IEquiped, IItem } from '@/interfaces/ItemsInterfaces';
 
 const props = defineProps({

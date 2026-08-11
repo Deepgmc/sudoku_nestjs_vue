@@ -2,22 +2,25 @@ import {type jwtTokenType } from '@/interfaces/Auth'
 
 import { Strategy } from './Strategy';
 import type { ILoginUser } from '@/interfaces/user';
-import { RESPONSE_STATUS_CODES } from '@/constants';
-import {AuthManager} from '../AuthManager';
-import { NetworkManager } from '@/network/NetworkManager';
+import { RESPONSE_STATUS_CODES } from '@/utils/constants';
+import type { TAuthRenponse, TServerStatus } from '@/interfaces/Error.ts';
+import NetworkManager, { EReqMethods } from '@/network/NetworkManager.ts';
+import { isSuccessRequest } from '@/utils/helpers/network';
 
-const $networkManager = NetworkManager.getInstance()
+//const $networkManager = NetworkManager.getInstance()
 
 export class jwtStrategy extends Strategy {
 
-    private _apiSection: string = 'auth'
-    private _postData: (authManager: AuthManager) => any
-    private _getData: (authManager: AuthManager) => any
+    private _apiModule: string = 'auth'
+    private _postData: (action: string) => any
+    private _getData: (action: string) => any
 
-    constructor(){
+    constructor(
+        private networkManager: NetworkManager
+    ){
         super()
-        this._postData = $networkManager.applyNetworkMethod('post', this._apiSection)
-        this._getData = $networkManager.applyNetworkMethod('get', this._apiSection)
+        this._postData = this.networkManager.getApiRequestMethod(EReqMethods.post)(this._apiModule)
+        this._getData = this.networkManager.getApiRequestMethod(EReqMethods.get)(this._apiModule)
     }
 
     /**
@@ -26,18 +29,15 @@ export class jwtStrategy extends Strategy {
      * @param password
      * @returns Is user logined success or no
     */
-    async login(loginData: ILoginUser): Promise<any> {
-        const $authManager = AuthManager.getInstance()
-        try{
-            const loginRes = await this._postData($authManager)('login')(loginData)
-            if(loginRes.status === RESPONSE_STATUS_CODES.CREATED){
-                this.setAuthStoragedData({access_token: loginRes.data.access_token})
-                return true
-            }
-            return loginRes //axios error
-        } catch(loginError){
-            return loginError
-        }
+    async login(loginData: ILoginUser): Promise<TAuthRenponse> {
+        const loginRes = await this._postData('login')(loginData, false)
+        console.log('loginRes:', loginRes)
+        this.setAuthStoragedData({
+            access_token: loginRes.data.access_token,
+            userId: loginRes.data.user.userId
+        })
+        await this.isLogined()
+        return { error: false, message: 'Успешная авторизация', data: loginRes.data }
     }
 
     logOut(): boolean{
@@ -48,8 +48,8 @@ export class jwtStrategy extends Strategy {
      * Is strategy has an authorisation
      * @returns boolean
      */
-    async isLogined(){
-        let isLogined: boolean = false
+    async isLogined(): Promise<TServerStatus> {
+        let isLogined: TServerStatus = {isLogined: false}
         isLogined = await this.checkServerStrategyStatus()
         return isLogined
     }
@@ -58,27 +58,44 @@ export class jwtStrategy extends Strategy {
      * Checks the server token
      * @returns whether token valid or not
      */
-    async checkServerStrategyStatus(){
+    async checkServerStrategyStatus(): Promise<TServerStatus> {
         let isLogined = false
-        const checkData = await this._getData(AuthManager.getInstance())('check_token')()
-        if(checkData.status === RESPONSE_STATUS_CODES.SUCCESS){
-            isLogined = true
+        try {
+            const res = await this._getData('check_token')()
+            if(isSuccessRequest(res)) {
+                isLogined = true
+            } else if (res.error && res.error.status === RESPONSE_STATUS_CODES.UNAUTHORIZED) {
+                isLogined = false
+            }
+            return { isLogined: isLogined, userId: res.userId }
+        } catch {
+            return { isLogined: false }
         }
-        if(checkData.error && checkData.error.status === RESPONSE_STATUS_CODES.UNAUTHORIZED){
-            isLogined = false
-        }
-        return isLogined
     }
 
     set token(token: jwtTokenType){
         throw new ReferenceError('Can not set token directly')
     }
-    get token(): jwtTokenType{
-        const authData = this.getAuthStoragedData()
-        if(!authData) return null
-        if(typeof authData.access_token !== 'undefined'){
+
+    static get token(): jwtTokenType{
+        const authData = jwtStrategy.getAuthStoragedData()
+        if (!authData) return ''
+        if (typeof authData.access_token !== 'undefined') {
             return authData.access_token
         }
-        return null
+        return ''
+    }
+
+    static get userId(): number {
+        const authData = jwtStrategy.getAuthStoragedData()
+        if (authData && !authData.access_token) return 0
+        if (authData && typeof authData.userId !== 'undefined') {
+            return authData.userId
+        }
+        return 0
+    }
+
+    isHasToken() {
+        return !!jwtStrategy.token
     }
 }

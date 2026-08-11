@@ -7,6 +7,7 @@ import type CellEntity from '@/umbrella/zoneEntities/CellObjects/CellEntity';
 import { type IPlayer, type IPlayerRaw } from '@/interfaces/PlayerInterfaces';
 import type { IActionResult, IChatMessage, TActionPayload, TRawActions } from '@/interfaces/MapInterfaces';
 import Inventory from './items/Inventory';
+import { EReqMethods } from '@/network/NetworkManager';
 
 
 
@@ -28,13 +29,14 @@ export default class PlayerManager extends Unit implements IPlayer {
     public defaultActions: TRawActions = []
     public defaultEntityActions: TRawActions = []
 
+    private _getData: (action: string) => any
+    private _apiModule: string = 'player'
+
     private constructor() {
         super(true)
         this.store = usePlayerStore()
-        this._getData = UmbrellaManager.$networkManager.applyNetworkMethod('get', this._apiSection)(UmbrellaManager.$authManager)
+        this._getData = UmbrellaManager.$networkManager.getApiRequestMethod(EReqMethods.get)(this._apiModule)
     }
-    private _getData: (action: string) => any
-    private _apiSection: string = 'player'
 
     API_METHODS = {
         INIT_PLAYER: 'get_player_data'

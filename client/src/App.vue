@@ -1,23 +1,19 @@
 <script setup lang="ts">
-/**import { RouterLink, RouterView } from 'vue-router'
-<RouterLink to="/login">Auth</RouterLink>
-        <RouterLink to="/">Game</RouterLink> -->
-        <!-- <RouterView />
-*/
 import { provide } from 'vue'
 import AuthView from '@/views/AuthView.vue';
 import UmbrellaApp from '@/components/UmbrellaApp.vue';
 import AuthLoading from '@/views/AuthLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 
-import { NetworkManager } from '@/network/NetworkManager'
+import NetworkManager from '@/network/NetworkManager'
 import { AuthManager } from '@/auth/AuthManager'
 import { jwtStrategy } from '@/auth/strategies/jwt.strategy'
 
 const authStore = useAuthStore()
+const $networkManager = NetworkManager.getInstance()
 
 provide('$networkManager', NetworkManager.getInstance())
-provide('$authManager', AuthManager.getInstance( new jwtStrategy(), authStore) )
+provide('$authManager', AuthManager.getInstance( new jwtStrategy($networkManager), authStore) )
 
 
 </script>

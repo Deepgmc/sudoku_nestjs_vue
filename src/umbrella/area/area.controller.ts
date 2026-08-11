@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 
 import { AuthGuard } from '@nestjs/passport'
 import { AreaService } from './area.service'
@@ -15,13 +15,12 @@ export class AreaController {
         return await this.areaService.getInitArea('piter')
     }
 
-    @Get('get_zone_file')
+    @Post('get_zone_file')
     getZone(
-        @Query('district') districtCoords: any,
-        @Query('zone') zoneCoords: any
+        @Body() coords: any,
     ){
         try{
-            return this.areaService.getZoneFile(districtCoords, zoneCoords)
+            return this.areaService.getZoneFile(coords.district, coords.zone)
         } catch(_e: any){
             throw new TypeError('Invalid parameters at get_zone_file')
         }

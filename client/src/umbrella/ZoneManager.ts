@@ -15,6 +15,7 @@ export default class ZoneManager extends UmbrellaManager {
     }
 
     public store: ReturnType<typeof useZoneStore>;
+    private _apiModule: string = 'area'
 
     private constructor(zoneRaw?: IZoneRaw) {
         super()

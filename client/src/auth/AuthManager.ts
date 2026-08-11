@@ -3,7 +3,7 @@ import { availableStrategies, type IAuthManager } from '@/interfaces/Auth'
 
 import type { ILoginUser, TRegisterForm } from '@/interfaces/user'
 import type { TStrategies } from '@/interfaces/Auth'
-import { NetworkManager } from '@/network/NetworkManager.ts'
+import NetworkManager, { EReqMethods } from '@/network/NetworkManager.ts'
 
 
 
@@ -28,8 +28,8 @@ export class AuthManager implements IAuthManager {
         return new AuthManager(strategy, authStore)
     }
 
-    private _apiSection: string = 'auth'
-    private _postData: (authManager: AuthManager) => any
+    private _apiModule: string = 'auth'
+    private _postData: (action: string) => any
 
     private constructor(
         strategy?: IAuthManager['_strategy'],
@@ -41,14 +41,14 @@ export class AuthManager implements IAuthManager {
         if(strategy) this._strategy = strategy
         this._authStore = authStore
         this.networkManager = NetworkManager.getInstance()
-        this._postData = this.networkManager.applyNetworkMethod('post', this._apiSection)
+        this._postData = this.networkManager.getApiRequestMethod(EReqMethods.post)(this._apiModule)
 
         void this.updateAndGetIsLogined()
     }
 
     async registerRequest(registerData: TRegisterForm): Promise<any>{
         if(this.isLogined) return {error: {message: 'You already logined'}}
-        return await this._postData(this)('register')(registerData)
+        return await this._postData('register')(registerData)
     }
 
     /**
@@ -63,7 +63,7 @@ export class AuthManager implements IAuthManager {
 
         const loginRes = await this._strategy.login(loginData)
 
-        if(loginRes === true){
+        if(loginRes.error === false){
             isLogined = true
         }
         this._isLogined = isLogined
@@ -88,10 +88,9 @@ export class AuthManager implements IAuthManager {
             this.logOut()
             return false
         }
-        let isLogined = false
 
-        isLogined = await this._strategy.isLogined()
-        this._isLogined = isLogined
+        const isLogined = await this._strategy.isLogined()
+        this._isLogined = isLogined.isLogined
         this._authStore.setIsLogined(this._isLogined)
         if(!this._isLogined) this.logOut()
         return this._isLogined
@@ -105,12 +104,3 @@ export class AuthManager implements IAuthManager {
         return true
     }
 }
-
-// export default {
-//     install: (app: AppType) => {
-//         console.info('Auth manager as plugin instance created')
-//         const am = AuthManager.getInstance( new jwtStrategy(), useAuthStore())
-//         app.config.globalProperties.$authManager = am
-//         app.provide('$authManager', am )
-//     }
-// }

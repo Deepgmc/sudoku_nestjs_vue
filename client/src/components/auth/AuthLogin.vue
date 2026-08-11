@@ -39,7 +39,7 @@ import { loginFormValidationFields, getRules } from './formValidationHelper'
 
 import type { IAuthManager } from '@/interfaces/Auth';
 import type { ILoginUser } from '@/interfaces/user';
-import { RESPONSE_STATUS_CODES } from '@/constants';
+import { RESPONSE_STATUS_CODES } from '@/utils/constants';
 
 
 const $externalResults = reactive({})

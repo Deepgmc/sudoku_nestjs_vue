@@ -1,10 +1,11 @@
 import {type IArea, type IDistrict, type IZoneRaw} from '@/interfaces/MapInterfaces'
 import { useAreaStore } from '@/stores/areaStore'
 
-import { RESPONSE_STATUS_CODES } from '@/constants';
+import { RESPONSE_STATUS_CODES } from '@/utils/constants';
 
 import UmbrellaManager from '@/umbrella/UmbrellaManager'
 import PlayerManager from './PlayerManager'
+import { EReqMethods } from '@/network/NetworkManager';
 
 /**
  * Main map class. Stores the whole map + actions and helpers
@@ -19,11 +20,16 @@ export default class AreaManager extends UmbrellaManager {
 
     store: ReturnType<typeof useAreaStore>;
 
+    private _apiModule: string = 'area'
+    private _getData: (action: string) => any
+    private _postData: (action: string) => any
+
     private constructor() {
         super()
         this.store = useAreaStore()
-        this._getData = this.networkManager.applyNetworkMethod('get', 'area')(this.authManager)
-        this._postData = this.networkManager.applyNetworkMethod('post', 'area')(this.authManager)
+        this._getData = this.networkManager.getApiRequestMethod(EReqMethods.get)(this._apiModule)
+        this._postData = this.networkManager.getApiRequestMethod(EReqMethods.post)(this._apiModule)
+
         this.player = PlayerManager.getInstance()
     }
 
@@ -32,14 +38,9 @@ export default class AreaManager extends UmbrellaManager {
         INIT_GET_AREA: 'get_area',
         INIT_GET_ZONE: 'get_zone_file',
     }
-    private _getData: (action: string) => any
-    private _postData: (action: string) => any
-
 
     async init(){
         const getAreaResult = await this._getData(this.API_METHODS.INIT_GET_AREA)(null)
-        // this.area = getAreaResult.data as IArea
-        //! @ts-expect-error -->> TAreaStore | TPlayerStore - type is ok
         this.store.loadAreaToStore(getAreaResult.data as IArea)
         return this
     }
@@ -92,11 +93,11 @@ export default class AreaManager extends UmbrellaManager {
             this.player.zoneX,
             this.player.zoneY
         )
-        const zoneFileData = await this._getData(this.API_METHODS.INIT_GET_ZONE)({
+        const zoneFileData = await this._postData(this.API_METHODS.INIT_GET_ZONE)({
             zone: playerZone.zonePosition,
             district: playerDistrict.districtPosition
         })
-        if(zoneFileData.status === RESPONSE_STATUS_CODES.SUCCESS){
+        if([RESPONSE_STATUS_CODES.SUCCESS, RESPONSE_STATUS_CODES.CREATED].includes(zoneFileData.status)) {
             return zoneFileData.data
         } else {
             throw new Error('Invalid zone loading')

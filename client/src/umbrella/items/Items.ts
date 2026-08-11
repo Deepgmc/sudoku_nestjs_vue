@@ -10,7 +10,7 @@ import {
 } from "@/interfaces/ItemsInterfaces"
 import {items} from './ItemsList.ts'
 import ChatManager from "../ChatManager.ts"
-import { equipSlots } from '@/constants'
+import { equipSlots } from '@/interfaces/ItemsInterfaces';
 
 
 export function ItemFactory(rawItem: IRawItem): IItem {

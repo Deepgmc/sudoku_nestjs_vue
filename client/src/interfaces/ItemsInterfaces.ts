@@ -70,6 +70,14 @@ export enum ITEM_TYPES {
     MISC    = 'miscellaneous'
 }
 
+export const equipSlots: TSlotItem[] = [
+    {name: SLOT_TYPES.HEAD, textName: 'Голова'},
+    {name: SLOT_TYPES.BODY, textName: 'Тело'},
+    {name: SLOT_TYPES.LEGS, textName: 'Ноги'},
+    {name: SLOT_TYPES.RHAND, textName: 'П рука'},
+    {name: SLOT_TYPES.LHAND, textName: 'Л рука'},
+]
+
 export type TItemId = string
 export type TItemNumber = string
 export type TItemQuantity = number

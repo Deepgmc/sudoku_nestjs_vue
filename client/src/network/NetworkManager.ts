@@ -1,96 +1,83 @@
+import { jwtStrategy } from '@/auth/strategies/jwt.strategy'
 import axios from 'axios'
-import type { /*AxiosInstance,*/ Axios, /*AxiosRequestConfig*/ AxiosResponse } from 'axios'
-import {type jwtTokenType } from '@/interfaces/Auth'
-import { type AuthManager} from '@/auth/AuthManager'
+import type { AxiosResponse } from 'axios'
+import { notifyTypes, useNotify } from '@/composables/notifyQuasar.ts'
+import type { Axios, AxiosRequestConfig } from 'axios'
+import { RESPONSE_STATUS_CODES } from '@/utils/constants'
 
-
-export interface INetworkManager {
-    applyNetworkMethod: (type: string, section: string) =>
-                        ($authManager: AuthManager) =>
-                        (action: string) =>
-                        (parameters: any) =>
-                        Promise<AxiosResponse | {error: any}>
-}
 export type HttpClientTypes = Axios
 
-export class NetworkManager implements INetworkManager {
+export enum EReqMethods {
+    get    = 'get',
+    post   = 'post',
+    delete = 'delete',
+    put    = 'put',
+    patch  = 'patch',
+}
 
-    static instance: NetworkManager | null = null
-    static getInstance(): NetworkManager {
-        if(NetworkManager.instance) return NetworkManager.instance
-        return new NetworkManager()
-    }
+const notify = useNotify()
+
+
+export default class NetworkManager {
+
+    static instance: NetworkManager
     private httpClient: HttpClientTypes
 
-    private constructor(){
-        if(NetworkManager.instance) {throw new TypeError('Instance creation only with .getInstance()')}
-        console.log('%c NetworkManager constructor call', 'color:rgb(182, 86, 158);')
+    static getInstance(): NetworkManager {
+        if (!NetworkManager.instance) new NetworkManager()
+        return NetworkManager.instance
+    }
+
+    private constructor() {
+
         NetworkManager.instance = this
+
         this.httpClient = axios.create({
-            baseURL: import.meta.env.DEV ? import.meta.env.VITE_API_URL : 'NEED_PROD_URL',
-            //baseURL: 'http://localhost:3050/api',
-            //headers: {'Authorization': 'Bearer XXXXX'},
-            //this.httpClient.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+            //baseURL: import.meta.env.DEV ? import.meta.env.VUE_APP_API_URL : 'NEED_PROD_URL',
             timeout: 1000,
+            baseURL: 'http://localhost:5173/api',
+            //baseURL: 'http://192.168.1.128:3050/api',
         })
     };
 
-    /**
-     * @returns каррирован, чтобы мочь поэтапно наполнять запрос
-     */
-    applyNetworkMethod(type: string, section: string) {
+    private applyAuthorization(): void {
+        this.httpClient.defaults.headers.common['Authorization'] = `Bearer ${jwtStrategy.token}`;
+    }
 
-        return ($authManager: AuthManager) => {
-
-            if($authManager._strategy && typeof $authManager._strategy !== 'undefined'){
-                this.applyAuthorisation($authManager._strategy.token)
-            }
-
+    //console.log(`%c NM: authenticated request = ${module}/${action}`, 'background:rgb(27, 122, 35); color: #bfc231; padding: 4px;')
+    getApiRequestMethod(method: EReqMethods) {
+        //каррировано, чтоб в каждом модуле подготавливать наборы методов к своему модулю
+        this.applyAuthorization()
+        return (module: string) => {
             return (action: string) => {
-
-                return async (parameters: object | null): Promise<any> => {
-
-                    switch (type) {
-                        case 'post':
-                            return await this.postMethod(`${section}/${action}`, parameters)
-                        break;
-                        case 'get':
-                            return await this.getMethod(`${section}/${action}`, parameters)
-                        break;
-                        default:
-                            return await this.postMethod(`${section}/${action}`, parameters)
-                    }
+                return async (parameters?: AxiosRequestConfig): Promise<AxiosResponse> => {
+                    return this.httpClient[method](`${module}/${action}`, parameters)
+                        .catch((err) => {
+                            return this.handleError(err)
+                        })
                 }
             }
         }
     }
 
-    async postMethod(addr: string, parameters: object | null){
-        return await this.httpClient.post(addr, parameters)
-            .catch(function(e){
-                return {error: e}
-            })
-    }
-    async getMethod(addr: string, parameters: object | null){
-        return await this.httpClient.get(addr, {params: parameters})
-            .catch(function(e){
-                return {error: e}
-            })
+    handleError(err: any) {
+        if(axios.isAxiosError(err)) {
+            return this.handleAxiosError(err)
+        } else {
+            notify.run('Неизвестная ошибка', notifyTypes.err)
+        }
+        return err
     }
 
-    applyAuthorisation(token: jwtTokenType){
-        this.httpClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    handleAxiosError(err: any) {
+        if(err.response){
+            //"нормальный" ответ сервера, но код ошибки не 200
+            if(err.response.data.statusCode !== RESPONSE_STATUS_CODES.UNAUTHORIZED) {
+                notify.run(this.warnPrefix + err.response.data.message, notifyTypes.err)
+            }
+        }
+        return err
     }
 
+    private warnPrefix = 'NetworkManager: '
 }
-
-
-
-//plugin
-// export default {
-//     install: (app: AppType) => {
-//         console.log('Network manager as plugin instance created')
-//         app.config.globalProperties.$networkManager = NetworkManager.getInstance()
-//         app.provide('$networkManager', NetworkManager.getInstance())
-//     }
-// }

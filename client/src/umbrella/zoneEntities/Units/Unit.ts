@@ -8,7 +8,7 @@ import {
     type TItemId,
     type TSlotItem
 } from "@/interfaces/ItemsInterfaces";
-import { equipSlots } from '@/constants';
+import { equipSlots } from '@/interfaces/ItemsInterfaces';
 import type { IEquiped, IRawEquiped } from "@/interfaces/ItemsInterfaces";
 import type { TCoords, TRawActions } from "@/interfaces/MapInterfaces";
 import type MapAction from "@/umbrella/actions/MapAction";

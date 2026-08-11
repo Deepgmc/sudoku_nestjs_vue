@@ -45,6 +45,8 @@ export default defineConfig(
             "@typescript-eslint/no-unsafe-assignment": "off",
             "@typescript-eslint/no-empty-object-type": "off",
 
+            "@typescript-eslint/no-unsafe-enum-comparison": "on",
+
 
             "vue/require-prop-types": "error",
             "vue/prop-name-casing": "error",
