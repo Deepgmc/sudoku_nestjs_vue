@@ -11,16 +11,16 @@ import { isSuccessRequest } from '@/utils/helpers/network';
 
 export class jwtStrategy extends Strategy {
 
-    private _apiModule: string = 'auth'
-    private _postData: (action: string) => any
-    private _getData: (action: string) => any
+    _apiModule: string = 'auth'
+    _postData: (action: string) => any
+    _getData: (action: string) => any
 
     constructor(
         private networkManager: NetworkManager
     ){
         super()
-        this._postData = this.networkManager.getApiRequestMethod(EReqMethods.post)(this._apiModule)
-        this._getData = this.networkManager.getApiRequestMethod(EReqMethods.get)(this._apiModule)
+        this._postData = this.networkManager.getPostMethod(this)
+        this._getData = this.networkManager.getGetMethod(this)
     }
 
     /**

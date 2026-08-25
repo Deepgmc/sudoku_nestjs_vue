@@ -4,6 +4,7 @@ import type { AxiosResponse } from 'axios'
 import { notifyTypes, useNotify } from '@/composables/notifyQuasar.ts'
 import type { Axios, AxiosRequestConfig } from 'axios'
 import { RESPONSE_STATUS_CODES } from '@/utils/constants'
+import type { IModule } from '@/interfaces/Global'
 
 export type HttpClientTypes = Axios
 
@@ -77,6 +78,18 @@ export default class NetworkManager {
             }
         }
         return err
+    }
+
+    /**
+    * Вызов REST запроса через getApiRequestMethod
+    * @param apiModule - модуль API для вызова
+    */
+    getPostMethod(caller: IModule) {
+        return this.getApiRequestMethod(EReqMethods.post)(caller._apiModule)
+    }
+
+    getGetMethod(caller: IModule) {
+        return this.getApiRequestMethod(EReqMethods.get)(caller._apiModule)
     }
 
     private warnPrefix = 'NetworkManager: '
